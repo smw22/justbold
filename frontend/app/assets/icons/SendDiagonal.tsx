@@ -1,0 +1,16 @@
+import React from 'react';
+
+export default function SendDiagonal(props) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
+      <g clipPath="url(#a)">
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m22.153 3.553-10.975 17.45-1.67-8.596L2 7.897l20.152-4.344Zm-12.698 8.89 12.697-8.89" />
+      </g>
+      <defs>
+        <clipPath id="a">
+          <path fill="#fff" d="M0 0h24v24H0z" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
