@@ -1,6 +1,7 @@
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 import Button from "../components/Button";
+import ContextMenu from "~/components/ContextMenu";
 
 export function Welcome() {
   return (
@@ -19,6 +20,11 @@ export function Welcome() {
             <Button text="Primary Glass" variant="primary-glass" />
             <Button text="Secondary" variant="secondary" />
             <Button text="Secondary Glass" variant="secondary-glass" />
+            <ContextMenu>
+              <Button text="Save post" variant="context-menu" fullWidth={true} />
+              <Button text="Report post" variant="context-menu" fullWidth={true} />
+              <Button text="Hellooooooo" variant="context-menu" fullWidth={true} />
+            </ContextMenu>
             <ul>
               {resources.map(({ href, text, icon }) => (
                 <li key={href}>

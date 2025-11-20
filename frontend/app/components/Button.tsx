@@ -1,5 +1,5 @@
 // Using a type union (recommended for simple cases)
-type ButtonVariant = "primary" | "primary-glass" | "secondary" | "secondary-glass";
+type ButtonVariant = "primary" | "primary-glass" | "secondary" | "secondary-glass" | "context-menu";
 
 export default function Button({ text, icon, variant, fullWidth }: { text: string; icon?: string; variant: ButtonVariant; fullWidth?: boolean }) {
   switch (variant) {
@@ -32,6 +32,12 @@ export default function Button({ text, icon, variant, fullWidth }: { text: strin
         <button
           className={`bg-primary-yellow text-black text-sm rounded-full px-3 py-1 hover:bg-primary-yellow-hover cursor-pointer transition-colors duration-400 ease-in-out ${fullWidth ? "w-full" : ""}`}
         >
+          {icon}&nbsp;{text}
+        </button>
+      );
+    case "context-menu":
+      return (
+        <button className={`hover:bg-neutral-grey rounded-lg transition-colors cursor-pointer p-1 duration-400 ease-in-out ${fullWidth ? "w-full" : ""}`}>
           {icon}&nbsp;{text}
         </button>
       );
