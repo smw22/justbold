@@ -16,14 +16,14 @@ export function Welcome() {
         <div className="max-w-[300px] w-full space-y-6 px-4">
           <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
             <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">What&apos;s next?</p>
-            <Button text="Primary" variant="primary" fullWidth={true} />
-            <Button text="Primary Glass" variant="primary-glass" />
-            <Button text="Secondary" variant="secondary" />
-            <Button text="Secondary Glass" variant="secondary-glass" />
+            <Button text="Primary" variant="primary" fullWidth={true} onClick={() => alert("Hej!")} />
+            <Button text="Primary Glass" variant="primary-glass" onClick={() => alert("Hej!")} />
+            <Button text="Secondary" variant="secondary" onClick={() => alert("Hej!")} />
+            <Button text="Secondary Glass" variant="secondary-glass" onClick={() => alert("Hej!")} />
             <ContextMenu>
-              <Button text="Save post" variant="context-menu" fullWidth={true} />
-              <Button text="Report post" variant="context-menu" fullWidth={true} />
-              <Button text="Hellooooooo" variant="context-menu" fullWidth={true} />
+              <Button text="Save post" variant="context-menu" fullWidth={true} onClick={() => alert("Hej!")} />
+              <Button text="Report post" variant="context-menu" fullWidth={true} onClick={() => alert("Hej!")} />
+              <Button text="Hellooooooo" variant="context-menu" fullWidth={true} onClick={() => alert("Hej!")} />
             </ContextMenu>
             <ul>
               {resources.map(({ href, text, icon }) => (
