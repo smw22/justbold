@@ -20,7 +20,6 @@ import { User } from "./users/entities/user.entity";
       synchronize: true,
     }),
     UsersModule,
-    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
