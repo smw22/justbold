@@ -26,7 +26,7 @@ backend/.env
 frontend/.vite
 
 # React Router
-/.react-router/
+frontend/.react-router/
 
 
 # IDE files
