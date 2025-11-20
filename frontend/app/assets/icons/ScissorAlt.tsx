@@ -1,0 +1,9 @@
+import React from 'react';
+
+export default function ScissorAlt(props) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
+      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10.236 8a3 3 0 1 0-4.472-4 3 3 0 0 0 4.472 4Zm0 0L20 16m-9.764 0a3 3 0 1 1-4.472 4 3 3 0 0 1 4.472-4Zm0 0L20 8" />
+    </svg>
+  );
+}
