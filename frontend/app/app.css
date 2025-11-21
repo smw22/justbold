@@ -1,9 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans:
-    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
   /* Primary colors */
   --color-primary-yellow: oklch(0.85 0.12 85);
@@ -98,4 +96,38 @@ body {
   pointer-events: none;
   z-index: 2;
   opacity: 0.7;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background: none;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  border-radius: 50%;
+  outline: 1px solid var(--color-neutral-grey);
+  outline-offset: -1px;
+}
+
+input + .slider {
+  outline: 1px solid var(--color-neutral-grey);
+  outline-offset: -1px;
+}
+
+input:checked + .slider {
+  outline: 1px solid var(--color-primary-yellow);
+  outline-offset: -1px;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(28px);
+  -ms-transform: translateX(28px);
+  transform: translateX(28px);
+  background: var(--color-primary-yellow);
+  outline: 1px solid var(--color-primary-yellow);
+  outline-offset: -1px;
 }
