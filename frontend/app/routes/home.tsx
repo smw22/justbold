@@ -1,3 +1,13 @@
+import { useState } from "react";
+import Switch from "~/components/Switch";
+
 export default function Home() {
-  return <h1>Home Page</h1>;
+  const [value, setValue] = useState(false);
+
+  return (
+    <>
+      <h1>Home Page</h1>
+      <Switch value={value} onClick={() => setValue(!value)} />
+    </>
+  );
 }
