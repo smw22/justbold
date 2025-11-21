@@ -48,9 +48,9 @@ body {
   /* We can work with ligh mode first and then create a dark mode later. Original dark mode background: dark:bg-gray-950 */
   @apply bg-white dark:bg-white;
 
-  @media (prefers-color-scheme: dark) {
+  /* @media (prefers-color-scheme: dark) {
     color-scheme: dark;
-  }
+  } */
 }
 
 .glass-card {
