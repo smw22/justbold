@@ -1,6 +1,7 @@
 import React from 'react';
+import type { SVGProps } from 'react';
 
-export default function Repeat21(props) {
+export default function Repeat21(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
       <path stroke="#1E1E1E" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15.539 2 19 5l-3.46 3" />

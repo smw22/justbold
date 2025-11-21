@@ -1,7 +1,7 @@
 import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
 export default [
-  route("/", "routes/app-layout.tsx", [
+  route("/", "routes/appLayout.tsx", [
     index("routes/home.tsx"),
 
     // Create
@@ -11,25 +11,25 @@ export default [
     route("collaborations", "routes/collaborations/collaborations.tsx"),
     route(
       "collaborations/:collaborationId",
-      "routes/collaborations/collaborations-details.tsx"
+      "routes/collaborations/collaborationsDetails.tsx"
     ),
 
     // Services
     route("services", "routes/services/services.tsx"),
-    route("services/:serviceId", "routes/services/services-detail.tsx"),
+    route("services/:serviceId", "routes/services/servicesDetail.tsx"),
 
     // Account
     route("profile/:profileId", "routes/account/profile.tsx"),
-    route("profile/:profileId/edit", "routes/account/profile-edit.tsx"),
+    route("profile/:profileId/edit", "routes/account/profileEdit.tsx"),
 
     // Favorites
     route("favorites", "routes/favorites/favorites.tsx"),
   ]),
 
   // Chat
-  route("chat", "routes/chat/chat-layout.tsx", [
+  route("chat", "routes/chat/chatLayout.tsx", [
     index("routes/chat/threads.tsx"),
-    route("new", "routes/chat/chat-new.tsx"),
+    route("new", "routes/chat/chatNew.tsx"),
     route(":threadId", "routes/chat/chat.tsx"),
   ]),
 

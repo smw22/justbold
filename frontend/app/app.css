@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
   /* Primary colors */
   --color-primary-yellow: oklch(0.85 0.12 85);
@@ -44,7 +46,8 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  /* We can work with ligh mode first and then create a dark mode later. Original dark mode background: dark:bg-gray-950 */
+  @apply bg-white dark:bg-white;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
