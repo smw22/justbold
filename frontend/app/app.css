@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
   /* Primary colors */
   --color-primary-yellow: oklch(0.85 0.12 85);
@@ -43,7 +45,8 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  /* We can work with ligh mode first and then create a dark mode later. Original dark mode background: dark:bg-gray-950 */
+  @apply bg-white dark:bg-white;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
@@ -58,7 +61,10 @@ body {
 }
 
 button.glass-card:hover {
-  background: linear-gradient(oklch(0.8 0.12 85 / 0.7), oklch(0.85 0.12 85 / 0.7));
+  background: linear-gradient(
+    oklch(0.8 0.12 85 / 0.7),
+    oklch(0.85 0.12 85 / 0.7)
+  );
 }
 
 .glass-card::before {
@@ -68,8 +74,19 @@ button.glass-card:hover {
   border-radius: inherit;
   padding: 1px;
   background:
-    linear-gradient(165deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.25) 30%, rgba(255, 255, 255, 0.1) 70%, rgba(255, 255, 255, 0.7) 100%),
-    linear-gradient(345deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.1) 60%, rgba(255, 255, 255, 0) 100%);
+    linear-gradient(
+      165deg,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0.25) 30%,
+      rgba(255, 255, 255, 0.1) 70%,
+      rgba(255, 255, 255, 0.7) 100%
+    ),
+    linear-gradient(
+      345deg,
+      rgba(0, 0, 0, 0.18) 0%,
+      rgba(0, 0, 0, 0.1) 60%,
+      rgba(255, 255, 255, 0) 100%
+    );
   box-shadow: 0 0 12px 2px rgba(255, 255, 255, 0.25) inset;
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
