@@ -1,6 +1,7 @@
 import React from 'react';
+import type { SVGProps } from 'react';
 
-export default function ArrowRight(props) {
+export default function ArrowRight(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m13 7 5 5m-5 5 5-5m0 0H6" />

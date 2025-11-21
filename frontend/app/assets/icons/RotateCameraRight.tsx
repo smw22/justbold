@@ -1,6 +1,7 @@
 import React from 'react';
+import type { SVGProps } from 'react';
 
-export default function RotateCameraRight(props) {
+export default function RotateCameraRight(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M22.003 3v4.497A.503.503 0 0 1 21.5 8a.52.52 0 0 1-.465-.3A10 10 0 0 0 12.003 2c-5.185 0-9.449 3.947-9.95 9" />

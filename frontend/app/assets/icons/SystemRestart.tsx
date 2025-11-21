@@ -1,6 +1,7 @@
 import React from 'react';
+import type { SVGProps } from 'react';
 
-export default function SystemRestart(props) {
+export default function SystemRestart(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 2v4m0 12v4m10-10h-4M6 12H2m2.93-7.071 2.828 2.828m8.484 8.485 2.829 2.829M19.07 4.929l-2.828 2.828m-8.484 8.485-2.829 2.829" />
