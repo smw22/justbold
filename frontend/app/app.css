@@ -64,9 +64,9 @@ body {
   @apply bg-white dark:bg-white;
   color: var(--color-header-bg-1);
 
-  @media (prefers-color-scheme: dark) {
+  /* @media (prefers-color-scheme: dark) {
     color-scheme: dark;
-  }
+  } */
 }
 
 /* Heading defaults */
