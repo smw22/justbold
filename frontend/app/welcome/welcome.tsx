@@ -15,15 +15,20 @@ export function Welcome() {
         </header>
         <div className="max-w-[300px] w-full space-y-6 px-4">
           <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
-            <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">What&apos;s next?</p>
-            <Button text="Primary" variant="primary" fullWidth={true} onClick={() => alert("Hej!")} />
-            <Button text="Primary Glass" variant="primary-glass" onClick={() => alert("Hej!")} />
+            <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">Buttons:</p>
+            <Button text="Primary" icon="Google" variant="primary" fullWidth={true} onClick={() => alert("Hej!")} />
+            <Button text="Primary Glass" icon="Info" variant="primary-glass" onClick={() => alert("Hej!")} />
             <Button text="Secondary" variant="secondary" onClick={() => alert("Hej!")} />
             <Button text="Secondary Glass" variant="secondary-glass" onClick={() => alert("Hej!")} />
+            <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">Context-menu</p>
             <ContextMenu>
-              <Button text="Save post" variant="context-menu" fullWidth={true} onClick={() => alert("Hej!")} />
-              <Button text="Report post" variant="context-menu" fullWidth={true} onClick={() => alert("Hej!")} />
-              <Button text="Hellooooooo" variant="context-menu" fullWidth={true} onClick={() => alert("Hej!")} />
+              <Button text="Save post" icon="BookmarkEmpty" variant="context-menu" fullWidth={true} onClick={() => alert("Hej!")} />
+              <div className="bg-white h-px mx-2"></div>
+              <Button text="Share post" icon="ShareIos" variant="context-menu" fullWidth={true} onClick={() => alert("Hej!")} />
+              <div className="bg-white h-px mx-2"></div>
+              <Button text="Hide posts from this user" icon="EyeEmpty" variant="context-menu" fullWidth={true} onClick={() => alert("Hej!")} />
+              <div className="bg-white h-px mx-2"></div>
+              <Button text="Report post" icon="ChatBubbleWarning" variant="context-menu" fullWidth={true} onClick={() => alert("Hej!")} />
             </ContextMenu>
             <ul>
               {resources.map(({ href, text, icon }) => (
