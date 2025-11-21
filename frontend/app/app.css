@@ -42,6 +42,17 @@
   --opacity-16: 0.16;
   --opacity-8: 0.08;
   --opacity-4: 0.04;
+
+  /* Text colors & weights */
+  --black-text: var(--color-black);
+  --white-text: var(--color-white);
+  --grey-text: var(--color-neutral-grey);
+  --lightgrey-text: oklch(0.54 0 0);
+  --darkgrey-text: oklch(0.28 0 0);
+  --bold-text: var(--color-black);
+
+  --fw-heading: 700;
+  --fw-normal: 400;
 }
 
 html,
@@ -52,6 +63,107 @@ body {
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+}
+
+/* Heading defaults */
+h1 {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-heading);
+  color: var(--black-text);
+  font-size: 24px;
+  line-height: 24px;
+  margin: 0;
+}
+h2 {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-heading);
+  color: var(--black-text);
+  font-size: 20px;
+  line-height: 19px;
+  margin: 0;
+}
+h3 {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-heading);
+  color: var(--black-text);
+  font-size: 18px;
+  line-height: 19px;
+  margin: 0;
+}
+h4 {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-heading);
+  color: var(--black-text);
+  font-size: 16px;
+  line-height: normal;
+  margin: 0;
+}
+h5 {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-heading);
+  color: var(--black-text);
+  font-size: 14px;
+  line-height: 135%;
+  margin: 0;
+}
+h6 {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-heading);
+  color: var(--black-text);
+  font-size: 12px;
+  line-height: 100%;
+  margin: 0;
+}
+
+/* Utility text-size classes */
+.text-xxl {
+  font-size: 24px;
+  line-height: 24px;
+}
+.text-xl {
+  font-size: 20px;
+  line-height: 19px;
+}
+.text-lg {
+  font-size: 18px;
+  line-height: 19px;
+}
+.text-md {
+  font-size: 16px;
+  line-height: normal;
+}
+.text-sm {
+  font-size: 14px;
+  line-height: 135%;
+}
+.text-xs {
+  font-size: 12px;
+  line-height: 100%;
+}
+
+/* Utility color classes */
+.text-black {
+  color: var(--black-text);
+}
+.text-white {
+  color: var(--white-text);
+}
+.text-grey {
+  color: var(--grey-text);
+}
+.text-lightgrey {
+  color: var(--lightgrey-text);
+}
+.text-darkgrey {
+  color: var(--darkgrey-text);
+}
+.text-bold {
+  color: var(--bold-text);
+}
+
+/* Normal font-weight utility */
+.font-normal {
+  font-weight: var(--fw-normal);
 }
 
 .glass-button {
@@ -66,7 +178,10 @@ body {
 }
 
 .glass-button:focus {
-  background: linear-gradient(oklch(0.8 0.12 85 / 0.7), oklch(0.85 0.12 85 / 0.7));
+  background: linear-gradient(
+    oklch(0.8 0.12 85 / 0.7),
+    oklch(0.85 0.12 85 / 0.7)
+  );
 }
 
 .glass-card {
@@ -84,8 +199,19 @@ body {
   border-radius: inherit;
   padding: 1px;
   background:
-    linear-gradient(165deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.25) 30%, rgba(255, 255, 255, 0.1) 70%, rgba(255, 255, 255, 0.8) 100%),
-    linear-gradient(345deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.1) 60%, rgba(255, 255, 255, 0) 100%);
+    linear-gradient(
+      165deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.25) 30%,
+      rgba(255, 255, 255, 0.1) 70%,
+      rgba(255, 255, 255, 0.8) 100%
+    ),
+    linear-gradient(
+      345deg,
+      rgba(0, 0, 0, 0.18) 0%,
+      rgba(0, 0, 0, 0.1) 60%,
+      rgba(255, 255, 255, 0) 100%
+    );
   box-shadow: 0 0 12px 2px rgba(255, 255, 255, 0.25) inset;
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
