@@ -1,6 +1,7 @@
 import React from 'react';
+import type { SVGProps } from 'react';
 
-export default function CopyCheck(props) {
+export default function CopyCheck(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
       <path stroke="#000" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m12 15 2 2 4-4" />
