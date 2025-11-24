@@ -13,6 +13,7 @@ export class Like {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  // The user who has given the like
   @ManyToOne(() => User, { eager: true })
   @JoinColumn({ name: "user_id" })
   user: User;
