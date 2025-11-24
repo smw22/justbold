@@ -1,0 +1,20 @@
+meta {
+  name: Get One Tag
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{domain}}/api/tags/:tagTitle
+  body: none
+  auth: inherit
+}
+
+params:path {
+  tagTitle: {{tag_title}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

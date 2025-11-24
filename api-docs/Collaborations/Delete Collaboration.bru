@@ -1,0 +1,20 @@
+meta {
+  name: Delete Collaboration
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{domain}}/api/collaborations/:collaborationId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  collaborationId: {{collaboration_id}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

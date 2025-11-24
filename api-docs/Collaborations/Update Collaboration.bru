@@ -1,0 +1,27 @@
+meta {
+  name: Update Collaboration
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{domain}}/api/collaborations/:collaborationId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  collaborationId: {{collaboration_id}}
+}
+
+body:json {
+  {
+    "title": "New Collab title",
+    "content": "updated content"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
