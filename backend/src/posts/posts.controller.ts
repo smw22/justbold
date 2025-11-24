@@ -43,7 +43,7 @@ export class PostsController {
       };
     } catch (error) {
       return {
-        susccess: false,
+        success: false,
         message: error.message,
       };
     }
