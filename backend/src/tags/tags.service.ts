@@ -1,26 +1,62 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTagDto } from './dto/create-tag.dto';
-import { UpdateTagDto } from './dto/update-tag.dto';
+import { Injectable, HttpException } from "@nestjs/common";
+import { CreateTagDto } from "./dto/create-tag.dto";
+import { UpdateTagDto } from "./dto/update-tag.dto";
+
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Tag } from "./entities/tag.entity";
 
 @Injectable()
 export class TagsService {
-  create(createTagDto: CreateTagDto) {
-    return 'This action adds a new tag';
+  constructor(
+    @InjectRepository(Tag)
+    private tagsRepository: Repository<Tag>
+  ) {}
+
+  async create(createTagDto: CreateTagDto): Promise<Tag> {
+    const existingTag = await this.tagsRepository.findOneBy({
+      title: createTagDto.title,
+    });
+    if (existingTag) {
+      throw new HttpException("Tag already exists", 400);
+    }
+    const tag = await this.tagsRepository.create(createTagDto);
+    return this.tagsRepository.save(tag);
   }
 
-  findAll() {
-    return `This action returns all tags`;
+  async findAll(): Promise<Tag[]> {
+    return this.tagsRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tag`;
+  async findOne(title: string): Promise<Tag> {
+    const tagData = await this.tagsRepository.findOneBy({
+      title: title,
+    });
+    if (!tagData) {
+      throw new HttpException("Tag not found", 404);
+    }
+
+    return tagData;
   }
 
-  update(id: number, updateTagDto: UpdateTagDto) {
-    return `This action updates a #${id} tag`;
+  async update(title: string, updateTagDto: UpdateTagDto): Promise<Tag> {
+    const existingTag = await this.tagsRepository.findOneBy({
+      title: title,
+    });
+    if (!existingTag) {
+      throw new HttpException("Tag not found", 404);
+    }
+    const tagData = this.tagsRepository.merge(existingTag, updateTagDto);
+    return this.tagsRepository.save(tagData);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tag`;
+  async remove(title: string): Promise<Tag> {
+    const existingTag = await this.tagsRepository.findOneBy({
+      title: title,
+    });
+    if (!existingTag) {
+      throw new HttpException("Tag not found", 404);
+    }
+    return this.tagsRepository.remove(existingTag);
   }
 }
