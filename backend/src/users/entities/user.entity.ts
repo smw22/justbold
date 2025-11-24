@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
-
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Post } from "../../posts/entities/post.entity";
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")
@@ -73,4 +73,7 @@ export class User {
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   created: Date;
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 }
