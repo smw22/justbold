@@ -1,13 +1,14 @@
 import Icon from "~/components/icon";
+import { Link } from "react-router";
 
 export default function ServicesCard() {
   return (
     <div className="flex flex-col gap-4 p-4 m-auto w-[90%] max-w-md border border-gray-300 rounded-3xl shadow-lg">
       <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <div className="w-[25px] h-[25px]">
             <img
-              src="images/user-avatar.png"
+              src="/images/user-avatar.png"
               alt="user avatar"
               className="w-full"
             />
@@ -21,7 +22,7 @@ export default function ServicesCard() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2">
+      <Link to="/services/:serviceId" className="flex flex-col gap-2">
         <div>
           <h2>Full-service recording and mixing</h2>
         </div>
@@ -32,7 +33,7 @@ export default function ServicesCard() {
             className="absolute top-4 right-4 bg-neutral-grey rounded-md text-white p-1"
           />
           <img
-            src="images/studio-example.png"
+            src="/images/studio-example.png"
             alt="user avatar"
             className="w-full rounded-2xl"
           />
@@ -43,12 +44,10 @@ export default function ServicesCard() {
           for musicians.
         </p>
         <div className="flex justify-between">
-          <a href="" className="font-bold underline">
-            Read more...
-          </a>
+          <span className="font-bold underline">Read more...</span>
           <span className="text-lightgrey">Aarhus - 4h ago</span>
         </div>
-      </div>
+      </Link>
     </div>
   );
 }
