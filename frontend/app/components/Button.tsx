@@ -11,7 +11,7 @@ export default function Button({ text, icon, variant, fullWidth, onClick }: { te
           className={`bg-primary-yellow text-black flex items-center justify-center gap-2 rounded-full px-4 py-2 hover:bg-primary-yellow-hover focus:bg-primary-yellow-pressed cursor-pointer transition-colors duration-400 ease-in-out ${fullWidth ? "w-full" : ""}`}
           onClick={onClick}
         >
-          <Icon name={icon ? icon : ""} size={24} />
+          <Icon name={icon ? icon : ""} size={18} />
           {text}
         </button>
       );
@@ -22,16 +22,16 @@ export default function Button({ text, icon, variant, fullWidth, onClick }: { te
           onClick={onClick}
         >
           {text}
-          <Icon name={icon ? icon : ""} size={24} />
+          <Icon name={icon ? icon : ""} size={18} />
         </button>
       );
     case "secondary":
       return (
         <button
-          className={`bg-transparent text-neutral-grey flex items-center justify-center gap-2 rounded-full px-4 py-2 hover:bg-primary-yellow-hover focus:bg-primary-yellow-semi-transparent cursor-pointer transition-colors duration-400 ease-in-out outline outline-1 outline-neutral-grey -outline-offset-1" ${fullWidth ? "w-full" : ""}`}
+          className={`bg-transparent text-neutral-grey flex items-center justify-center gap-2 rounded-full px-4 py-2 hover:bg-primary-yellow-hover focus:bg-primary-yellow-semi-transparent cursor-pointer transition-colors duration-400 ease-in-out outline-1 outline-neutral-grey -outline-offset-1" ${fullWidth ? "w-full" : ""}`}
           onClick={onClick}
         >
-          <Icon name={icon ? icon : ""} size={24} />
+          <Icon name={icon ? icon : ""} size={18} />
           {text}
         </button>
       );

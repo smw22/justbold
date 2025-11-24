@@ -9,10 +9,7 @@ export default [
 
     // Collaborations
     route("collaborations", "routes/collaborations/collaborations.tsx"),
-    route(
-      "collaborations/:collaborationId",
-      "routes/collaborations/collaborationsDetails.tsx"
-    ),
+    route("collaborations/:collaborationId", "routes/collaborations/collaborationsDetails.tsx"),
 
     // Services
     route("services", "routes/services/services.tsx"),
@@ -27,11 +24,7 @@ export default [
   ]),
 
   // Chat
-  route("chat", "routes/chat/chatLayout.tsx", [
-    index("routes/chat/threads.tsx"),
-    route("new", "routes/chat/chatNew.tsx"),
-    route(":threadId", "routes/chat/chat.tsx"),
-  ]),
+  route("chat", "routes/chat/chatLayout.tsx", [index("routes/chat/threads.tsx"), route("new", "routes/chat/chatNew.tsx"), route(":threadId", "routes/chat/chat.tsx")]),
 
   // Login / Signup
   route("login", "routes/auth/login.tsx"),
