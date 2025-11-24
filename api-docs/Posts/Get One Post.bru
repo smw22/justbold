@@ -1,0 +1,20 @@
+meta {
+  name: Get One Post
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{domain}}/api/posts/:postId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  postId: {{post_id}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

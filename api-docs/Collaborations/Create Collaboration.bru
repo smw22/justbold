@@ -1,0 +1,28 @@
+meta {
+  name: Create Collaboration
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{domain}}/api/collaborations
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": "Collaboration title",
+    "content": "This is the collaboration content",
+    "media": "http://localhost:3000/image",
+    "genre_ids": [],
+    "paid": "",
+    "tag_ids": "",
+    "user_id": "1"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

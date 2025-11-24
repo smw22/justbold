@@ -1,0 +1,20 @@
+meta {
+  name: Delete Tag
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{domain}}/api/tags/:tagTitle
+  body: none
+  auth: inherit
+}
+
+params:path {
+  tagTitle: {{tag_title}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

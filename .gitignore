@@ -38,3 +38,6 @@ frontend/.react-router
 
 # Ignore public build artifacts
 frontend/public/build/
+
+# Bruno
+collection.bru
