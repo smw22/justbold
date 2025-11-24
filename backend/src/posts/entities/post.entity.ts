@@ -18,11 +18,9 @@ export class Post {
   @Column()
   media: string;
 
-  //   @ManyToOne(() => User, (user) => user.posts, { onDelete: "CASCADE" })
-  //   user: User;
-
-  @Column()
-  user_id: string;
+  // Foreign key to User entity
+  @ManyToOne(() => User, (user) => user.posts, { onDelete: "CASCADE" })
+  user: User;
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   created: Date;
