@@ -1,26 +1,59 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCollaborationDto } from './dto/create-collaboration.dto';
-import { UpdateCollaborationDto } from './dto/update-collaboration.dto';
+import { Injectable, HttpException } from "@nestjs/common";
+import { CreateCollaborationDto } from "./dto/create-collaboration.dto";
+import { UpdateCollaborationDto } from "./dto/update-collaboration.dto";
+
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Collaboration } from "./entities/collaboration.entity";
 
 @Injectable()
 export class CollaborationsService {
-  create(createCollaborationDto: CreateCollaborationDto) {
-    return 'This action adds a new collaboration';
+  constructor(
+    @InjectRepository(Collaboration)
+    private readonly collaborationRepository: Repository<Collaboration>
+  ) {}
+
+  async create(
+    createCollaborationDto: CreateCollaborationDto
+  ): Promise<Collaboration> {
+    const collabData = await this.collaborationRepository.create(
+      createCollaborationDto
+    );
+    return this.collaborationRepository.save(collabData);
   }
 
-  findAll() {
-    return `This action returns all collaborations`;
+  async findAll(): Promise<Collaboration[]> {
+    return await this.collaborationRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} collaboration`;
+  async findOne(id: string): Promise<Collaboration> {
+    const collabData = await this.collaborationRepository.findOneBy({ id });
+    if (!collabData) {
+      throw new HttpException("Collaboration not found", 404);
+    }
+    return collabData;
   }
 
-  update(id: number, updateCollaborationDto: UpdateCollaborationDto) {
-    return `This action updates a #${id} collaboration`;
+  async update(
+    id: string,
+    updateCollaborationDto: UpdateCollaborationDto
+  ): Promise<Collaboration> {
+    const existingCollab = await this.collaborationRepository.findOneBy({ id });
+    if (!existingCollab) {
+      throw new HttpException("Collaboration not found", 404);
+    }
+    const collabData = this.collaborationRepository.merge(
+      existingCollab,
+      updateCollaborationDto
+    );
+    return await this.collaborationRepository.save(collabData);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} collaboration`;
+  async remove(id: string) {
+    const existingCollab = await this.collaborationRepository.findOneBy({ id });
+    if (!existingCollab) {
+      throw new HttpException("Collaboration not found", 404);
+    }
+    return await this.collaborationRepository.remove(existingCollab);
   }
 }
