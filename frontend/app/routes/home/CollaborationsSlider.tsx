@@ -1,0 +1,104 @@
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { Link } from "react-router";
+
+type Collaboration = {
+  id: string;
+  user: {
+    name: string;
+    profile_image: string;
+  };
+  title: string;
+  content: string;
+  tags: string[];
+  location: string;
+  created: string;
+};
+
+type CollaborationsSliderProps = {
+  collaborations: {
+    data: Collaboration[];
+  };
+};
+
+export default function CollaborationsSlider({
+  collaborations,
+}: CollaborationsSliderProps) {
+  return (
+    <div className="bg-light-grey py-6">
+      <h2 className="px-4 font-semibold text-lg mb-4">
+        Collaborations requests
+      </h2>
+      <Swiper
+        className="pl-4!"
+        spaceBetween={12}
+        slidesPerView={1.25}
+        onSlideChange={() => console.log("slide change")}
+        onSwiper={(swiper) => console.log(swiper)}
+      >
+        {collaborations.data.map((collab: Collaboration) => (
+          <SwiperSlide className="h-auto!" key={collab.id}>
+            <div className="bg-white rounded-xl overflow-hidden flex flex-col gap-1 p-4 h-full">
+              <div className="flex items-center gap-1 border-b border-gray-200 pb-4 mb-4">
+                <div className="flex items-center gap-1">
+                  <img
+                    className="size-6 rounded-full"
+                    src={collab.user.profile_image}
+                    alt={collab.user.name}
+                  />
+                  <span className="text-xs">
+                    {collab.user.name.split(" ")[0]}
+                  </span>
+                </div>
+                <span className="text-xs text-gray-400">looking for a</span>
+                <span className="text-xs text-gray-400">
+                  #
+                  {typeof collab.tags[0] === "string"
+                    ? collab.tags[0]
+                    : collab.tags[0]?.title}
+                </span>
+              </div>
+              <div className="flex flex-col gap-2">
+                <h5>{collab.title}</h5>
+                <p className="text-sm text-gray-500">
+                  {collab.content.split(" ").length > 15
+                    ? collab.content.split(" ").slice(0, 15).join(" ") + "..."
+                    : collab.content}
+                </p>
+              </div>
+              <div className="mt-auto flex items-center justify-between gap-4">
+                <Link
+                  className="text-gray-600 font-bold text-sm"
+                  to={`/collaborations/${collab.id}`}
+                >
+                  Read more
+                </Link>
+                <div className="text-xs text-gray-400">
+                  <span>{collab.location}</span>
+                  <span> - </span>
+                  <span>
+                    {(() => {
+                      const createdDate = new Date(collab.created);
+                      const now = new Date();
+                      const diffMs = now.getTime() - createdDate.getTime();
+                      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                      if (diffHours < 1) {
+                        const diffMinutes = Math.floor(diffMs / (1000 * 60));
+                        return `${diffMinutes} minutes ago`;
+                      }
+                      if (diffHours < 24) {
+                        return `${diffHours} hours ago`;
+                      }
+                      const diffDays = Math.floor(diffHours / 24);
+                      return `${diffDays} days ago`;
+                    })()}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
+  );
+}
