@@ -1,11 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  ManyToOne,
-  JoinColumn,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { User } from "../../users/entities/user.entity";
 import { Service } from "../../services/entities/service.entity";
 
@@ -38,5 +31,5 @@ export class Review {
   type: string;
 
   @CreateDateColumn()
-  craeted: Date;
+  created: Date;
 }
