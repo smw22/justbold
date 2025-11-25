@@ -74,7 +74,6 @@ h1 {
   color: var(--black-text);
   font-size: 24px;
   line-height: 24px;
-  margin: 0;
 }
 h2 {
   font-family: var(--font-sans);
@@ -82,7 +81,6 @@ h2 {
   color: var(--black-text);
   font-size: 20px;
   line-height: 19px;
-  margin: 0;
 }
 h3 {
   font-family: var(--font-sans);
@@ -90,7 +88,6 @@ h3 {
   color: var(--black-text);
   font-size: 18px;
   line-height: 19px;
-  margin: 0;
 }
 h4 {
   font-family: var(--font-sans);
@@ -98,7 +95,6 @@ h4 {
   color: var(--black-text);
   font-size: 16px;
   line-height: normal;
-  margin: 0;
 }
 h5 {
   font-family: var(--font-sans);
@@ -106,7 +102,6 @@ h5 {
   color: var(--black-text);
   font-size: 14px;
   line-height: 135%;
-  margin: 0;
 }
 h6 {
   font-family: var(--font-sans);
@@ -114,7 +109,6 @@ h6 {
   color: var(--black-text);
   font-size: 12px;
   line-height: 100%;
-  margin: 0;
 }
 
 /* Utility text-size classes */

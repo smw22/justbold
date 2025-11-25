@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -29,6 +37,7 @@ export class UsersController {
   }
 
   @Get(":id")
+<<<<<<< HEAD
   async findOne(@Param("id") id: string) {
     try {
       const data = await this.usersService.findOne(id);
@@ -42,6 +51,10 @@ export class UsersController {
         message: error.message,
       };
     }
+=======
+  findOne(@Param("id") id: string) {
+    return this.usersService.findOne(+id);
+>>>>>>> origin/main
   }
 
   @Patch(":id")
@@ -52,5 +65,22 @@ export class UsersController {
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.usersService.remove(+id);
+  }
+
+  @Get(":id/posts")
+  async findUserPosts(@Param("id") id: string) {
+    try {
+      const data = await this.usersService.findUserPosts(id);
+      return {
+        success: true,
+        data,
+        message: "User posts retrieved successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 }

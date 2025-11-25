@@ -12,8 +12,8 @@ export class Post {
   @Column("text")
   content: string;
 
-  @Column()
-  tags: string;
+  @Column("simple-array")
+  tags: string[];
 
   @Column()
   media: string;

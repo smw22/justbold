@@ -13,7 +13,7 @@ export class UpdatePostDto extends PartialType(CreatePostDto) {
 
   @IsOptional()
   @IsString()
-  tags?: string;
+  tags?: string[];
 
   @IsOptional()
   @IsString()
