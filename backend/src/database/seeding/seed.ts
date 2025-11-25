@@ -8,10 +8,18 @@ import { PostFactory } from "./post.factory";
 import { UserFactory } from "./user.factory";
 import { TagFactory } from "./tag.factory";
 import { Tag } from "src/tags/entities/tag.entity";
+import { GenreFactory } from "./genre.factory";
+import { CollaborationFactory } from "./collaboration.factory";
 
 const options: DataSourceOptions & SeederOptions = {
   ...AppDataSource.options,
-  factories: [PostFactory, UserFactory, TagFactory],
+  factories: [
+    PostFactory,
+    UserFactory,
+    TagFactory,
+    GenreFactory,
+    CollaborationFactory,
+  ],
   seeds: [MainSeeder],
 };
 
