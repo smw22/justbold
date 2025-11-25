@@ -1,6 +1,10 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Link } from "react-router";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 type Collaboration = {
   id: string;
@@ -42,7 +46,7 @@ export default function CollaborationsSlider({
               <div className="flex items-center gap-1 border-b border-gray-200 pb-4 mb-4">
                 <div className="flex items-center gap-1">
                   <img
-                    className="size-6 rounded-full"
+                    className="size-8 rounded-full"
                     src={collab.user.profile_image}
                     alt={collab.user.name}
                   />
@@ -76,29 +80,21 @@ export default function CollaborationsSlider({
                 <div className="text-xs text-gray-400">
                   <span>{collab.location}</span>
                   <span> - </span>
-                  <span>
-                    {(() => {
-                      const createdDate = new Date(collab.created);
-                      const now = new Date();
-                      const diffMs = now.getTime() - createdDate.getTime();
-                      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-                      if (diffHours < 1) {
-                        const diffMinutes = Math.floor(diffMs / (1000 * 60));
-                        return `${diffMinutes} minutes ago`;
-                      }
-                      if (diffHours < 24) {
-                        return `${diffHours} hours ago`;
-                      }
-                      const diffDays = Math.floor(diffHours / 24);
-                      return `${diffDays} days ago`;
-                    })()}
-                  </span>
+                  <span>{dayjs(collab.created).fromNow()}</span>
                 </div>
               </div>
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
+      <div className="px-4 mt-4 flex itenms-center">
+        <Link
+          to="/collaborations"
+          className="bg-primary-yellow px-4 py-2 rounded-full flex items-center justify-center"
+        >
+          See more collabs
+        </Link>
+      </div>
     </div>
   );
 }
