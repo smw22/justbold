@@ -1,20 +1,12 @@
 import Icon from "~/components/icon";
 import { Link } from "react-router";
+import AvatarHeader from "./AvatarHeader";
 
 export default function ServicesCard() {
   return (
     <div className="flex flex-col gap-4 p-4 m-auto w-[90%] max-w-md border border-gray-300 rounded-3xl shadow-lg">
       <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-        <div className="flex items-center gap-2">
-          <div className="w-[25px] h-[25px]">
-            <img
-              src="/images/user-avatar.png"
-              alt="user avatar"
-              className="w-full"
-            />
-          </div>
-          <span>EchoLabs Studio</span>
-        </div>
+        <AvatarHeader imageSize={25} title="EchoLabs Studio" />
 
         <span className="text-lightgrey">#recording</span>
         <div>

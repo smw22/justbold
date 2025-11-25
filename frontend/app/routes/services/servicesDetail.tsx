@@ -1,7 +1,8 @@
 import Button from "~/components/Button";
 import Icon from "~/components/icon";
-import ReviewStars from "./components/reviewStarts";
+import ReviewStars from "./components/ReviewStarts";
 import { Link } from "react-router";
+import AvatarHeader from "./components/AvatarHeader";
 
 export default function ServicesDetail() {
   const reviewsAvg = 3.6;
@@ -10,16 +11,7 @@ export default function ServicesDetail() {
     <div className=" p-4">
       Services Detail
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-[40px] h-[40px]">
-            <img
-              src="/images/user-avatar.png"
-              alt="user avatar"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <span>EchoLabs Studio</span>
-        </div>
+        <AvatarHeader imageSize={40} title="EchoLabs Studio" />
 
         <span className="text-lightgrey">#recording</span>
         <div>
