@@ -21,14 +21,14 @@ export default function ProfileHeader({
       <section className="flex justify-center gap-1 items-center">
         <div className="flex flex-col items-center w-24 gap-1 md:hidden">
           <p className="text-lg">{connection_count}</p>
-          <p className="text-xs">Connections</p>
+          <p className="text-xs">{connection_count === 1 ? "Connection" : "Connections"}</p>
         </div>
 
         <div style={{ backgroundImage: `url('${image}')` }} className={`w-36 h-36 md:z-20 rounded-full bg-cover bg-gray-400  border-2 border-white`}></div>
 
         <div className="flex flex-col items-center w-24 gap-1 md:hidden">
           <p className="text-lg">{post_count}</p>
-          <p className="text-xs">Posts</p>
+          <p className="text-xs">{post_count === 1 ? "Post" : "Posts"}</p>
         </div>
       </section>
       <section className="flex flex-col items-center md:items-start gap-2 flex-1">
@@ -38,9 +38,13 @@ export default function ProfileHeader({
         </div>
         <p className="text-xs">{bio}</p>
         <div className="hidden md:flex gap-2 text-sm mt-2">
-          <p>{connection_count} connections</p>
+          <p>
+            {connection_count} {connection_count === 1 ? "Connection" : "Connections"}
+          </p>
           <p>|</p>
-          <p>{post_count} posts</p>
+          <p>
+            {post_count} {post_count === 1 ? "Post" : "Posts"}
+          </p>
         </div>
       </section>
       <section className="flex flex-row md:flex-col md:max-w-48 gap-4 w-full mt-1">
