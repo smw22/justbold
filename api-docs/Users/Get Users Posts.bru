@@ -1,0 +1,20 @@
+meta {
+  name: Get Users Posts
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{domain}}/api/users/:userId/posts
+  body: none
+  auth: inherit
+}
+
+params:path {
+  userId: {{user_id}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
