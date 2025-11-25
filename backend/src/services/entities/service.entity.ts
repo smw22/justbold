@@ -5,8 +5,6 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
-  ManyToMany,
-  JoinTable,
 } from "typeorm";
 import { User } from "../../users/entities/user.entity";
 import { Tag } from "../../tags/entities/tag.entity";
@@ -20,6 +18,10 @@ export class Service {
   @ManyToOne(() => User, { eager: true, onDelete: "CASCADE" })
   @JoinColumn({ name: "user_id" })
   user: User;
+
+  @ManyToOne(() => Tag, { eager: true })
+  @JoinColumn({ name: "tag_id" })
+  tags: Tag[];
 
   @Column({ nullable: true })
   media: string;
@@ -35,10 +37,6 @@ export class Service {
 
   @Column({ nullable: true })
   location: string;
-
-  @ManyToMany(() => Tag, { eager: true })
-  @JoinTable({ name: "service_tags" })
-  tags: Tag[];
 
   @CreateDateColumn()
   created: Date;
