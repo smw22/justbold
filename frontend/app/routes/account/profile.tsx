@@ -11,30 +11,29 @@ import SoMeTikTok from "../../assets/icons/SoMeTikTok.svg";
 
 export async function clientLoader({ params }: { params: { profileId: string } }) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const response = await fetch(`${apiUrl}/users/${params.profileId}`);
-  if (!response.ok) {
+  const profileResponse = await fetch(`${apiUrl}/users/${params.profileId}`);
+  const postsResponse = await fetch(`${apiUrl}/posts/${params.profileId}`);
+  if (!profileResponse.ok || !postsResponse.ok) {
     throw new Error("Unknown error.");
   }
 
-  if (response.status === 404) {
-    throw new Response("Thread not found", { status: 404 });
+  if (profileResponse.status === 404) {
+    throw new Response("Profile not found", { status: 404 });
   }
 
-  // Check for other errors
-  if (!response.ok) {
-    throw new Error(`Failed to fetch thread: ${response.status}`);
-  }
-
-  const profile = await response.json();
+  const profile = await profileResponse.json();
+  const user_posts = await postsResponse.json();
+  console.log(user_posts);
 
   return {
     profile,
+    user_posts,
   };
 }
 
 export default function Users() {
   // Access the profile from the loader
-  const { profile } = useLoaderData();
+  const { profile, user_posts } = useLoaderData();
   const [tab, setTab] = useState(0);
 
   return (
@@ -45,7 +44,7 @@ export default function Users() {
           name={profile.data.name}
           bio={profile.data.bio}
           connection_count={profile.data.connections.length}
-          post_count={0}
+          post_count={user_posts ? user_posts.length : 0}
           image={profile.data.profile_image}
           theme={profile.data.theme}
         />
@@ -64,6 +63,8 @@ export default function Users() {
             youtube={profile.data.youtube}
             tiktok={profile.data.tiktok}
             spotify_embed_link={profile.data.spotify_embed_link}
+            videos={profile.data.videos}
+            posts={user_posts}
           />
         ) : (
           <Posts />
@@ -84,6 +85,8 @@ function About({
   youtube,
   tiktok,
   spotify_embed_link,
+  videos,
+  posts,
 }: {
   theme: string;
   about: string;
@@ -95,12 +98,14 @@ function About({
   youtube: string;
   tiktok: string;
   spotify_embed_link: string;
+  videos: string[];
+  posts: any;
 }) {
   return (
     <article className="bg-white p-4 flex flex-col gap-4 pb-36">
       <section>
         <h5 className="font-normal text-gray-400! text-sm">About me</h5>
-        <p className="text-sm mx-4 my-3">{about}</p>
+        <p className="text-sm mx-4 my-3 max-w-md">{about}</p>
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">What I am looking for</h5>
@@ -173,11 +178,26 @@ function About({
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Videos</h5>
-        <p className="text-sm mx-4 my-3">Coming later, skrrrt.</p>
+        <div className="m-4 flex flex-col md:grid md:grid-cols-2 gap-4">
+          {videos.map((video) => (
+            <div className="aspect-video w-full">
+              <iframe
+                className="w-full h-full"
+                style={{ borderRadius: 12 }}
+                src={`https://www.youtube.com/embed/${video.split("?v=")[1]}`}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
+            </div>
+          ))}
+        </div>
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Past collaborations</h5>
-        <p className="text-sm mx-4 my-3">Her skal vi lave kald til users endpoint</p>
+        <p className="text-sm mx-4 my-3">Her skal vi lave kald til collaborations endpoint</p>
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Questions</h5>

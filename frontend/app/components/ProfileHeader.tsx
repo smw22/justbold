@@ -24,7 +24,7 @@ export default function ProfileHeader({
           <p className="text-xs">Connections</p>
         </div>
 
-        <div className={`w-36 h-36 md:z-20 rounded-full bg-gray-400 bg-[url('${image}')] border-2 border-white`}></div>
+        <div style={{ backgroundImage: `url('${image}')` }} className={`w-36 h-36 md:z-20 rounded-full bg-cover bg-gray-400  border-2 border-white`}></div>
 
         <div className="flex flex-col items-center w-24 gap-1 md:hidden">
           <p className="text-lg">{post_count}</p>

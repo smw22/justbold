@@ -4,6 +4,7 @@ export default function Tabs({ tabs, currentTab, setTab }: { tabs: string[]; cur
       {tabs?.map((tab, index) => (
         <>
           <button
+            key={tab + index}
             onClick={() => setTab(index)}
             className={`flex py-3 m-2 rounded-2xl flex-row bg-white cursor-pointer items-center justify-center w-full ${index === currentTab ? "text-black" : "text-gray-400"} hover:bg-gray-100 transition-colors duration-400 ease-in-out`}
           >
