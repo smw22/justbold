@@ -6,6 +6,7 @@ export default [
 
     // Create
     route("create", "routes/create/create.tsx"),
+    route("create/service", "routes/create/createService.tsx"), //This should be made with a parent route later (Outlet)
 
     // Collaborations
     route("collaborations", "routes/collaborations/collaborations.tsx"),
