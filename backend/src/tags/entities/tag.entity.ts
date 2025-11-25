@@ -1,13 +1,10 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  PrimaryColumn,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
 export class Tag {
-  @PrimaryColumn()
-  title: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
+
+  @Column({ unique: true, length: 50 })
+  title: string; // "recording", "mixing", etc.
 }

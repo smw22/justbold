@@ -20,5 +20,8 @@
   "workspaces": [
     "backend",
     "frontend"
-  ]
+  ],
+  "dependencies": {
+    "class-validator": "^0.14.3"
+  }
 }
