@@ -1,6 +1,6 @@
 import Button from "~/components/Button";
 import Icon from "~/components/icon";
-import ReviewStars from "./components/ReviewStarts";
+import ReviewStars from "./components/ReviewStars";
 import { Link } from "react-router";
 import AvatarHeader from "./components/AvatarHeader";
 

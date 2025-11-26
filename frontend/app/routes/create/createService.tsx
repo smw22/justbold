@@ -1,23 +1,5 @@
-import type { Params } from "react-router";
 import AvatarHeader from "../services/components/AvatarHeader";
 import CreateServiceForm from "./components/CreateServiceForm";
-
-export async function clientLoader({ params }: { params: Params }) {
-  const response = await fetch(
-    `http://localhost:4000/services/${params.serviceId}`
-  );
-
-  if (response.status === 404) {
-    throw new Response("Service Not Found", { status: 404 });
-  }
-
-  if (!response.ok) {
-    throw new Error(`Failed to load service: ${response.status}`);
-  }
-
-  const service = await response.json();
-  return { service };
-}
 
 export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();
@@ -35,7 +17,7 @@ export async function clientAction({ request }: { request: Request }) {
   }
 
   try {
-    const response = await fetch("http://localhost:4000/services", {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/services`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

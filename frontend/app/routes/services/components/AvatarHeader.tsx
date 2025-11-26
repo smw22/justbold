@@ -6,11 +6,11 @@ interface AvatarHeaderProps {
 export default function AvatarHeader({ imageSize, title }: AvatarHeaderProps) {
   return (
     <div className="flex items-center gap-2">
-      <div className={`w-[${imageSize}px] h-[${imageSize}px]`}>
+      <div style={{ width: `${imageSize}px`, height: `${imageSize}px` }}>
         <img
           src="/images/user-avatar.png"
           alt="user avatar"
-          className="w-full"
+          className="w-full h-full object-cover rounded-full"
         />
       </div>
       <span>{title}</span>
