@@ -30,7 +30,7 @@ export default function Steps() {
   return (
     <div className="h-dvh w-screen flex flex-col items-center relative py-[50px]">
       <div className="w-[300px] relative">
-        <div className="h-1.5 bg-black opacity-16 rounded-3xl absolute w-full top-0 left-0"></div>
+        <div className="h-1.5 bg-black opacity-8 rounded-3xl absolute w-full top-0 left-0"></div>
         <div
           className="h-1.5 bg-primary-yellow rounded-3xl z-1 absolute top-0 left-0 transition-all duration-300"
           style={{ width: `${((currentStep + 1) / totalSteps) * 300}px` }}
