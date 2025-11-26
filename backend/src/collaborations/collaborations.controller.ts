@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query, // <-- add Query import
 } from "@nestjs/common";
 import { CollaborationsService } from "./collaborations.service";
 import { CreateCollaborationDto } from "./dto/create-collaboration.dto";
@@ -35,9 +36,17 @@ export class CollaborationsController {
   }
 
   @Get()
-  async findAll() {
+  async findAll(
+    @Query("page") page: string = "1",
+    @Query("limit") limit: string = "10"
+  ) {
     try {
-      const data = await this.collaborationsService.findAll();
+      const pageNum = parseInt(page, 10) || 1;
+      const limitNum = parseInt(limit, 10) || 10;
+      const { data } = await this.collaborationsService.findAll(
+        pageNum,
+        limitNum
+      );
       return {
         success: true,
         data,

@@ -22,8 +22,16 @@ export class CollaborationsService {
     return this.collaborationRepository.save(collabData);
   }
 
-  async findAll(): Promise<Collaboration[]> {
-    return await this.collaborationRepository.find();
+  async findAll(
+    page = 1,
+    limit = 10
+  ): Promise<{ data: Collaboration[]; total: number }> {
+    const [data, total] = await this.collaborationRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { created: "DESC" },
+    });
+    return { data, total };
   }
 
   async findOne(id: string): Promise<Collaboration> {
