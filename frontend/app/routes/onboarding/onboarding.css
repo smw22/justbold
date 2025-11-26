@@ -38,3 +38,19 @@
     z-index: 1;
   }
 }
+
+.onboarding-swiper .swiper-pagination-bullet {
+  background: var(--color-neutral-grey);
+  opacity: var(--opacity-40);
+}
+
+.onboarding-swiper .swiper-pagination-bullet-active {
+  background: var(--color-neutral-grey);
+  opacity: 1;
+}
+
+.onboarding-swiper .swiper-pagination {
+  bottom: 0 !important;
+  padding: 0 !important;
+  margin: 0;
+}
