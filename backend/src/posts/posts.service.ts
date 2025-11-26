@@ -18,8 +18,16 @@ export class PostsService {
     return this.postsRepository.save(postData);
   }
 
-  async findAll(): Promise<Post[]> {
-    return await this.postsRepository.find();
+  async findAll(
+    page = 1,
+    limit = 10
+  ): Promise<{ data: Post[]; total: number }> {
+    const [data, total] = await this.postsRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { created: "DESC" },
+    });
+    return { data, total };
   }
 
   async findOne(id: string): Promise<Post> {
