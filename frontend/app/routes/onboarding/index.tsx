@@ -1,13 +1,36 @@
 import "./onboarding.css";
 import Logo from "~/assets/icons/artwork/Logo";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import { useNavigate } from "react-router";
 import "swiper/css";
-import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Button from "~/components/Button";
+import ArrowRight from "~/assets/icons/ArrowRight";
+
+function CustomNavigation() {
+  const swiper = useSwiper();
+  return (
+    <>
+      <button
+        onClick={() => swiper.slidePrev()}
+        className="absolute left-6 top-1/2 -translate-y-1/2 rotate-180 rounded-full border text-darkgrey z-10 cursor-pointer p-0.5"
+      >
+        <ArrowRight />
+      </button>
+      <button
+        onClick={() => swiper.slideNext()}
+        className="absolute right-6 top-1/2 -translate-y-1/2 rounded-full border text-darkgrey z-10 cursor-pointer p-0.5"
+      >
+        <ArrowRight />
+      </button>
+    </>
+  );
+}
 
 export default function Onboarding() {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="onboarding-yellow-bg bg-primary-yellow w-dvw h-dvh flex items-center justify-center z-2 absolute">
@@ -15,47 +38,57 @@ export default function Onboarding() {
       </div>
       <div className="h-dvh w-screen flex flex-col items-center justify-center">
         <Swiper
-          modules={[Navigation, Pagination]}
+          modules={[Pagination]}
           spaceBetween={0}
           slidesPerView={1}
-          navigation
           pagination={{ clickable: true }}
-          className="flex! flex-col items-center w-dvw"
+          loop={true}
+          className="flex! flex-col items-center w-dvw onboarding-swiper relative max-w-[393px]"
         >
+          <CustomNavigation />
           <SwiperSlide>
-            <div className="flex flex-col items-center gap-4 p-6">
+            <div className="flex flex-col items-center gap-2 p-6">
               <img
-                src="/images/slide1.jpg"
-                alt="Slide 1"
-                className="w-full h-48"
+                src="/images/iphone-15.png"
+                alt="iPhone 15"
+                className="h-[201px] max-w-[200px]] object-contain"
               />
-              <h3 className="text-xl">Make connections with musicians</h3>
+              <h2 className="max-w-[280px] text-center">
+                Make connections with musicians
+              </h2>
             </div>
           </SwiperSlide>
 
           <SwiperSlide>
             <div className="flex flex-col items-center gap-4 p-6">
               <img
-                src="/images/slide2.jpg"
-                alt="Slide 2"
-                className="w-full h-48"
+                src="/images/iphone-12-pro.png"
+                alt="iPhone 12 Pro"
+                className="h-[201px] max-w-[221px]] object-contain"
               />
-              <h3 className="text-xl">Post requests</h3>
+              <h2 className="max-w-[280px] text-center">Post requests</h2>
             </div>
           </SwiperSlide>
 
           <SwiperSlide>
             <div className="flex flex-col items-center gap-4 p-6">
               <img
-                src="/images/slide3.jpg"
-                alt="Slide 3"
-                className="w-full h-48"
+                src="/images/iphone-15-pro.png"
+                alt="iPhone 15 Pro"
+                className="h-[201px] max-w-[268px]] object-contain"
               />
-              <h3 className="text-xl">Find the right service for you</h3>
+              <h2 className="max-w-[280px] text-center">
+                Find the right service for you
+              </h2>
             </div>
           </SwiperSlide>
         </Swiper>
-        <Button text={"Get started!"} variant={"primary"} />
+        <Button
+          text={"Get started!"}
+          variant={"primary"}
+          className="z-1 my-14"
+          onClick={() => navigate("/onboarding/steps")}
+        />
       </div>
     </>
   );
