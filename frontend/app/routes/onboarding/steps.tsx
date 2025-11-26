@@ -38,6 +38,7 @@ export default function Steps() {
       </div>
       <Swiper
         slidesPerView={1}
+        speed={0}
         allowTouchMove={false}
         onSwiper={setSwiperInstance}
         onSlideChange={(swiper) => setCurrentStep(swiper.activeIndex)}
