@@ -4,6 +4,7 @@ import Icon from "~/components/icon";
 import ProfileHeader from "~/components/ProfileHeader";
 import Tabs from "~/components/Tabs";
 import Post from "~/components/Post";
+import ShowArtists from "~/components/ShowArtists";
 import SoMeInstagram from "../../assets/icons/SoMeInstagram.svg";
 import SoMeTwitter from "../../assets/icons/SoMeTwitter.svg";
 import SoMeFacebook from "../../assets/icons/SoMeFacebook.svg";
@@ -119,7 +120,8 @@ function About({ profile }: { profile: ProfileType }) {
         </div>
       </section>
       <section>
-        <h5 className="font-normal text-gray-400! text-sm">Artists I like</h5>
+        <h5 className="font-normal text-gray-400! text-sm">Artists I like (static)</h5>
+        <ShowArtists users={["x", "x", "x", "x", "x", "x", "x", "x"]} />
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">My Music</h5>
@@ -156,8 +158,8 @@ function About({ profile }: { profile: ProfileType }) {
         </div>
       </section>
       <section>
-        <h5 className="font-normal text-gray-400! text-sm">Past collaborations</h5>
-        <p className="text-sm mx-4 my-3">Her skal vi lave kald til collaborations endpoint</p>
+        <h5 className="font-normal text-gray-400! text-sm">Past collaborations (static)</h5>
+        <ShowArtists users={["x", "x", "x", "x", "x", "x", "x", "x"]} />
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Questions</h5>
