@@ -12,5 +12,5 @@ export type Service = {
   tag: {
     title: string;
   };
-  created: Date;
+  created: Date | string;
 };

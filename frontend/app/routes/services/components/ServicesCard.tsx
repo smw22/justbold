@@ -7,6 +7,22 @@ type ServicesCardProps = {
   servicesData: Service;
 };
 
+function timeAgo(dateString: string | Date): string {
+  const now = new Date();
+  const createdDate = new Date(dateString);
+  const diffMs = now.getTime() - createdDate.getTime();
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffHours < 24) {
+    return `${diffHours}h ago`;
+  } else if (diffDays < 31) {
+    return `${diffDays}d ago`;
+  } else {
+    return "+1 month ago";
+  }
+}
+
 export default function ServicesCard({ servicesData }: ServicesCardProps) {
   return (
     <div className="flex flex-col gap-4 p-4 m-auto w-[90%] max-w-md border border-gray-300 rounded-3xl shadow-lg">
@@ -43,7 +59,7 @@ export default function ServicesCard({ servicesData }: ServicesCardProps) {
         <div className="flex justify-between">
           <span className="font-bold underline">Read more...</span>
           <span className="text-lightgrey">
-            {servicesData.location} - 4h ago
+            {servicesData.location} - {timeAgo(servicesData.created)}
           </span>
         </div>
       </Link>
