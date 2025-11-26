@@ -41,6 +41,6 @@ export class UsersService {
   }
 
   async findUserPosts(id: string) {
-    return await this.postsRepository.find({ where: { user: { id } } });
+    return await this.postsRepository.findAndCount({ where: { user: { id } } });
   }
 }
