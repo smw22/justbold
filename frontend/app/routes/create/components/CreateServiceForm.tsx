@@ -13,6 +13,7 @@ export default function CreateServiceForm() {
           id="title"
           placeholder="Studio Session"
           className={inputStyle}
+          required
         />
       </p>
 
@@ -30,7 +31,7 @@ export default function CreateServiceForm() {
 
       <p className="flex flex-col gap-2">
         <label htmlFor="tag">Choose a tag</label>
-        <select name="tag" id="tag" className={inputStyle}>
+        <select name="tag" id="tag" className={inputStyle} required>
           {/*NOTE: In the future we have to map the multiple possible tags from the tag table */}
           <option value="art">Art</option>
           <option value="recording">Recording</option>
@@ -45,6 +46,7 @@ export default function CreateServiceForm() {
           id="content"
           placeholder="Write your description here..."
           className={inputStyle}
+          required
         />
       </p>
 
@@ -56,6 +58,7 @@ export default function CreateServiceForm() {
           id="price"
           placeholder="100"
           className={inputStyle}
+          required
         />
       </p>
 
@@ -67,6 +70,7 @@ export default function CreateServiceForm() {
           id="location"
           placeholder="Odense"
           className={inputStyle}
+          required
         />
       </p>
 
