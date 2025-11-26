@@ -38,14 +38,19 @@ export class CollaborationsController {
   @Get()
   async findAll(
     @Query("page") page: string = "1",
-    @Query("limit") limit: string = "10"
+    @Query("limit") limit: string = "10",
+    @Query("role") role: string = "",
+    @Query("genre") genre: string = "",
+    @Query("orderBy") orderBy: string = "created"
   ) {
     try {
       const pageNum = parseInt(page, 10) || 1;
       const limitNum = parseInt(limit, 10) || 10;
       const { data } = await this.collaborationsService.findAll(
         pageNum,
-        limitNum
+        limitNum,
+        genre,
+        orderBy
       );
       return {
         success: true,
