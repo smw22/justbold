@@ -1,10 +1,14 @@
 import { Form } from "react-router";
 
-export default function CreateServiceForm() {
+export default function CreateServiceForm({
+  tags,
+}: {
+  tags: Array<{ id: string; title: string }>;
+}) {
   const inputStyle = "bg-light-grey p-4 rounded-lg border border-neutral-grey";
 
   return (
-    <Form className="flex flex-col gap-4">
+    <Form method="post" className="flex flex-col gap-4">
       <p className="flex flex-col gap-2">
         <label htmlFor="title">Title</label>
         <input
@@ -32,10 +36,11 @@ export default function CreateServiceForm() {
       <p className="flex flex-col gap-2">
         <label htmlFor="tag">Choose a tag</label>
         <select name="tag" id="tag" className={inputStyle} required>
-          {/*NOTE: In the future we have to map the multiple possible tags from the tag table */}
-          <option value="art">Art</option>
-          <option value="recording">Recording</option>
-          <option value="studio">Studio</option>
+          {tags.map((tag) => (
+            <option key={tag.id} value={tag.id}>
+              {tag.title.charAt(0).toUpperCase() + tag.title.slice(1)}
+            </option>
+          ))}
         </select>
       </p>
 
