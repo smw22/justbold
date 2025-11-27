@@ -8,21 +8,21 @@ export class Review {
   id: string;
 
   // The user who has received the review
-  @ManyToOne(() => User, { eager: true })
+  @ManyToOne(() => User, (user) => user.reviews)
   @JoinColumn({ name: "user_id" })
   user: User;
 
   // The user who has sent the review
-  @ManyToOne(() => User, { eager: true, onDelete: "CASCADE" })
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "sender_id" })
   sender: User;
 
-  @ManyToOne(() => Service, { eager: true, onDelete: "CASCADE" })
+  @ManyToOne(() => Service, { onDelete: "CASCADE" })
   @JoinColumn({ name: "service_id" })
   service: Service;
 
   @Column("int")
-  raiting: number;
+  rating: number;
 
   @Column("text")
   content: string;

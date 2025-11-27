@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "./entities/user.entity";
 import { Post } from "../posts/entities/post.entity";
+import { Review } from "src/reviews/entities/review.entity";
 
 @Injectable()
 export class UsersService {
@@ -13,7 +14,9 @@ export class UsersService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
     @InjectRepository(Post)
-    private readonly postsRepository: Repository<Post>
+    private readonly postsRepository: Repository<Post>,
+    @InjectRepository(Review)
+    private readonly reviewsReposity: Repository<Review>
   ) {}
 
   create(createUserDto: CreateUserDto) {
@@ -25,11 +28,15 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    const postData = await this.usersRepository.findOneBy({ id });
-    if (!postData) {
-      throw new HttpException("Post not found", 404);
+    const userData = await this.usersRepository.findOne({
+      where: { id },
+    });
+
+    if (!userData) {
+      throw new HttpException("User not found", 404);
     }
-    return postData;
+
+    return userData;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
@@ -42,5 +49,20 @@ export class UsersService {
 
   async findUserPosts(id: string) {
     return await this.postsRepository.findAndCount({ where: { user: { id } } });
+  }
+
+  async findUserReviews(id: string) {
+    const [data, count] = await this.reviewsReposity.findAndCount({
+      where: { user: { id } },
+      relations: ["sender", "service"], // Add relations here
+    });
+
+    if (count === 0) {
+      throw new HttpException("No reviews found", 404);
+    }
+
+    const avg_rating = data.reduce((sum, review) => sum + review.rating, 0) / count;
+
+    return { data, avg_rating };
   }
 }
