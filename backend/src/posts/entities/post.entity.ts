@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { User } from "../../users/entities/user.entity";
 
 @Entity()
@@ -19,7 +25,10 @@ export class Post {
   media: string;
 
   // Foreign key to User entity
-  @ManyToOne(() => User, (user) => user.posts, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, (user) => user.posts, {
+    onDelete: "CASCADE",
+    eager: true,
+  })
   @JoinColumn({ name: "user_id" })
   user: User;
 

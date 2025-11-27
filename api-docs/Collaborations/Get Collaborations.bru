@@ -5,9 +5,14 @@ meta {
 }
 
 get {
-  url: {{domain}}/api/collaborations
+  url: {{domain}}/api/collaborations?page=1&limit=10
   body: none
   auth: inherit
+}
+
+params:query {
+  page: 1
+  limit: 10
 }
 
 settings {
