@@ -4,6 +4,7 @@ import CreateServiceForm from "./components/CreateServiceForm";
 
 export async function clientLoader(): Promise<{}> {
   const userId = "445338b5-4396-48b3-8d7a-78564776cfb1"; // Replace with actual logic to get current user ID
+
   const userResponse = await fetch(
     `${import.meta.env.VITE_API_URL}/users/${userId}`
   );
@@ -29,14 +30,14 @@ export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();
   const title = formData.get("title") as string;
   const media = formData.get("media") as string;
-  const tag = formData.get("tag") as string;
+  const tag_id = formData.get("tag_id") as string;
   const content = formData.get("content") as string;
   const price = formData.get("price") as string;
   const location = formData.get("location") as string;
 
-  const user = "445338b5-4396-48b3-8d7a-78564776cfb1"; // NOTE: Replace with actual logic to get current user ID when we add auth
+  const user_id = "445338b5-4396-48b3-8d7a-78564776cfb1"; // NOTE: Replace with actual logic to get current user ID when we add auth
 
-  if (!title || !content || !tag || !price || !location) {
+  if (!title || !content || !tag_id || !price || !location) {
     throw new Error(
       "All fields are required, make sure to fill: title, media, tag, content, price and location"
     );
@@ -49,13 +50,13 @@ export async function clientAction({ request }: { request: Request }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        tag_id,
+        user_id,
         title,
         media: media || undefined,
-        tag,
         content,
         price: Number(price),
         location,
-        user,
       }),
     });
 

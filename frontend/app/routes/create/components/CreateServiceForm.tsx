@@ -35,8 +35,9 @@ export default function CreateServiceForm({
       </p>
 
       <p className="flex flex-col gap-2">
-        <label htmlFor="tag">Choose a tag *</label>
-        <select name="tag" id="tag" className={inputStyle} required>
+        <label htmlFor="tag_id">Choose a tag *</label>
+        <select name="tag_id" id="tag_id" className={inputStyle} required>
+          <option value="">-- Select a tag --</option>
           {tags.map((tag) => (
             <option key={tag.id} value={tag.id}>
               {tag.title.charAt(0).toUpperCase() + tag.title.slice(1)}
