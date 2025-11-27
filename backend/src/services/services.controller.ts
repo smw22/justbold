@@ -1,34 +1,103 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ServicesService } from './services.service';
-import { CreateServiceDto } from './dto/create-service.dto';
-import { UpdateServiceDto } from './dto/update-service.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from "@nestjs/common";
+import { ServicesService } from "./services.service";
+import { CreateServiceDto } from "./dto/create-service.dto";
+import { UpdateServiceDto } from "./dto/update-service.dto";
 
-@Controller('services')
+@Controller("services")
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Post()
-  create(@Body() createServiceDto: CreateServiceDto) {
-    return this.servicesService.create(createServiceDto);
+  async create(@Body() createServiceDto: CreateServiceDto) {
+    try {
+      await this.servicesService.create(createServiceDto);
+
+      return {
+        success: true,
+        message: "Service created successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 
   @Get()
-  findAll() {
-    return this.servicesService.findAll();
+  async findAll() {
+    try {
+      const data = await this.servicesService.findAll();
+      return {
+        success: true,
+        data,
+        message: "Services retrieved successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.servicesService.findOne(+id);
+  @Get(":id")
+  async findOne(@Param("id") id: string) {
+    try {
+      const data = await this.servicesService.findOne(id);
+      return {
+        success: true,
+        data,
+        message: "Service retrieved successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
-    return this.servicesService.update(+id, updateServiceDto);
+  @Patch(":id")
+  async update(
+    @Param("id") id: string,
+    @Body() updateServiceDto: UpdateServiceDto
+  ) {
+    try {
+      await this.servicesService.update(id, updateServiceDto);
+      return {
+        success: true,
+        message: "Service updated successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.servicesService.remove(+id);
+  @Delete(":id")
+  async remove(@Param("id") id: string) {
+    try {
+      await this.servicesService.remove(id);
+      return {
+        success: true,
+        message: "Service removed successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 }
