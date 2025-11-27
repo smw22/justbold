@@ -141,7 +141,7 @@ export default function CollaborationDetails() {
   const collab = collaboration.data;
 
   return (
-    <div className="px-4 flex flex-col gap-4">
+    <div className="px-4 flex flex-col gap-4 outer-wrapper">
       <CollabHeader
         userName={collab.user.name}
         userImage={collab.user.profile_image}

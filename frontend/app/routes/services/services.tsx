@@ -19,8 +19,7 @@ export default function Services() {
 
   return (
     <>
-      Services Page
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 outer-wrapper">
         {services.data.map((service: Service) => (
           <ServicesCard key={service.id} servicesData={service} />
         ))}

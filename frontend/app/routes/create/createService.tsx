@@ -53,7 +53,7 @@ export async function clientAction({ request }: { request: Request }) {
 
 export default function CreateService() {
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 p-4 outer-wrapper">
       <AvatarHeader imageSize={40} title="EchoLabs Studio" />
       <CreateServiceForm />
     </div>

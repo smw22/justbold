@@ -8,8 +8,8 @@ export default function Header() {
   const isHomePage = location.pathname === "/";
 
   return (
-    <header>
-      <nav className="flex justify-between items-center p-6">
+    <header className="outer-wrapper">
+      <nav className="flex justify-between items-center px-4 py-6">
         {/* navigate(-1) : Lets you go back to the previous page  */}
         {isHomePage ? (
           <Logo />
