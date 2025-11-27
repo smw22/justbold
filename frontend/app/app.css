@@ -230,7 +230,7 @@ h6 {
   opacity: 0.7;
 }
 
-.slider:before {
+.toggle-switch:before {
   position: absolute;
   content: "";
   height: 20px;
@@ -245,21 +245,34 @@ h6 {
   outline-offset: -1px;
 }
 
-input + .slider {
+input + .toggle-switch {
   outline: 1px solid var(--color-neutral-grey);
   outline-offset: -1px;
 }
 
-input:checked + .slider {
+input:checked + .toggle-switch {
   outline: 1px solid var(--color-primary-yellow);
   outline-offset: -1px;
 }
 
-input:checked + .slider:before {
+input:checked + .toggle-switch:before {
   -webkit-transform: translateX(28px);
   -ms-transform: translateX(28px);
   transform: translateX(28px);
   background: var(--color-primary-yellow);
   outline: 1px solid var(--color-primary-yellow);
   outline-offset: -1px;
+}
+
+/* Remove arrows in number-type input */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }

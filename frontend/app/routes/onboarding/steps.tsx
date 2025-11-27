@@ -18,8 +18,14 @@ export default function Steps() {
   const navigate = useNavigate();
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
+  const [isMusician, setIsMusician] = useState<boolean>(true);
 
   const handleNext = () => {
+    swiperInstance?.slideNext();
+  };
+
+  const handleStep2Next = (musicianRole: boolean) => {
+    setIsMusician(musicianRole);
     swiperInstance?.slideNext();
   };
 
@@ -28,7 +34,7 @@ export default function Steps() {
   };
 
   return (
-    <div className="h-dvh w-screen flex flex-col items-center relative py-[50px]">
+    <div className="min-h-dvh w-full flex flex-col items-center relative pt-[50px] pb-10">
       <div className="w-[300px] relative">
         <div className="h-1.5 bg-black opacity-8 rounded-3xl absolute w-full top-0 left-0"></div>
         <div
@@ -40,9 +46,10 @@ export default function Steps() {
         slidesPerView={1}
         speed={0}
         allowTouchMove={false}
+        autoHeight={true}
         onSwiper={setSwiperInstance}
         onSlideChange={(swiper) => setCurrentStep(swiper.activeIndex)}
-        className="w-full h-full"
+        className="w-full flex-1"
       >
         <SwiperSlide>
           <Step1
@@ -52,10 +59,10 @@ export default function Steps() {
           />
         </SwiperSlide>
         <SwiperSlide>
-          <Step2 onNext={handleNext} />
+          <Step2 onNext={handleStep2Next} />
         </SwiperSlide>
         <SwiperSlide>
-          <Step3 onNext={handleNext} />
+          <Step3 isMusician={isMusician} onNext={handleNext} />
         </SwiperSlide>
         <SwiperSlide>
           <Step4 onNext={handleNext} onSkip={handleSkip} />
