@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { ProfileType } from "~/types/profile";
 import { Link } from "react-router";
 
-export default function ShowArtists({ users }: { users: string[] }) {
+export default function ShowArtists({ users, theme }: { users: string[]; theme: string }) {
   const [showAll, setShowAll] = useState(false);
   return (
     <div className="p-4 flex items-center gap-2">
@@ -15,7 +15,7 @@ export default function ShowArtists({ users }: { users: string[] }) {
             <>
               <div className="flex relative">
                 {users.map((user, index) => (
-                  <div className={`relative w-20 h-20 bg-black border-4 border-white opacity-100 rounded-full shadow ${index === 0 ? "" : "-ml-8"}`}></div>
+                  <div className={`relative w-20 h-20 bg-${theme} border-4 border-white opacity-100 rounded-full shadow ${index === 0 ? "" : "-ml-8"}`}></div>
                 ))}
               </div>
             </>
@@ -24,9 +24,9 @@ export default function ShowArtists({ users }: { users: string[] }) {
             <>
               <div className="flex relative">
                 {users.slice(0, 3).map((user, index) => (
-                  <div className={`relative w-20 h-20 bg-black border-4 border-white opacity-100 rounded-full shadow-lg ${index === 0 ? "" : "-ml-8"}`}></div>
+                  <div className={`relative w-20 h-20 bg-${theme} border-4 border-white opacity-100 rounded-full shadow-lg ${index === 0 ? "" : "-ml-8"}`}></div>
                 ))}
-                <div className={`flex justify-center items-center relative w-20 h-20 bg-black border-4 border-white opacity-100 rounded-full shadow-lg -ml-8`}>
+                <div className={`flex justify-center items-center relative w-20 h-20 bg-${theme} border-4 border-white opacity-100 rounded-full shadow-lg -ml-8`}>
                   <p className="text-white">+{users.length - 3}</p>
                 </div>
               </div>
@@ -40,7 +40,7 @@ export default function ShowArtists({ users }: { users: string[] }) {
           <div className="flex flex-col gap-2 items-start">
             {users.map((user, index) => (
               <Link to="" className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-black rounded-full"></div>
+                <div className={`w-8 h-8 bg-${theme} rounded-full`}></div>
                 <p>USERNAME HERE</p>
               </Link>
             ))}

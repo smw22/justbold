@@ -121,7 +121,7 @@ function About({ profile }: { profile: ProfileType }) {
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Artists I like (static)</h5>
-        <ShowArtists users={["x", "x", "x", "x", "x", "x", "x", "x"]} />
+        <ShowArtists users={["x", "x", "x", "x", "x", "x", "x", "x"]} theme={profile.theme} />
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">My Music</h5>
@@ -159,7 +159,7 @@ function About({ profile }: { profile: ProfileType }) {
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Past collaborations (static)</h5>
-        <ShowArtists users={["x", "x", "x", "x", "x", "x", "x", "x"]} />
+        <ShowArtists users={["x", "x", "x", "x", "x", "x", "x", "x"]} theme={profile.theme} />
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Questions</h5>
