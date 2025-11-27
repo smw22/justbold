@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query, // <-- add Query import
 } from "@nestjs/common";
 import { PostsService } from "./posts.service";
 import { CreatePostDto } from "./dto/create-post.dto";
@@ -33,9 +34,14 @@ export class PostsController {
   }
 
   @Get()
-  async findAll() {
+  async findAll(
+    @Query("page") page: string = "1",
+    @Query("limit") limit: string = "10"
+  ) {
     try {
-      const data = await this.postsService.findAll();
+      const pageNum = parseInt(page, 10) || 1;
+      const limitNum = parseInt(limit, 10) || 10;
+      const { data } = await this.postsService.findAll(pageNum, limitNum);
       return {
         success: true,
         data,
