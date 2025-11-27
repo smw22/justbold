@@ -25,7 +25,7 @@ export default function Step1({ onNext, onSkip, onLogin }: Step1Props) {
   };
 
   return (
-    <div className="m-auto flex flex-col items-center justify-center h-full gap-6 w-[263px]">
+    <div className="m-auto flex flex-col items-center justify-center gap-6 w-[263px] pt-14">
       <h1 className="text-primary-purple!">Sign up</h1>
       <div className="text-center">
         <p>By continuing you agree to LineUp!</p>
