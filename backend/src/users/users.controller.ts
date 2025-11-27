@@ -73,7 +73,7 @@ export class UsersController {
   }
 
   @Get(":id/reviews")
-  async findAllReviews(@Param("id") id: string) {
+  async findUserReviews(@Param("id") id: string) {
     const { data, avg_rating } = await this.usersService.findUserReviews(id);
     return {
       success: true,
@@ -81,5 +81,10 @@ export class UsersController {
       data,
       message: "User reviews retrieved successfully",
     };
+  }
+
+  @Get(":id/questions")
+  async findUserQuestions(@Param("id") id: string) {
+    return this.usersService.findUserQuestions(id);
   }
 }

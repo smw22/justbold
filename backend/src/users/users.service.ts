@@ -7,6 +7,7 @@ import { Repository } from "typeorm";
 import { User } from "./entities/user.entity";
 import { Post } from "../posts/entities/post.entity";
 import { Review } from "src/reviews/entities/review.entity";
+import { Question } from "src/questions/entities/question.entity";
 
 @Injectable()
 export class UsersService {
@@ -18,7 +19,9 @@ export class UsersService {
     @InjectRepository(Post)
     private readonly postsRepository: Repository<Post>,
     @InjectRepository(Review)
-    private readonly reviewsReposity: Repository<Review>
+    private readonly reviewsRepository: Repository<Review>,
+    @InjectRepository(Question)
+    private readonly questionsRepository: Repository<Question>
   ) {}
 
   create(createUserDto: CreateUserDto) {
@@ -63,7 +66,7 @@ export class UsersService {
     // "reviewsRepository" relates to an object that can call methods like "findAndCount()".
     // "findAndCount()" is one of the built-in methods in TypeORM.
     // the function returns an array with exactly 2 values - data and count.
-    const [data, count] = await this.reviewsReposity.findAndCount({
+    const [data, count] = await this.reviewsRepository.findAndCount({
       // user is one of the column names that was defined inside review.entity.ts.
       // You know, like this:
       //   @Column()
@@ -81,5 +84,9 @@ export class UsersService {
 
     // return data and avg_rating as json.
     return { data, avg_rating };
+  }
+
+  async findUserQuestions(id: string) {
+    return await this.questionsRepository.find({ where: { user: { id } } });
   }
 }
