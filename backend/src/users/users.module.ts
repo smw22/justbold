@@ -10,5 +10,6 @@ import { Post } from "../posts/entities/post.entity";
   imports: [TypeOrmModule.forFeature([User, Post])],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}
