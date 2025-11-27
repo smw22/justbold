@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import Icon from "./icon";
 import ContextMenu from "./ContextMenu";
 import Button from "./Button";
+import CardMedia from "./CardMedia";
 
 export default function Post({ post }: { post: PostType }) {
   const [showContextMenu, setShowContextMenu] = useState(false);
@@ -12,7 +13,7 @@ export default function Post({ post }: { post: PostType }) {
     <div className="bg-white flex flex-col gap-4 w-full items-start overflow-hidden p-4 md:p-8">
       <div className={`flex flex-row items-center w-full px-2 gap-2`}>
         <div className={`${post.tags.length > 1 ? "flex flex-col flex-1 gap-2" : "flex flex-row items-center gap-2 w-full"}`}>
-          <Link to={`/profile/${post?.user_id}`} className="flex flex-row gap-2 items-center hover:opacity-40 transition-opacity duration-400 ease-in-out">
+          <Link to={`/profile/${post.user.id}`} className="flex flex-row gap-2 items-center hover:opacity-40 transition-opacity duration-400 ease-in-out">
             <div style={{ backgroundImage: `url('${post.user.profile_image}')` }} className="w-8 h-8 bg-black bg-cover rounded-full min-w-8"></div>
             <p className="text-sm">{post.user.name}</p>
           </Link>
@@ -41,7 +42,7 @@ export default function Post({ post }: { post: PostType }) {
         </div>
       </div>
       <h2 className="px-2">{post.title}</h2>
-      <div className="w-full bg-cover aspect-video rounded-3xl" style={{ backgroundImage: `url('${post.media}')` }}></div>
+      <CardMedia variant="image" url={post.media} />
       <p className="text-sm px-2">{post.content}</p>
       <div className="px-2 flex gap-4">
         <div className="flex items-center gap-1">

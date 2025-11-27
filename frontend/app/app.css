@@ -54,6 +54,8 @@
 
   --fw-heading: 700;
   --fw-normal: 400;
+
+  --aspect-post: 4 / 3;
 }
 
 html,
