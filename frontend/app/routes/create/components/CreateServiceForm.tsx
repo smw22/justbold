@@ -1,16 +1,17 @@
-import { Form } from "react-router";
+import { Form, useActionData } from "react-router";
 
 export default function CreateServiceForm({
   tags,
 }: {
   tags: Array<{ id: string; title: string }>;
 }) {
+  const actionData = useActionData();
   const inputStyle = "bg-light-grey p-4 rounded-lg border border-neutral-grey";
 
   return (
     <Form method="post" className="flex flex-col gap-4">
       <p className="flex flex-col gap-2">
-        <label htmlFor="title">Title</label>
+        <label htmlFor="title">Title *</label>
         <input
           type="text"
           name="title"
@@ -23,7 +24,7 @@ export default function CreateServiceForm({
 
       {/*NOTE: We need a imageUploader component here or placeholder images with a select input */}
       <p className="flex flex-col gap-2">
-        <label htmlFor="media">Media</label>
+        <label htmlFor="media">Media (optional)</label>
         <input
           type="text"
           name="media"
@@ -34,7 +35,7 @@ export default function CreateServiceForm({
       </p>
 
       <p className="flex flex-col gap-2">
-        <label htmlFor="tag">Choose a tag</label>
+        <label htmlFor="tag">Choose a tag *</label>
         <select name="tag" id="tag" className={inputStyle} required>
           {tags.map((tag) => (
             <option key={tag.id} value={tag.id}>
@@ -45,7 +46,7 @@ export default function CreateServiceForm({
       </p>
 
       <p className="flex flex-col gap-2">
-        <label htmlFor="content">Description</label>
+        <label htmlFor="content">Description *</label>
         <textarea
           name="content"
           id="content"
@@ -56,7 +57,7 @@ export default function CreateServiceForm({
       </p>
 
       <p className="flex flex-col gap-2">
-        <label htmlFor="price">Price</label>
+        <label htmlFor="price">Price *</label>
         <input
           type="number"
           name="price"
@@ -68,7 +69,7 @@ export default function CreateServiceForm({
       </p>
 
       <p className="flex flex-col gap-2">
-        <label htmlFor="location">Location</label>
+        <label htmlFor="location">Location *</label>
         <input
           type="text"
           name="location"
@@ -86,6 +87,12 @@ export default function CreateServiceForm({
       >
         + Create
       </button>
+
+      {actionData?.error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          {actionData.error}
+        </div>
+      )}
     </Form>
   );
 }

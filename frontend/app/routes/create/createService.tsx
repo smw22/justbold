@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router";
+import { redirect, useLoaderData } from "react-router";
 import AvatarHeader from "../services/components/AvatarHeader";
 import CreateServiceForm from "./components/CreateServiceForm";
 
@@ -36,7 +36,7 @@ export async function clientAction({ request }: { request: Request }) {
 
   const user = "445338b5-4396-48b3-8d7a-78564776cfb1"; // NOTE: Replace with actual logic to get current user ID when we add auth
 
-  if (!title || !media || !content || !tag || !price || !location) {
+  if (!title || !content || !tag || !price || !location) {
     throw new Error(
       "All fields are required, make sure to fill: title, media, tag, content, price and location"
     );
@@ -50,10 +50,10 @@ export async function clientAction({ request }: { request: Request }) {
       },
       body: JSON.stringify({
         title,
-        media,
+        media: media || undefined,
         tag,
         content,
-        price,
+        price: Number(price),
         location,
         user,
       }),
@@ -72,7 +72,8 @@ export async function clientAction({ request }: { request: Request }) {
       throw new Error(`Failed to create service: ${response.status}`);
     }
 
-    return { success: true };
+    // We can redirect to profile/services page after creation when me make it
+    return redirect("/services");
   } catch (error: any) {
     console.error("Network error: ", error.message);
   }
