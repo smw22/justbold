@@ -10,15 +10,17 @@ export default function Post({ post }: { post: PostType }) {
 
   return (
     <div className="bg-white flex flex-col gap-4 w-full items-start overflow-hidden p-4 md:p-8">
-      <div className="flex flex-row w-full items-center px-2 gap-2">
-        <Link to={`/profile/${post?.user_id}`} className="flex flex-row gap-2 items-center">
-          <div className="w-8 h-8 bg-black rounded-full min-w-8"></div>
-          <p className="text-sm">Placeholder Name</p>
-        </Link>
-        <div className="flex flex-1 gap-2 text-neutral-grey">
-          {post.tags.map((tag) => (
-            <div className="border border-neutral-grey py-0 px-2 rounded-full text-sm">#{tag}</div>
-          ))}
+      <div className={`flex flex-row items-center w-full px-2 gap-2`}>
+        <div className={`${post.tags.length > 1 ? "flex flex-col flex-1 gap-2" : "flex flex-row items-center gap-2 w-full"}`}>
+          <Link to={`/profile/${post?.user_id}`} className="flex flex-row gap-2 items-center hover:opacity-40 transition-opacity duration-400 ease-in-out">
+            <div style={{ backgroundImage: `url('${post.user.profile_image}')` }} className="w-8 h-8 bg-black bg-cover rounded-full min-w-8"></div>
+            <p className="text-sm">{post.user.name}</p>
+          </Link>
+          <div className="flex flex-1 gap-2 text-neutral-grey flex-wrap">
+            {post.tags.map((tag) => (
+              <div className="border border-neutral-grey py-0 px-2 rounded-full text-sm ">#{tag}</div>
+            ))}
+          </div>
         </div>
         <div className="relative">
           <button
