@@ -13,6 +13,8 @@ import Icon from "~/components/icon";
 import ProfileHeader from "~/components/ProfileHeader";
 import Tabs from "~/components/Tabs";
 import Post from "~/components/Post";
+import ShowArtists from "~/components/ShowArtists";
+import SheetView from "~/components/SheetView";
 import SoMeInstagram from "../../assets/icons/SoMeInstagram.svg";
 import SoMeTwitter from "../../assets/icons/SoMeTwitter.svg";
 import SoMeFacebook from "../../assets/icons/SoMeFacebook.svg";
@@ -62,7 +64,7 @@ export default function Users() {
           name={profile.data.name}
           bio={profile.data.bio}
           connection_count={profile.data.connections.length}
-          post_count={user_posts.data ? user_posts.data.length : 0}
+          post_count={user_posts.total_posts}
           image={profile.data.profile_image}
           theme={profile.data.theme}
         />
@@ -84,8 +86,11 @@ export default function Users() {
 }
 
 function About({ profile }: { profile: ProfileType }) {
+  const [showArtistsILike, setShowArtistsILike] = useState(false);
+  const [showPastCollabs, setShowPastCollabs] = useState(false);
+
   return (
-    <article className="bg-white p-4 flex flex-col gap-4 pb-36">
+    <article className="bg-white p-4 flex flex-col gap-4">
       <section>
         <h5 className="font-normal text-gray-400! text-sm">About me</h5>
         <p className="text-sm mx-4 my-3 max-w-md">{profile.about}</p>
@@ -174,7 +179,21 @@ function About({ profile }: { profile: ProfileType }) {
         </div>
       </section>
       <section>
-        <h5 className="font-normal text-gray-400! text-sm">Artists I like</h5>
+        <h5 className="font-normal text-gray-400! text-sm">Artists I like (static)</h5>
+        <ShowArtists users={["x", "x", "x", "x", "x", "x", "x", "x"]} theme={profile.theme} onShowMore={() => setShowArtistsILike(true)} />
+        <SheetView show={showArtistsILike} onClose={() => setShowArtistsILike(false)} title="Artists I like">
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+        </SheetView>
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">My Music</h5>
@@ -211,12 +230,21 @@ function About({ profile }: { profile: ProfileType }) {
         </div>
       </section>
       <section>
-        <h5 className="font-normal text-gray-400! text-sm">
-          Past collaborations
-        </h5>
-        <p className="text-sm mx-4 my-3">
-          Her skal vi lave kald til collaborations endpoint
-        </p>
+        <h5 className="font-normal text-gray-400! text-sm">Past collaborations (static)</h5>
+        <ShowArtists users={["x", "x", "x", "x", "x", "x", "x", "x"]} theme={profile.theme} onShowMore={() => setShowPastCollabs(true)} />
+        <SheetView show={showPastCollabs} onClose={() => setShowPastCollabs(false)} title="Past collaborations">
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+        </SheetView>
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Questions</h5>
