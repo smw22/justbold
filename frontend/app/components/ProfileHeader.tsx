@@ -17,14 +17,21 @@ export default function ProfileHeader({
   theme: string;
 }) {
   return (
-    <article className={`p-5 md:p-8 rounded-4xl mx-4 mb-12 mt-4 bg-${theme} text-white flex flex-col md:flex-row justify-center gap-3 items-center`}>
+    <article
+      className={`p-5 md:p-8 rounded-4xl     mb-12 mt-4 bg-${theme} text-white flex flex-col md:flex-row justify-center gap-3 items-center`}
+    >
       <section className="flex justify-center gap-1 items-center">
         <div className="flex flex-col items-center w-24 gap-1 md:hidden">
           <p className="text-lg">{connection_count}</p>
-          <p className="text-xs">{connection_count === 1 ? "Connection" : "Connections"}</p>
+          <p className="text-xs">
+            {connection_count === 1 ? "Connection" : "Connections"}
+          </p>
         </div>
 
-        <div style={{ backgroundImage: `url('${image}')` }} className={`w-36 h-36 md:z-20 rounded-full bg-cover bg-gray-400  border-2 border-white`}></div>
+        <div
+          style={{ backgroundImage: `url('${image}')` }}
+          className={`w-36 h-36 md:z-20 rounded-full bg-cover bg-gray-400  border-2 border-white`}
+        ></div>
 
         <div className="flex flex-col items-center w-24 gap-1 md:hidden">
           <p className="text-lg">{post_count}</p>
@@ -39,7 +46,8 @@ export default function ProfileHeader({
         <p className="text-xs">{bio}</p>
         <div className="hidden md:flex gap-2 text-sm mt-2">
           <p>
-            {connection_count} {connection_count === 1 ? "Connection" : "Connections"}
+            {connection_count}{" "}
+            {connection_count === 1 ? "Connection" : "Connections"}
           </p>
           <p>|</p>
           <p>
@@ -48,7 +56,12 @@ export default function ProfileHeader({
         </div>
       </section>
       <section className="flex flex-row md:flex-col md:max-w-48 gap-4 w-full mt-1">
-        <Button variant="primary-glass" text="Connect" icon="AddCircle" fullWidth={true} />
+        <Button
+          variant="primary-glass"
+          text="Connect"
+          icon="AddCircle"
+          fullWidth={true}
+        />
         <Button variant="primary-glass" text="Message" fullWidth={true} />
       </section>
     </article>

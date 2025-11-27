@@ -7,11 +7,14 @@ type StoriesSliderProps = {
 
 export default function StoriesSlider({ stories }: StoriesSliderProps) {
   return (
-    <div>
+    <div className="outer-wrapper">
       <Swiper
-        className="pl-4!"
+        className="pl-4! overflow-visible!"
         spaceBetween={12}
-        slidesPerView={4.5}
+        breakpoints={{
+          0: { slidesPerView: 4.5 },
+          640: { slidesPerView: 6.5 },
+        }}
         onSlideChange={() => console.log("slide change")}
         onSwiper={(swiper) => console.log(swiper)}
       >

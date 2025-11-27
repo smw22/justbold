@@ -32,8 +32,7 @@ export default function ServicesDetail() {
   const reviewsAvg = 3.6;
 
   return (
-    <div className=" p-4">
-      Services Detail
+    <div className=" p-4 outer-wrapper">
       <div className="flex items-center justify-between mb-4">
         <AvatarHeader
           imageUrl={service.user.profile_image}
