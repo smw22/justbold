@@ -15,37 +15,25 @@ export class CollaborationsService {
     private readonly collaborationRepository: Repository<Collaboration>
   ) {}
 
-  async create(
-    createCollaborationDto: CreateCollaborationDto
-  ): Promise<Collaboration> {
-    const collabData = await this.collaborationRepository.create(
-      createCollaborationDto
-    );
+  async create(createCollaborationDto: CreateCollaborationDto): Promise<Collaboration> {
+    const collabData = await this.collaborationRepository.create(createCollaborationDto);
     return this.collaborationRepository.save(collabData);
   }
 
-  async findAll(
-    page = 1,
-    limit = 10,
-    genre = "",
-    orderBy = "created"
-  ): Promise<{ data: Collaboration[] }> {
-    const query =
-      this.collaborationRepository.createQueryBuilder("collaboration");
+  async findAll(page = 1, limit = 10, genre = "", orderBy = "created"): Promise<{ data: Collaboration[] }> {
+    const query = this.collaborationRepository.createQueryBuilder("collaboration");
 
     if (genre) {
       query
-        .innerJoin(
-          "collaboration.genres",
-          "genreFilter",
-          "genreFilter.title = :genre",
-          { genre }
-        )
+        .innerJoin("collaboration.genres", "genreFilter", "genreFilter.title = :genre", { genre })
         .leftJoinAndSelect("collaboration.genres", "genre")
         .distinct(true);
     } else {
       query.leftJoinAndSelect("collaboration.genres", "genre");
     }
+
+    // Add user data
+    query.leftJoinAndSelect("collaboration.user", "user");
 
     query
       .orderBy(`collaboration.${orderBy}`, "DESC")
@@ -65,18 +53,12 @@ export class CollaborationsService {
     return collabData;
   }
 
-  async update(
-    id: string,
-    updateCollaborationDto: UpdateCollaborationDto
-  ): Promise<Collaboration> {
+  async update(id: string, updateCollaborationDto: UpdateCollaborationDto): Promise<Collaboration> {
     const existingCollab = await this.collaborationRepository.findOneBy({ id });
     if (!existingCollab) {
       throw new HttpException("Collaboration not found", 404);
     }
-    const collabData = this.collaborationRepository.merge(
-      existingCollab,
-      updateCollaborationDto
-    );
+    const collabData = this.collaborationRepository.merge(existingCollab, updateCollaborationDto);
     return await this.collaborationRepository.save(collabData);
   }
 
