@@ -19,9 +19,7 @@ export class CollaborationsController {
   @Post()
   async create(@Body() createCollaborationDto: CreateCollaborationDto) {
     try {
-      const data = await this.collaborationsService.create(
-        createCollaborationDto
-      );
+      const data = await this.collaborationsService.create(createCollaborationDto);
       return {
         success: true,
         data,
@@ -46,12 +44,7 @@ export class CollaborationsController {
     try {
       const pageNum = parseInt(page, 10) || 1;
       const limitNum = parseInt(limit, 10) || 10;
-      const { data } = await this.collaborationsService.findAll(
-        pageNum,
-        limitNum,
-        genre,
-        orderBy
-      );
+      const { data } = await this.collaborationsService.findAll(pageNum, limitNum, genre, orderBy);
       return {
         success: true,
         data,
@@ -83,15 +76,9 @@ export class CollaborationsController {
   }
 
   @Patch(":id")
-  async update(
-    @Param("id") id: string,
-    @Body() updateCollaborationDto: UpdateCollaborationDto
-  ) {
+  async update(@Param("id") id: string, @Body() updateCollaborationDto: UpdateCollaborationDto) {
     try {
-      const data = await this.collaborationsService.update(
-        id,
-        updateCollaborationDto
-      );
+      const data = await this.collaborationsService.update(id, updateCollaborationDto);
       return {
         success: true,
         data,
