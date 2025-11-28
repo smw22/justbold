@@ -20,7 +20,13 @@ export class CollaborationsService {
     return this.collaborationRepository.save(collabData);
   }
 
-  async findAll(page = 1, limit = 10, genre = "", orderBy = "created"): Promise<{ data: Collaboration[] }> {
+  async findAll(
+    page = 1,
+    limit = 10,
+    genre = "",
+    orderBy = "created",
+    tags: string[] = []
+  ): Promise<{ data: Collaboration[] }> {
     const query = this.collaborationRepository.createQueryBuilder("collaboration");
 
     if (genre) {
@@ -34,6 +40,14 @@ export class CollaborationsService {
 
     // Add user data
     query.leftJoinAndSelect("collaboration.user", "user");
+
+    // Add tags join
+    query.leftJoinAndSelect("collaboration.tags", "tag");
+
+    // Filter by tags if provided
+    if (tags.length > 0) {
+      query.andWhere("tag.title IN (:...tags)", { tags });
+    }
 
     query
       .orderBy(`collaboration.${orderBy}`, "DESC")
