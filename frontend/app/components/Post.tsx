@@ -13,13 +13,19 @@ export default function Post({ post }: { post: PostType }) {
     <div className="bg-white flex flex-col gap-4 w-full items-start overflow-hidden p-4 md:p-8">
       <div className={`flex flex-row items-center w-full px-2 gap-2`}>
         <div className={`${post.tags.length > 1 ? "flex flex-col flex-1 gap-2" : "flex flex-row items-center gap-2 w-full"}`}>
-          <Link to={`/profile/${post.user.id}`} className="flex flex-row gap-2 items-center hover:opacity-40 transition-opacity duration-400 ease-in-out">
-            <div style={{ backgroundImage: `url('${post.user.profile_image}')` }} className="w-8 h-8 bg-black bg-cover rounded-full min-w-8"></div>
+          <Link
+            to={`/profile/${post.user.id}`}
+            className="flex flex-row gap-2 items-center hover:opacity-40 transition-opacity duration-400 ease-in-out"
+          >
+            <div
+              style={{ backgroundImage: `url('${post.user.profile_image}')` }}
+              className="w-8 h-8 bg-black bg-cover rounded-full min-w-8"
+            ></div>
             <p className="text-sm">{post.user.name}</p>
           </Link>
           <div className="flex flex-1 gap-2 text-neutral-grey flex-wrap">
             {post.tags.map((tag) => (
-              <div className="border border-neutral-grey py-0 px-2 rounded-full text-sm ">#{tag}</div>
+              <div className="border border-neutral-grey py-0 px-2 rounded-full text-sm ">#{tag.title}</div>
             ))}
           </div>
         </div>
@@ -31,13 +37,37 @@ export default function Post({ post }: { post: PostType }) {
             <Icon name="More" size={24} />
           </button>
           <ContextMenu show={showContextMenu} setShow={(e) => setShowContextMenu(e)}>
-            <Button text="Save post" icon="BookmarkEmpty" variant="context-menu" fullWidth={true} onClick={() => alert("Indsæt funktionalitet")} />
+            <Button
+              text="Save post"
+              icon="BookmarkEmpty"
+              variant="context-menu"
+              fullWidth={true}
+              onClick={() => alert("Indsæt funktionalitet")}
+            />
             <div className="bg-white h-px mx-2"></div>
-            <Button text="Share post" icon="ShareIos" variant="context-menu" fullWidth={true} onClick={() => alert("Indsæt funktionalitet")} />
+            <Button
+              text="Share post"
+              icon="ShareIos"
+              variant="context-menu"
+              fullWidth={true}
+              onClick={() => alert("Indsæt funktionalitet")}
+            />
             <div className="bg-white h-px mx-2"></div>
-            <Button text="Hide posts from this user" icon="EyeEmpty" variant="context-menu" fullWidth={true} onClick={() => alert("Indsæt funktionalitet")} />
+            <Button
+              text="Hide posts from this user"
+              icon="EyeEmpty"
+              variant="context-menu"
+              fullWidth={true}
+              onClick={() => alert("Indsæt funktionalitet")}
+            />
             <div className="bg-white h-px mx-2"></div>
-            <Button text="Report post" icon="ChatBubbleWarning" variant="context-menu" fullWidth={true} onClick={() => alert("Indsæt funktionalitet")} />
+            <Button
+              text="Report post"
+              icon="ChatBubbleWarning"
+              variant="context-menu"
+              fullWidth={true}
+              onClick={() => alert("Indsæt funktionalitet")}
+            />
           </ContextMenu>
         </div>
       </div>
