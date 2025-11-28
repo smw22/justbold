@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -71,6 +63,41 @@ export class UsersController {
         total_posts: total,
         data,
         message: "User posts retrieved successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
+
+  @Get(":id/reviews")
+  async findUserReviews(@Param("id") id: string) {
+    try {
+      const { data, avg_rating } = await this.usersService.findUserReviews(id);
+      return {
+        success: true,
+        avg_rating,
+        data,
+        message: "User reviews retrieved successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
+
+  @Get(":id/questions")
+  async findUserQuestions(@Param("id") id: string) {
+    try {
+      const data = await this.usersService.findUserQuestions(id);
+      return {
+        success: true,
+        data,
+        message: "User questions retrieved successfully",
       };
     } catch (error) {
       return {

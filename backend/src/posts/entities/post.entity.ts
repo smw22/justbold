@@ -1,11 +1,6 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
-} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, JoinTable, ManyToMany } from "typeorm";
 import { User } from "../../users/entities/user.entity";
+import { Tag } from "../../tags/entities/tag.entity";
 
 @Entity()
 export class Post {
@@ -18,8 +13,9 @@ export class Post {
   @Column("text")
   content: string;
 
-  @Column("simple-array")
-  tags: string[];
+  @ManyToMany(() => Tag, { eager: true })
+  @JoinTable({ name: "collaboration_tags" })
+  tags: Tag[];
 
   @Column()
   media: string;

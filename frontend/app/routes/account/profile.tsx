@@ -1,18 +1,38 @@
 import { useState } from "react";
-import { useParams, useLoaderData, useActionData, useNavigation, useRouteError, Link, href, Outlet } from "react-router";
+import {
+  useParams,
+  useLoaderData,
+  useActionData,
+  useNavigation,
+  useRouteError,
+  Link,
+  href,
+  Outlet,
+} from "react-router";
 import Icon from "~/components/icon";
 import ProfileHeader from "~/components/ProfileHeader";
 import Tabs from "~/components/Tabs";
+import Post from "~/components/Post";
+import ShowArtists from "~/components/ShowArtists";
+import SheetView from "~/components/SheetView";
 import SoMeInstagram from "../../assets/icons/SoMeInstagram.svg";
 import SoMeTwitter from "../../assets/icons/SoMeTwitter.svg";
 import SoMeFacebook from "../../assets/icons/SoMeFacebook.svg";
 import SoMeYouTube from "../../assets/icons/SoMeYouTube.svg";
 import SoMeTikTok from "../../assets/icons/SoMeTikTok.svg";
+import type { PostType } from "~/types/post";
+import type { ProfileType } from "~/types/profile";
 
-export async function clientLoader({ params }: { params: { profileId: string } }) {
+export async function clientLoader({
+  params,
+}: {
+  params: { profileId: string };
+}) {
   const apiUrl = import.meta.env.VITE_API_URL;
   const profileResponse = await fetch(`${apiUrl}/users/${params.profileId}`);
-  const postsResponse = await fetch(`${apiUrl}/posts/${params.profileId}`);
+  const postsResponse = await fetch(
+    `${apiUrl}/users/${params.profileId}/posts`
+  );
   if (!profileResponse.ok || !postsResponse.ok) {
     throw new Error("Unknown error.");
   }
@@ -23,7 +43,7 @@ export async function clientLoader({ params }: { params: { profileId: string } }
 
   const profile = await profileResponse.json();
   const user_posts = await postsResponse.json();
-  console.log(user_posts);
+  console.log(user_posts.data);
 
   return {
     profile,
@@ -37,129 +57,143 @@ export default function Users() {
   const [tab, setTab] = useState(0);
 
   return (
-    <div className="bg-gray-100">
-      <div className="max-w-4xl m-auto">
+    <div className="outer-wrapper">
+      <div className="">
         {/* // The profile header component */}
         <ProfileHeader
           name={profile.data.name}
           bio={profile.data.bio}
           connection_count={profile.data.connections.length}
-          post_count={user_posts ? user_posts.length : 0}
+          post_count={user_posts.total_posts}
           image={profile.data.profile_image}
           theme={profile.data.theme}
         />
         {/* // Tabs component, "About" and "Posts" - the current tab is held as a number in a state. */}
-        <Tabs tabs={["About", "Posts"]} currentTab={tab} setTab={(e) => setTab(e)} />
+        <Tabs
+          tabs={["About", "Posts"]}
+          currentTab={tab}
+          setTab={(e) => setTab(e)}
+        />
         {/* // if tab is 0 we show about - otherwise we show posts. */}
         {tab === 0 ? (
-          <About
-            theme={profile.data.theme}
-            about={profile.data.about}
-            looking_for={profile.data.looking_for}
-            genres={profile.data.genres}
-            instagram={profile.data.instagram}
-            twitter={profile.data.twitter}
-            facebook={profile.data.facebook}
-            youtube={profile.data.youtube}
-            tiktok={profile.data.tiktok}
-            spotify_embed_link={profile.data.spotify_embed_link}
-            videos={profile.data.videos}
-            posts={user_posts}
-          />
+          <About profile={profile.data} />
         ) : (
-          <Posts />
+          <Posts posts={user_posts.data} />
         )}
       </div>
     </div>
   );
 }
 
-function About({
-  theme,
-  about,
-  looking_for,
-  genres,
-  instagram,
-  twitter,
-  facebook,
-  youtube,
-  tiktok,
-  spotify_embed_link,
-  videos,
-  posts,
-}: {
-  theme: string;
-  about: string;
-  looking_for: string[];
-  genres: string[];
-  instagram: string;
-  twitter: string;
-  facebook: string;
-  youtube: string;
-  tiktok: string;
-  spotify_embed_link: string;
-  videos: string[];
-  posts: any;
-}) {
+function About({ profile }: { profile: ProfileType }) {
+  const [showArtistsILike, setShowArtistsILike] = useState(false);
+  const [showPastCollabs, setShowPastCollabs] = useState(false);
+
   return (
-    <article className="bg-white p-4 flex flex-col gap-4 pb-36">
+    <article className="bg-white p-4 flex flex-col gap-4">
       <section>
         <h5 className="font-normal text-gray-400! text-sm">About me</h5>
-        <p className="text-sm mx-4 my-3 max-w-md">{about}</p>
+        <p className="text-sm mx-4 my-3 max-w-md">{profile.about}</p>
       </section>
       <section>
-        <h5 className="font-normal text-gray-400! text-sm">What I am looking for</h5>
+        <h5 className="font-normal text-gray-400! text-sm">
+          What I am looking for
+        </h5>
         <div className="flex flex-row gap-1 mx-4 my-3">
-          {looking_for.map((str) => (
-            <p className={`inline-flex text-white bg-${theme} capitalize px-3 py-1 rounded-full`}>{str}</p>
+          {profile.looking_for.map((str) => (
+            <p
+              className={`inline-flex text-white bg-${profile.theme} capitalize px-3 py-1 rounded-full`}
+            >
+              {str}
+            </p>
           ))}
         </div>
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Genres</h5>
         <div className="flex flex-row gap-1 mx-4 my-3">
-          {genres.map((str) => (
-            <p className={`inline-flex text-white bg-${theme} capitalize px-3 py-1 rounded-full`}>{str}</p>
+          {profile.genres.map((str) => (
+            <p
+              className={`inline-flex text-white bg-${profile.theme} capitalize px-3 py-1 rounded-full`}
+            >
+              {str}
+            </p>
           ))}
         </div>
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Reviews</h5>
-        <p className="text-sm mx-4 my-3">Her skal vi lave kald til review endpoint</p>
+        <p className="text-sm mx-4 my-3">
+          Her skal vi lave kald til review endpoint
+        </p>
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Social media</h5>
         <div className="flex flex-row gap-2 mx-2 my-3 items-center">
-          {instagram && (
-            <Link to={instagram} target="blank" className="hover:opacity-40 transition-opacity duration-200 ease-in-out">
+          {profile.instagram && (
+            <Link
+              to={profile.instagram}
+              target="blank"
+              className="hover:opacity-40 transition-opacity duration-200 ease-in-out"
+            >
               <img src={SoMeInstagram} alt="Instagram" className="w-10 m-2" />
             </Link>
           )}
-          {twitter && (
-            <Link to={twitter} target="blank" className="hover:opacity-40 transition-opacity duration-200 ease-in-out">
+          {profile.twitter && (
+            <Link
+              to={profile.twitter}
+              target="blank"
+              className="hover:opacity-40 transition-opacity duration-200 ease-in-out"
+            >
               <img src={SoMeTwitter} alt="Twitter" className="w-10 m-2" />
             </Link>
           )}
 
-          {youtube && (
-            <Link to={youtube} target="blank" className="hover:opacity-40 transition-opacity duration-200 ease-in-out">
+          {profile.youtube && (
+            <Link
+              to={profile.youtube}
+              target="blank"
+              className="hover:opacity-40 transition-opacity duration-200 ease-in-out"
+            >
               <img src={SoMeYouTube} alt="YouTube" className="w-10 m-2" />
             </Link>
           )}
-          {tiktok && (
-            <Link to={tiktok} target="blank" className="hover:opacity-40 transition-opacity duration-200 ease-in-out">
+          {profile.tiktok && (
+            <Link
+              to={profile.tiktok}
+              target="blank"
+              className="hover:opacity-40 transition-opacity duration-200 ease-in-out"
+            >
               <img src={SoMeTikTok} alt="TikTok" className="w-10 m-2" />
             </Link>
           )}
-          {facebook && (
-            <Link to={facebook} target="blank" className="hover:opacity-40 transition-opacity duration-200 ease-in-out">
+          {profile.facebook && (
+            <Link
+              to={profile.facebook}
+              target="blank"
+              className="hover:opacity-40 transition-opacity duration-200 ease-in-out"
+            >
               <img src={SoMeFacebook} alt="Facebook" className="w-10 m-2" />
             </Link>
           )}
         </div>
       </section>
       <section>
-        <h5 className="font-normal text-gray-400! text-sm">Artists I like</h5>
+        <h5 className="font-normal text-gray-400! text-sm">Artists I like (static)</h5>
+        <ShowArtists users={["x", "x", "x", "x", "x", "x", "x", "x"]} theme={profile.theme} onShowMore={() => setShowArtistsILike(true)} />
+        <SheetView show={showArtistsILike} onClose={() => setShowArtistsILike(false)} title="Artists I like">
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+        </SheetView>
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">My Music</h5>
@@ -167,7 +201,7 @@ function About({
           <iframe
             data-testid="embed-iframe"
             style={{ borderRadius: 12 }}
-            src={`https://open.spotify.com/embed/${spotify_embed_link.split("spotify.com/")[1]}?utm_source=generator`}
+            src={`https://open.spotify.com/embed/${profile.spotify_embed_link.split("spotify.com/")[1]}?utm_source=generator`}
             width="100%"
             height="352"
             frameBorder="0"
@@ -179,7 +213,7 @@ function About({
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Videos</h5>
         <div className="m-4 flex flex-col md:grid md:grid-cols-2 gap-4">
-          {videos.map((video) => (
+          {profile.videos.map((video) => (
             <div className="aspect-video w-full">
               <iframe
                 className="w-full h-full"
@@ -196,19 +230,39 @@ function About({
         </div>
       </section>
       <section>
-        <h5 className="font-normal text-gray-400! text-sm">Past collaborations</h5>
-        <p className="text-sm mx-4 my-3">Her skal vi lave kald til collaborations endpoint</p>
+        <h5 className="font-normal text-gray-400! text-sm">Past collaborations (static)</h5>
+        <ShowArtists users={["x", "x", "x", "x", "x", "x", "x", "x"]} theme={profile.theme} onShowMore={() => setShowPastCollabs(true)} />
+        <SheetView show={showPastCollabs} onClose={() => setShowPastCollabs(false)} title="Past collaborations">
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+          <p>Her skal der være content</p>
+        </SheetView>
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Questions</h5>
-        <p className="text-sm mx-4 my-3">Her skal vi lave kald til questions endpoint</p>
+        <p className="text-sm mx-4 my-3">
+          Her skal vi lave kald til questions endpoint
+        </p>
       </section>
       <section>
         <h5 className="font-normal text-lg">Ask me a question</h5>
-        <div className={`flex items-center border-${theme} border rounded-full mx-2 my-4`}>
-          <input className="outline-none px-5 py-5 w-full" placeholder="Type your question here..." />
+        <div
+          className={`flex items-center border-${profile.theme} border rounded-full mx-2 my-4`}
+        >
+          <input
+            className="outline-none px-5 py-5 w-full"
+            placeholder="Type your question here..."
+          />
           <button
-            className={`cursor-pointer hover:opacity-40 bg-${theme} text-white min-w-12 w-12 h-12 m-2 flex items-center justify-center rounded-full transition-opacity duration-200 ease-in-out`}
+            className={`cursor-pointer hover:opacity-40 bg-${profile.theme} text-white min-w-12 w-12 h-12 m-2 flex items-center justify-center rounded-full transition-opacity duration-200 ease-in-out`}
           >
             <Icon name="SendDiagonal" size={24} />
           </button>
@@ -218,6 +272,12 @@ function About({
   );
 }
 
-function Posts() {
-  return <p>User posts here. Currently waiting for someone to make a post component I can call.</p>;
+function Posts({ posts }: { posts: PostType[] }) {
+  return (
+    <>
+      {posts.map((post: PostType) => (
+        <Post post={post} />
+      ))}
+    </>
+  );
 }
