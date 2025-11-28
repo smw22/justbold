@@ -5,13 +5,13 @@ meta {
 }
 
 get {
-  url: {{domain}}/api/collaborations?genre=Metal
+  url: {{domain}}/api/collaborations
   body: none
   auth: inherit
 }
 
 params:query {
-  genre: Metal
+  ~genre: Gospel
   ~page: 1
   ~limit: 10
   ~role: 
