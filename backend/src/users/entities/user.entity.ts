@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Post } from "../../posts/entities/post.entity";
-import { Review } from "src/reviews/entities/review.entity";
+import { Review } from "../../reviews/entities/review.entity";
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")

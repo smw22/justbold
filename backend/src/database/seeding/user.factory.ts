@@ -8,9 +8,7 @@ export const UserFactory = setSeederFactory(User, (faker: Faker) => {
   user.email = faker.internet.email();
   user.password = faker.internet.password();
   user.phone = faker.phone.number();
-  user.year_of_birth = faker.date
-    .birthdate({ min: 1970, max: 2020, mode: "year" })
-    .getFullYear();
+  user.year_of_birth = faker.date.birthdate({ min: 1970, max: 2020, mode: "year" }).getFullYear();
   user.bio = faker.lorem.sentence();
   user.about = faker.lorem.paragraph();
   user.location = faker.location.city();
@@ -29,8 +27,7 @@ export const UserFactory = setSeederFactory(User, (faker: Faker) => {
   user.facebook = "https://www.facebook.com/" + faker.internet.userName();
   user.youtube = "https://www.youtube.com/" + faker.internet.userName();
   user.tiktok = "https://www.tiktok.com/@" + faker.internet.userName();
-  user.spotify_embed_link =
-    "https://open.spotify.com/artist/67pwWZtcg7U2P2keoeC9jW?si=LSqoLE8GQSOi4WYcr70xdA";
+  user.spotify_embed_link = "https://open.spotify.com/artist/67pwWZtcg7U2P2keoeC9jW?si=LSqoLE8GQSOi4WYcr70xdA";
   user.videos = [];
   user.looking_for = faker.helpers.arrayElements(
     [
@@ -47,5 +44,6 @@ export const UserFactory = setSeederFactory(User, (faker: Faker) => {
     ],
     { min: 1, max: 3 }
   );
+  user.profile_image = faker.image.url();
   return user;
 });
