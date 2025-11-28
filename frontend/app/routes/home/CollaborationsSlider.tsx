@@ -28,7 +28,7 @@ type CollaborationsSliderProps = {
 
 export default function CollaborationsSlider({ collaborations }: CollaborationsSliderProps) {
   return (
-    <div className="bg-light-grey py-6">
+    <div className="bg-light-grey py-6 overflow-hidden">
       <div className="outer-wrapper">
         <h2 className="px-4 font-semibold text-lg mb-4">Collaborations requests</h2>
         <Swiper
