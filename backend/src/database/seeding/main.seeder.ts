@@ -10,10 +10,7 @@ import { Genre } from "../../genres/entities/genre.entity";
 import { Collaboration } from "../../collaborations/entities/collaboration.entity";
 
 export class MainSeeder implements Seeder {
-  public async run(
-    dataSource: DataSource,
-    factoryManager: SeederFactoryManager
-  ): Promise<any> {
+  public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
     // Seed users
     const userFactory = factoryManager.get(User);
     const users = await userFactory.saveMany(10);
@@ -46,9 +43,7 @@ export class MainSeeder implements Seeder {
       "Ska",
       "House",
     ];
-    const genres = await Promise.all(
-      genreTitles.map((title: string) => GenreFactory.make({ title }))
-    );
+    const genres = await Promise.all(genreTitles.map((title: string) => GenreFactory.make({ title })));
     await dataSource.getRepository(Genre).save(genres);
 
     // Seed posts, each linked to a random user
@@ -59,13 +54,11 @@ export class MainSeeder implements Seeder {
         .fill("")
         .map(async () => {
           const user = faker.helpers.arrayElement(users);
-          const postTags = faker.helpers
-            .arrayElements(tags, {
-              min: 1,
-              max: 5,
-            })
-            .map((tag) => tag.title);
-          return postFactory.make({ user, tags: postTags });
+          const postTags = faker.helpers.arrayElements(tags, {
+            min: 1,
+            max: 5,
+          });
+          return postFactory.make({ user, tags: postTags.map((tag) => tag.id) }); // Use tag IDs
         })
     );
     await dataSource.getRepository(Post).save(posts);
@@ -91,7 +84,7 @@ export class MainSeeder implements Seeder {
             min: 1,
             max: 5,
           });
-          collaboration.tags = randomTags;
+          collaboration.tags = randomTags; // Use tag entities directly
 
           return collaboration;
         })
