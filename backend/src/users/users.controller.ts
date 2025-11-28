@@ -74,17 +74,36 @@ export class UsersController {
 
   @Get(":id/reviews")
   async findUserReviews(@Param("id") id: string) {
-    const { data, avg_rating } = await this.usersService.findUserReviews(id);
-    return {
-      success: true,
-      avg_rating,
-      data,
-      message: "User reviews retrieved successfully",
-    };
+    try {
+      const { data, avg_rating } = await this.usersService.findUserReviews(id);
+      return {
+        success: true,
+        avg_rating,
+        data,
+        message: "User reviews retrieved successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 
   @Get(":id/questions")
   async findUserQuestions(@Param("id") id: string) {
-    return this.usersService.findUserQuestions(id);
+    try {
+      const data = await this.usersService.findUserQuestions(id);
+      return {
+        success: true,
+        data,
+        message: "User questions retrieved successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 }
