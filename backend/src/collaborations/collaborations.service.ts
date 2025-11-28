@@ -4,7 +4,9 @@ import { UpdateCollaborationDto } from "./dto/update-collaboration.dto";
 
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+
 import { Collaboration } from "./entities/collaboration.entity";
+import { DataSource } from "typeorm/browser";
 
 @Injectable()
 export class CollaborationsService {
@@ -24,14 +26,35 @@ export class CollaborationsService {
 
   async findAll(
     page = 1,
-    limit = 10
-  ): Promise<{ data: Collaboration[]; total: number }> {
-    const [data, total] = await this.collaborationRepository.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
-      order: { created: "DESC" },
-    });
-    return { data, total };
+    limit = 10,
+    genre = "",
+    orderBy = "created"
+  ): Promise<{ data: Collaboration[] }> {
+    const query =
+      this.collaborationRepository.createQueryBuilder("collaboration");
+
+    if (genre) {
+      query
+        .innerJoin(
+          "collaboration.genres",
+          "genreFilter",
+          "genreFilter.title = :genre",
+          { genre }
+        )
+        .leftJoinAndSelect("collaboration.genres", "genre")
+        .distinct(true);
+    } else {
+      query.leftJoinAndSelect("collaboration.genres", "genre");
+    }
+
+    query
+      .orderBy(`collaboration.${orderBy}`, "DESC")
+      .skip((page - 1) * limit)
+      .take(limit);
+
+    const data = await query.getMany();
+
+    return { data };
   }
 
   async findOne(id: string): Promise<Collaboration> {

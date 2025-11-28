@@ -5,14 +5,17 @@ meta {
 }
 
 get {
-  url: {{domain}}/api/collaborations?page=1&limit=10
+  url: {{domain}}/api/collaborations?genre=Metal
   body: none
   auth: inherit
 }
 
 params:query {
-  page: 1
-  limit: 10
+  genre: Metal
+  ~page: 1
+  ~limit: 10
+  ~role: 
+  ~orderby: 
 }
 
 settings {
