@@ -25,7 +25,7 @@ function timeAgo(dateString: string | Date): string {
 
 export default function ServicesCard({ servicesData }: ServicesCardProps) {
   return (
-    <div className="flex flex-col gap-4 p-4 m-auto w-[90%] max-w-md border border-gray-300 rounded-3xl shadow-lg">
+    <div className="flex flex-col gap-4 p-4 m-auto w-[90%] border border-gray-300 rounded-3xl shadow-lg">
       <div className="flex items-center justify-between border-b border-gray-300 pb-2">
         <AvatarHeader
           imageUrl={servicesData.user.profile_image}

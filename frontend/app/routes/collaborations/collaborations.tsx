@@ -21,7 +21,7 @@ export default function Collaborations() {
   const { collaborations } = useLoaderData();
 
   return (
-    <div className="flex flex-col gap-4 px-4 bg-light-grey">
+    <div className="flex flex-col gap-4 px-4 outer-wrapper">
       <CollaborationsFilter />
       <CollaborationsFeed collaborations={collaborations} />
     </div>
