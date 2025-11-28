@@ -32,11 +32,12 @@ export default function ServicesCard({ servicesData }: ServicesCardProps) {
           <h2>{servicesData.title}</h2>
         </div>
         <div className="relative">
-          <Icon
+          {/* Note - add Icon logic in the future to showcase a custom icon in relation with the tags */}
+          {/* <Icon
             name="Mic"
             size={24}
             className="absolute top-4 right-4 bg-neutral-grey rounded-md text-white p-1"
-          />
+          /> */}
           {servicesData.media && (
             <img
               src={servicesData.media}
@@ -46,7 +47,7 @@ export default function ServicesCard({ servicesData }: ServicesCardProps) {
           )}
         </div>
         <p className="line-clamp-3">{servicesData.content}</p>
-        <div className="flex justify-between">
+        <div className="flex justify-between mt-2">
           <span className="font-bold underline">Read more...</span>
           <span className="text-lightgrey">
             {servicesData.location} - {dayjs(servicesData.created).fromNow()}

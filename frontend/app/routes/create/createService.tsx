@@ -1,9 +1,14 @@
-import { redirect, useLoaderData } from "react-router";
+import {
+  redirect,
+  useLoaderData,
+  useActionData,
+  useNavigation,
+} from "react-router";
 import AvatarHeader from "../services/components/AvatarHeader";
 import CreateServiceForm from "./components/CreateServiceForm";
 
 export async function clientLoader(): Promise<{}> {
-  const userId = "445338b5-4396-48b3-8d7a-78564776cfb1"; // Replace with actual logic to get current user ID
+  const userId = "9ec7b46e-3538-47eb-9067-c2fad0ddf97f"; // Replace with actual logic to get current user ID
 
   const userResponse = await fetch(
     `${import.meta.env.VITE_API_URL}/users/${userId}`
@@ -35,12 +40,45 @@ export async function clientAction({ request }: { request: Request }) {
   const price = formData.get("price") as string;
   const location = formData.get("location") as string;
 
-  const user_id = "445338b5-4396-48b3-8d7a-78564776cfb1"; // NOTE: Replace with actual logic to get current user ID when we add auth
+  const user_id = "9ec7b46e-3538-47eb-9067-c2fad0ddf97f"; // NOTE: Replace with actual logic to get current user ID when we add auth
 
   if (!title || !content || !tag_id || !price || !location) {
-    throw new Error(
-      "All fields are required, make sure to fill: title, media, tag, content, price and location"
+    console.error("Error creating service; Missing fields:", {
+      title,
+      content,
+      tag_id,
+      price,
+      location,
+    });
+    return "All fields are required, make sure to fill: title, media, tag, content, price and location";
+  }
+
+  if (title.length > 100) {
+    console.error("Error creating service; Title too long:", title.length);
+    return { error: "Title cannot exceed 100 characters" };
+  }
+
+  if (title.length < 3) {
+    console.error("Error creating service; Title too short:", title.length);
+    return { error: "Title must be at least 3 characters long" };
+  }
+
+  if (content.length < 10) {
+    console.error("Error creating service; Content too short:", content.length);
+    return { error: "Description must be at least 10 characters long" };
+  }
+
+  if (isNaN(Number(price)) || Number(price) < 0) {
+    console.error("Error creating service; Invalid price:", price);
+    return { error: "Price must be a valid non-negative number" };
+  }
+
+  if (location.length < 3) {
+    console.error(
+      "Error creating service; Location too short:",
+      location.length
     );
+    return { error: "Location must be at least 3 characters long" };
   }
 
   try {
@@ -82,6 +120,9 @@ export async function clientAction({ request }: { request: Request }) {
 
 export default function CreateService() {
   const { user, tags } = useLoaderData();
+  const actionData = useActionData();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -90,7 +131,12 @@ export default function CreateService() {
         imageSize={40}
         title={user.name}
       />
-      <CreateServiceForm tags={tags} />
+      <CreateServiceForm tags={tags} isSubmitting={isSubmitting} />
+      {actionData?.error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+          <strong>Error:</strong> {actionData.error}
+        </div>
+      )}
     </div>
   );
 }

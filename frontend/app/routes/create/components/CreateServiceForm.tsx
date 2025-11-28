@@ -1,11 +1,12 @@
-import { Form, useActionData } from "react-router";
+import { Form } from "react-router";
 
 export default function CreateServiceForm({
   tags,
+  isSubmitting,
 }: {
   tags: Array<{ id: string; title: string }>;
+  isSubmitting: boolean;
 }) {
-  const actionData = useActionData();
   const inputStyle = "bg-light-grey p-4 rounded-lg border border-neutral-grey";
 
   return (
@@ -84,16 +85,13 @@ export default function CreateServiceForm({
       {/* NOTE: had to use normal button because of missing type prop in button component, maybe fix in future */}
       <button
         type="submit"
-        className="bg-primary-yellow text-black w-fit py-2 px-4 rounded-lg"
+        disabled={isSubmitting}
+        className={`bg-primary-yellow text-black w-fit py-2 px-4 rounded-lg ${
+          isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+        }`}
       >
-        + Create
+        {isSubmitting ? "Creating..." : "+ Create"}
       </button>
-
-      {actionData?.error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          {actionData.error}
-        </div>
-      )}
     </Form>
   );
 }
