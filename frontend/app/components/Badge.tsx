@@ -5,8 +5,9 @@ type Color =
   | "header-bg-4"
   | "header-bg-5"
   | "header-bg-6"
-  | "header-bg-7";
-
+  | "header-bg-7"
+  | "primary-yellow"
+  | "neutral-grey";
 type Variant = "filled" | "outline";
 
 export default function Badge({

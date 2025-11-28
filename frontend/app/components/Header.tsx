@@ -1,21 +1,32 @@
 import Icon from "./icon";
 import Logo from "../assets/icons/artwork/Logo";
+import { useLocation, useNavigate } from "react-router";
 
 export default function Header() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHomePage = location.pathname === "/";
+
   return (
-    <header>
-      {/* NOTE: There are different headers for the app. I will start with the homepage navigation bar. */}
-      <nav className="flex justify-between items-center px-4 py-2">
-        <Logo />
-        <ul className="flex">
+    <header className="outer-wrapper">
+      <nav className="flex justify-between items-center px-4 py-6">
+        {/* navigate(-1) : Lets you go back to the previous page  */}
+        {isHomePage ? (
+          <Logo />
+        ) : (
+          <button onClick={() => navigate(-1)} aria-label="Go back">
+            <Icon name="NavArrowLeft" color="black" size={20} />
+          </button>
+        )}
+        <ul className="flex gap-4">
           <li>
-            <Icon name="Search" color="black" />
+            <Icon name="Search" color="black" size={20} />
           </li>
           <li>
-            <Icon name="BellNotification" color="black" />
+            <Icon name="BellNotification" color="black" size={20} />
           </li>
           <li>
-            <Icon name="Menu" color="black" />
+            <Icon name="Menu" color="black" size={20} />
           </li>
         </ul>
       </nav>

@@ -6,6 +6,8 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import AppWrapper from "./components/AppWrapper";
+import Logo from "./assets/icons/artwork/Logo";
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -33,9 +35,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
+        <AppWrapper>
+          {children}
+          <ScrollRestoration />
+          <Scripts />
+        </AppWrapper>
       </body>
     </html>
   );
@@ -71,5 +75,14 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         </pre>
       )}
     </main>
+  );
+}
+
+export function HydrateFallback() {
+  return (
+    <div className="w-screen h-screen flex flex-col justify-center items-center">
+      <div className="loader" />
+      <Logo />
+    </div>
   );
 }

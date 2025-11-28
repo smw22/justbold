@@ -1,0 +1,20 @@
+meta {
+  name: Get One Collaboration
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{domain}}/api/collaborations/:collaborationId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  collaborationId: {{collaboration_id}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

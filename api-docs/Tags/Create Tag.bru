@@ -1,0 +1,22 @@
+meta {
+  name: Create Tag
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{domain}}/api/tags
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": "Gamer 1"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

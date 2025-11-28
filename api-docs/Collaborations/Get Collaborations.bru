@@ -1,0 +1,21 @@
+meta {
+  name: Get Collaborations
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{domain}}/api/collaborations?page=1&limit=10
+  body: none
+  auth: inherit
+}
+
+params:query {
+  page: 1
+  limit: 10
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
