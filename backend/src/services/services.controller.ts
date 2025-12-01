@@ -18,10 +18,11 @@ export class ServicesController {
   @Post()
   async create(@Body() createServiceDto: CreateServiceDto) {
     try {
-      await this.servicesService.create(createServiceDto);
+      const data = await this.servicesService.create(createServiceDto);
 
       return {
         success: true,
+        data,
         message: "Service created successfully",
       };
     } catch (error) {
