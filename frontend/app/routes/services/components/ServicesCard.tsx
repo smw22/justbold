@@ -2,26 +2,14 @@ import Icon from "~/components/icon";
 import { Link } from "react-router";
 import AvatarHeader from "./AvatarHeader";
 import type { Service } from "~/types/services/servicesProps";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 type ServicesCardProps = {
   servicesData: Service;
 };
-
-function timeAgo(dateString: string | Date): string {
-  const now = new Date();
-  const createdDate = new Date(dateString);
-  const diffMs = now.getTime() - createdDate.getTime();
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-  if (diffHours < 24) {
-    return `${diffHours}h ago`;
-  } else if (diffDays < 31) {
-    return `${diffDays}d ago`;
-  } else {
-    return "+1 month ago";
-  }
-}
 
 export default function ServicesCard({ servicesData }: ServicesCardProps) {
   return (
@@ -44,22 +32,25 @@ export default function ServicesCard({ servicesData }: ServicesCardProps) {
           <h2>{servicesData.title}</h2>
         </div>
         <div className="relative">
-          <Icon
+          {/* Note - add Icon logic in the future to showcase a custom icon in relation with the tags */}
+          {/* <Icon
             name="Mic"
             size={24}
             className="absolute top-4 right-4 bg-neutral-grey rounded-md text-white p-1"
-          />
-          <img
-            src={servicesData.media}
-            alt="user avatar"
-            className="w-full rounded-2xl"
-          />
+          /> */}
+          {servicesData.media && (
+            <img
+              src={servicesData.media}
+              alt="service image"
+              className="w-full rounded-2xl"
+            />
+          )}
         </div>
         <p className="line-clamp-3">{servicesData.content}</p>
-        <div className="flex justify-between">
+        <div className="flex justify-between mt-2">
           <span className="font-bold underline">Read more...</span>
           <span className="text-lightgrey">
-            {servicesData.location} - {timeAgo(servicesData.created)}
+            {servicesData.location} - {dayjs(servicesData.created).fromNow()}
           </span>
         </div>
       </Link>

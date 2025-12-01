@@ -1,12 +1,18 @@
 import { Form } from "react-router";
 
-export default function CreateServiceForm() {
+export default function CreateServiceForm({
+  tags,
+  isSubmitting,
+}: {
+  tags: Array<{ id: string; title: string }>;
+  isSubmitting: boolean;
+}) {
   const inputStyle = "bg-light-grey p-4 rounded-lg border border-neutral-grey";
 
   return (
-    <Form className="flex flex-col gap-4">
+    <Form method="post" className="flex flex-col gap-4">
       <p className="flex flex-col gap-2">
-        <label htmlFor="title">Title</label>
+        <label htmlFor="title">Title *</label>
         <input
           type="text"
           name="title"
@@ -19,7 +25,7 @@ export default function CreateServiceForm() {
 
       {/*NOTE: We need a imageUploader component here or placeholder images with a select input */}
       <p className="flex flex-col gap-2">
-        <label htmlFor="media">Media</label>
+        <label htmlFor="media">Media (optional)</label>
         <input
           type="text"
           name="media"
@@ -30,17 +36,19 @@ export default function CreateServiceForm() {
       </p>
 
       <p className="flex flex-col gap-2">
-        <label htmlFor="tag">Choose a tag</label>
-        <select name="tag" id="tag" className={inputStyle} required>
-          {/*NOTE: In the future we have to map the multiple possible tags from the tag table */}
-          <option value="art">Art</option>
-          <option value="recording">Recording</option>
-          <option value="studio">Studio</option>
+        <label htmlFor="tag_id">Choose a tag *</label>
+        <select name="tag_id" id="tag_id" className={inputStyle} required>
+          <option value="">-- Select a tag --</option>
+          {tags.map((tag) => (
+            <option key={tag.id} value={tag.id}>
+              {tag.title.charAt(0).toUpperCase() + tag.title.slice(1)}
+            </option>
+          ))}
         </select>
       </p>
 
       <p className="flex flex-col gap-2">
-        <label htmlFor="content">Description</label>
+        <label htmlFor="content">Description *</label>
         <textarea
           name="content"
           id="content"
@@ -51,7 +59,7 @@ export default function CreateServiceForm() {
       </p>
 
       <p className="flex flex-col gap-2">
-        <label htmlFor="price">Price</label>
+        <label htmlFor="price">Price *</label>
         <input
           type="number"
           name="price"
@@ -63,7 +71,7 @@ export default function CreateServiceForm() {
       </p>
 
       <p className="flex flex-col gap-2">
-        <label htmlFor="location">Location</label>
+        <label htmlFor="location">Location *</label>
         <input
           type="text"
           name="location"
@@ -77,9 +85,12 @@ export default function CreateServiceForm() {
       {/* NOTE: had to use normal button because of missing type prop in button component, maybe fix in future */}
       <button
         type="submit"
-        className="bg-primary-yellow text-black w-fit py-2 px-4 rounded-lg"
+        disabled={isSubmitting}
+        className={`bg-primary-yellow text-black w-fit py-2 px-4 rounded-lg ${
+          isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+        }`}
       >
-        + Create
+        {isSubmitting ? "Creating..." : "+ Create"}
       </button>
     </Form>
   );
