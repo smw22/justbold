@@ -1,9 +1,7 @@
-// TODO: Add bycryt hashing for passwords
-
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
-import * as bcrypt from "bcrypt";
+const bcrypt = require("bcrypt");
 
 @Injectable()
 export class AuthService {
@@ -12,11 +10,17 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async signIn(email: string, pass: string): Promise<{ access_token: string }> {
-    const user = await this.usersService.findOne(email);
-    if (!user || !(await bcrypt.compare(pass, user.password))) {
-      throw new UnauthorizedException();
+  async signIn(email: string, password: string): Promise<{ access_token: string }> {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      throw new UnauthorizedException("User with this email does not exist");
     }
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      throw new UnauthorizedException("Incorrect password");
+    }
+
     const payload = { sub: user.id, email: user.name };
     return {
       access_token: await this.jwtService.signAsync(payload),
