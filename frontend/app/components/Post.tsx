@@ -68,9 +68,21 @@ export default function Post({ post, clickable = true }: { post: PostType; click
           </ContextMenu>
         </div>
       </div>
-      <h2 className="px-2">{post.title}</h2>
-      <CardMedia variant="image" url={post.media} />
-      <p className="text-sm px-2">{post.content}</p>
+      {clickable ? (
+        // if the post is clickable. and therefore can take the user to the details page of the post.
+        <Link to={`/posts/${post.id}`} className="gap-4 flex flex-col">
+          <h2 className="px-2">{post.title}</h2>
+          <CardMedia variant="image" url={post.media} />
+          <p className="text-sm px-2">{post.content}</p>
+        </Link>
+      ) : (
+        <>
+          <h2 className="px-2">{post.title}</h2>
+          <CardMedia variant="image" url={post.media} />
+          <p className="text-sm px-2">{post.content}</p>
+        </>
+      )}
+
       <div className="px-2 flex gap-4">
         <div className="flex items-center gap-1">
           <button
