@@ -1,5 +1,4 @@
-import { Link, Form, redirect, useActionData, useNavigation, useSearchParams } from "react-router";
-import { useState } from "react";
+import { Link, Form, redirect, useActionData, useNavigation } from "react-router";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
 import { apiFetch } from "~/lib/apiFetch";
@@ -54,9 +53,18 @@ export default function Login({ onNext, onLogin }: LoginProps) {
       <div className="m-auto flex flex-col items-center justify-center h-full gap-6 w-[263px]">
         <h1 className="text-primary-purple!">Login</h1>
         <Form method="POST" className="flex flex-col gap-3.5">
-          <input type="email" id="email" name="email" required autoComplete="email" placeholder="you@example.com" />
+          <Input
+            variant="onboarding"
+            type="email"
+            id="email"
+            name="email"
+            required
+            autoComplete="email"
+            placeholder="you@example.com"
+          />
 
-          <input
+          <Input
+            variant="onboarding"
             type="password"
             id="password"
             name="password"
@@ -64,15 +72,7 @@ export default function Login({ onNext, onLogin }: LoginProps) {
             autoComplete="current-password"
             placeholder="Your password"
           />
-          {/* <Input variant="onboarding" placeholder="Enter your email" type="email" value={email} name="email" />
-          <Input
-            variant="onboarding"
-            placeholder="Enter your password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            name="password"
-          /> */}
+
           {isSubmitting ? (
             <Button text="Logging in..." variant="primary" className="mt-1.5 w-fit self-center" />
           ) : (
