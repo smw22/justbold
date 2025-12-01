@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, JoinTabl
 import { User } from "../../users/entities/user.entity";
 import { Tag } from "../../tags/entities/tag.entity";
 import { Like } from "../../likes/entities/like.entity";
-import { Comment } from "src/comments/entities/comment.entity";
+import { Comment } from "../../comments/entities/comment.entity";
 
 @Entity()
 export class Post {

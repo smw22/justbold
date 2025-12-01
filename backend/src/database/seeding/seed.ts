@@ -9,10 +9,11 @@ import { UserFactory } from "./user.factory";
 import { TagFactory } from "./tag.factory";
 import { GenreFactory } from "./genre.factory";
 import { CollaborationFactory } from "./collaboration.factory";
+import { ServiceFactory } from "./service.factory";
 
 const options: DataSourceOptions & SeederOptions = {
   ...AppDataSource.options,
-  factories: [PostFactory, UserFactory, TagFactory, GenreFactory, CollaborationFactory],
+  factories: [PostFactory, UserFactory, TagFactory, GenreFactory, CollaborationFactory, ServiceFactory],
   seeds: [MainSeeder],
 };
 

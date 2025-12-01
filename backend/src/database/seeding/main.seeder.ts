@@ -8,6 +8,7 @@ import { Post } from "../../posts/entities/post.entity";
 import { Tag } from "../../tags/entities/tag.entity";
 import { Genre } from "../../genres/entities/genre.entity";
 import { Collaboration } from "../../collaborations/entities/collaboration.entity";
+import { Service } from "../../services/entities/service.entity";
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
@@ -90,5 +91,18 @@ export class MainSeeder implements Seeder {
         })
     );
     await dataSource.getRepository(Collaboration).save(collaborations);
+
+    // seed services, each linked to a random user and tag
+    const serviceFactory = factoryManager.get(Service);
+    const services = await Promise.all(
+      Array(50)
+        .fill("")
+        .map(async () => {
+          const user = faker.helpers.arrayElement(users);
+          const tag = faker.helpers.arrayElement(tags);
+          return serviceFactory.make({ user, tag });
+        })
+    );
+    await dataSource.getRepository(Service).save(services);
   }
 }
