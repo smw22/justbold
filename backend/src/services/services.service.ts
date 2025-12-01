@@ -4,8 +4,8 @@ import { UpdateServiceDto } from "./dto/update-service.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Service } from "./entities/service.entity";
-import { User } from "src/users/entities/user.entity";
-import { Tag } from "src/tags/entities/tag.entity";
+import { User } from "../users/entities/user.entity";
+import { Tag } from "../tags/entities/tag.entity";
 
 @Injectable()
 export class ServicesService {
@@ -26,9 +26,7 @@ export class ServicesService {
     });
 
     if (!user) {
-      throw new NotFoundException(
-        `User with ID ${createServiceDto.user_id} not found`
-      );
+      throw new NotFoundException(`User with ID ${createServiceDto.user_id} not found`);
     }
 
     // Fetch the Tag entity
@@ -37,9 +35,7 @@ export class ServicesService {
     });
 
     if (!tag) {
-      throw new NotFoundException(
-        `Tag with ID ${createServiceDto.tag_id} not found`
-      );
+      throw new NotFoundException(`Tag with ID ${createServiceDto.tag_id} not found`);
     }
 
     // Create service with entity references (not IDs)
@@ -69,18 +65,12 @@ export class ServicesService {
     return serviceData;
   }
 
-  async update(
-    id: string,
-    updateServiceDto: UpdateServiceDto
-  ): Promise<Service> {
+  async update(id: string, updateServiceDto: UpdateServiceDto): Promise<Service> {
     const existingService = await this.servicesRepository.findOneBy({ id });
     if (!existingService) {
       throw new HttpException("Service not found", 404);
     }
-    const serviceData = this.servicesRepository.merge(
-      existingService,
-      updateServiceDto
-    );
+    const serviceData = this.servicesRepository.merge(existingService, updateServiceDto);
     return await this.servicesRepository.save(serviceData);
   }
 

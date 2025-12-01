@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { User } from "../../users/entities/user.entity";
-import { Post } from "src/posts/entities/post.entity";
+import { Post } from "../../posts/entities/post.entity";
 
 @Entity()
 export class Like {
