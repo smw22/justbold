@@ -1,11 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  ManyToOne,
-  JoinColumn,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { Post } from "../../posts/entities/post.entity";
 import { User } from "../../users/entities/user.entity";
 
@@ -23,9 +16,14 @@ export class Comment {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @ManyToOne(() => Comment, { nullable: true })
+  // Parent comment (null for top-level comments)
+  @ManyToOne(() => Comment, (comment) => comment.replies, { nullable: true })
   @JoinColumn({ name: "parent_id" })
-  parent: Comment;
+  parent: Comment | null;
+
+  // Child comments (replies to this comment)
+  @OneToMany(() => Comment, (comment) => comment.parent)
+  replies: Comment[];
 
   @Column("text")
   content: string;
