@@ -107,12 +107,8 @@ export class UsersService {
     // "findAndCount()" is one of the built-in methods in TypeORM.
     // the function returns an array with exactly 2 values - data and count.
     const [data, count] = await this.reviewsRepository.findAndCount({
-      // user is one of the column names that was defined inside review.entity.ts.
-      // You know, like this:
-      //   @Column()
-      //   user: User;
-      where: { user: { id } },
-      relations: ["sender", "service"], // Add relations here
+      where: { object_id: id, type: "user" },
+      relations: ["sender"], // Only include existing relations
     });
 
     if (count === 0) {
