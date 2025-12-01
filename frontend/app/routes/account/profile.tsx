@@ -1,14 +1,5 @@
 import { useState } from "react";
-import {
-  useParams,
-  useLoaderData,
-  useActionData,
-  useNavigation,
-  useRouteError,
-  Link,
-  href,
-  Outlet,
-} from "react-router";
+import { useParams, useLoaderData, useActionData, useNavigation, useRouteError, Link, href, Outlet } from "react-router";
 import Icon from "~/components/icon";
 import ProfileHeader from "~/components/ProfileHeader";
 import Tabs from "~/components/Tabs";
@@ -22,17 +13,11 @@ import SoMeYouTube from "../../assets/icons/SoMeYouTube.svg";
 import SoMeTikTok from "../../assets/icons/SoMeTikTok.svg";
 import type { PostType } from "~/types/post";
 import type { ProfileType } from "~/types/profile";
+import { apiFetch } from "~/lib/apiFetch";
 
-export async function clientLoader({
-  params,
-}: {
-  params: { profileId: string };
-}) {
-  const apiUrl = import.meta.env.VITE_API_URL;
-  const profileResponse = await fetch(`${apiUrl}/users/${params.profileId}`);
-  const postsResponse = await fetch(
-    `${apiUrl}/users/${params.profileId}/posts`
-  );
+export async function clientLoader({ params }: { params: { profileId: string } }) {
+  const profileResponse = await apiFetch(`/users/${params.profileId}`);
+  const postsResponse = await apiFetch(`/users/${params.profileId}/posts`);
   if (!profileResponse.ok || !postsResponse.ok) {
     throw new Error("Unknown error.");
   }
@@ -69,17 +54,9 @@ export default function Users() {
           theme={profile.data.theme}
         />
         {/* // Tabs component, "About" and "Posts" - the current tab is held as a number in a state. */}
-        <Tabs
-          tabs={["About", "Posts"]}
-          currentTab={tab}
-          setTab={(e) => setTab(e)}
-        />
+        <Tabs tabs={["About", "Posts"]} currentTab={tab} setTab={(e) => setTab(e)} />
         {/* // if tab is 0 we show about - otherwise we show posts. */}
-        {tab === 0 ? (
-          <About profile={profile.data} />
-        ) : (
-          <Posts posts={user_posts.data} />
-        )}
+        {tab === 0 ? <About profile={profile.data} /> : <Posts posts={user_posts.data} />}
       </div>
     </div>
   );
@@ -96,16 +73,10 @@ function About({ profile }: { profile: ProfileType }) {
         <p className="text-sm mx-4 my-3 max-w-md">{profile.about}</p>
       </section>
       <section>
-        <h5 className="font-normal text-gray-400! text-sm">
-          What I am looking for
-        </h5>
+        <h5 className="font-normal text-gray-400! text-sm">What I am looking for</h5>
         <div className="flex flex-row gap-1 mx-4 my-3">
           {profile.looking_for.map((str) => (
-            <p
-              className={`inline-flex text-white bg-${profile.theme} capitalize px-3 py-1 rounded-full`}
-            >
-              {str}
-            </p>
+            <p className={`inline-flex text-white bg-${profile.theme} capitalize px-3 py-1 rounded-full`}>{str}</p>
           ))}
         </div>
       </section>
@@ -113,19 +84,13 @@ function About({ profile }: { profile: ProfileType }) {
         <h5 className="font-normal text-gray-400! text-sm">Genres</h5>
         <div className="flex flex-row gap-1 mx-4 my-3">
           {profile.genres.map((str) => (
-            <p
-              className={`inline-flex text-white bg-${profile.theme} capitalize px-3 py-1 rounded-full`}
-            >
-              {str}
-            </p>
+            <p className={`inline-flex text-white bg-${profile.theme} capitalize px-3 py-1 rounded-full`}>{str}</p>
           ))}
         </div>
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Reviews</h5>
-        <p className="text-sm mx-4 my-3">
-          Her skal vi lave kald til review endpoint
-        </p>
+        <p className="text-sm mx-4 my-3">Her skal vi lave kald til review endpoint</p>
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Social media</h5>
@@ -140,39 +105,23 @@ function About({ profile }: { profile: ProfileType }) {
             </Link>
           )}
           {profile.twitter && (
-            <Link
-              to={profile.twitter}
-              target="blank"
-              className="hover:opacity-40 transition-opacity duration-200 ease-in-out"
-            >
+            <Link to={profile.twitter} target="blank" className="hover:opacity-40 transition-opacity duration-200 ease-in-out">
               <img src={SoMeTwitter} alt="Twitter" className="w-10 m-2" />
             </Link>
           )}
 
           {profile.youtube && (
-            <Link
-              to={profile.youtube}
-              target="blank"
-              className="hover:opacity-40 transition-opacity duration-200 ease-in-out"
-            >
+            <Link to={profile.youtube} target="blank" className="hover:opacity-40 transition-opacity duration-200 ease-in-out">
               <img src={SoMeYouTube} alt="YouTube" className="w-10 m-2" />
             </Link>
           )}
           {profile.tiktok && (
-            <Link
-              to={profile.tiktok}
-              target="blank"
-              className="hover:opacity-40 transition-opacity duration-200 ease-in-out"
-            >
+            <Link to={profile.tiktok} target="blank" className="hover:opacity-40 transition-opacity duration-200 ease-in-out">
               <img src={SoMeTikTok} alt="TikTok" className="w-10 m-2" />
             </Link>
           )}
           {profile.facebook && (
-            <Link
-              to={profile.facebook}
-              target="blank"
-              className="hover:opacity-40 transition-opacity duration-200 ease-in-out"
-            >
+            <Link to={profile.facebook} target="blank" className="hover:opacity-40 transition-opacity duration-200 ease-in-out">
               <img src={SoMeFacebook} alt="Facebook" className="w-10 m-2" />
             </Link>
           )}
@@ -180,7 +129,11 @@ function About({ profile }: { profile: ProfileType }) {
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Artists I like (static)</h5>
-        <ShowArtists users={["x", "x", "x", "x", "x", "x", "x", "x"]} theme={profile.theme} onShowMore={() => setShowArtistsILike(true)} />
+        <ShowArtists
+          users={["x", "x", "x", "x", "x", "x", "x", "x"]}
+          theme={profile.theme}
+          onShowMore={() => setShowArtistsILike(true)}
+        />
         <SheetView show={showArtistsILike} onClose={() => setShowArtistsILike(false)} title="Artists I like">
           <p>Her skal der være content</p>
           <p>Her skal der være content</p>
@@ -231,7 +184,11 @@ function About({ profile }: { profile: ProfileType }) {
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Past collaborations (static)</h5>
-        <ShowArtists users={["x", "x", "x", "x", "x", "x", "x", "x"]} theme={profile.theme} onShowMore={() => setShowPastCollabs(true)} />
+        <ShowArtists
+          users={["x", "x", "x", "x", "x", "x", "x", "x"]}
+          theme={profile.theme}
+          onShowMore={() => setShowPastCollabs(true)}
+        />
         <SheetView show={showPastCollabs} onClose={() => setShowPastCollabs(false)} title="Past collaborations">
           <p>Her skal der være content</p>
           <p>Her skal der være content</p>
@@ -248,19 +205,12 @@ function About({ profile }: { profile: ProfileType }) {
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Questions</h5>
-        <p className="text-sm mx-4 my-3">
-          Her skal vi lave kald til questions endpoint
-        </p>
+        <p className="text-sm mx-4 my-3">Her skal vi lave kald til questions endpoint</p>
       </section>
       <section>
         <h5 className="font-normal text-lg">Ask me a question</h5>
-        <div
-          className={`flex items-center border-${profile.theme} border rounded-full mx-2 my-4`}
-        >
-          <input
-            className="outline-none px-5 py-5 w-full"
-            placeholder="Type your question here..."
-          />
+        <div className={`flex items-center border-${profile.theme} border rounded-full mx-2 my-4`}>
+          <input className="outline-none px-5 py-5 w-full" placeholder="Type your question here..." />
           <button
             className={`cursor-pointer hover:opacity-40 bg-${profile.theme} text-white min-w-12 w-12 h-12 m-2 flex items-center justify-center rounded-full transition-opacity duration-200 ease-in-out`}
           >

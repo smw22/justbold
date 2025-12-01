@@ -2,6 +2,7 @@ import { Link, Form, redirect, useActionData, useNavigation, useSearchParams } f
 import { useState } from "react";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
+import { apiFetch } from "~/lib/apiFetch";
 
 interface LoginProps {
   onNext: () => void;
@@ -9,14 +10,13 @@ interface LoginProps {
 }
 
 export async function clientAction({ params, request }: { params: any; request: any }) {
-  const apiUrl = import.meta.env.VITE_API_URL as string;
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
   if (!email || !password) {
     return { error: "Email and password are required" };
   }
-  const getAccessToken = await fetch(`${apiUrl}/auth/login`, {
+  const getAccessToken = await apiFetch(`/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
