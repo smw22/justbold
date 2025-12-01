@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Query } from "@nestjs/common";
 import { SearchService } from "./search.service";
-import { SearchQueryDto } from "./dto/search-query.dto";
+import { SearchQueryDto } from "./dto/search-query-dto";
 
 @Controller("search")
 export class SearchController {
@@ -9,7 +9,7 @@ export class SearchController {
   @Get()
   async search(@Query() searchQueryDto: SearchQueryDto) {
     try {
-      const results = await this.searchQueryDto.search(searchQueryDto);
+      const results = await this.searchService.search(searchQueryDto);
       return {
         success: true,
         data: results,
