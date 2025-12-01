@@ -92,7 +92,7 @@ export default function Post({ post }: { post: PostType }) {
           >
             <Icon name="MultiBubble" size={24} className="text-neutral-grey" />
           </button>
-          <p className="text-sm text-neutral-grey">X</p>
+          <p className="text-sm text-neutral-grey">{post.comments.length}</p>
         </div>
         <button
           className="cursor-pointer hover:bg-gray-100 w-8 h-8 flex justify-center items-center rounded-full transition-colors duration-200 ease-in-out"

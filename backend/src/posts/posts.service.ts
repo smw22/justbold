@@ -7,6 +7,7 @@ import { Repository } from "typeorm";
 import { Post } from "./entities/post.entity";
 import { Tag } from "../tags/entities/tag.entity";
 import { Like } from "../likes/entities/like.entity";
+import { Comment } from "../comments/entities/comment.entity";
 
 @Injectable()
 export class PostsService {
@@ -16,7 +17,9 @@ export class PostsService {
     @InjectRepository(Tag)
     private readonly tagsRepository: Repository<Tag>,
     @InjectRepository(Like)
-    private readonly likesRepository: Repository<Like>
+    private readonly likesRepository: Repository<Like>,
+    @InjectRepository(Comment)
+    private readonly commentsRepository: Repository<Comment>
   ) {}
 
   async create(CreatePostDto: CreatePostDto) {
@@ -29,12 +32,12 @@ export class PostsService {
       skip: (page - 1) * limit,
       take: limit,
       order: { created: "DESC" },
-      relations: ["tags", "likes", "likes.user", "user"],
+      relations: ["tags", "likes", "likes.user", "user", "comments", "comments.user"],
     });
 
     const transformedData: any[] = [];
     for (const post of data) {
-      const { user, likes, ...rest } = post;
+      const { user, likes, comments, ...rest } = post;
       transformedData.push({
         ...rest,
         user: user
@@ -53,6 +56,18 @@ export class PostsService {
               }
             : null,
         })),
+        comments: comments.map((comment) => ({
+          id: comment.id,
+          content: comment.content,
+          created: comment.created,
+          user: comment.user
+            ? {
+                id: comment.id,
+                name: comment.user.name,
+                profile_image: comment.user.profile_image,
+              }
+            : null,
+        })),
       });
     }
 
@@ -62,13 +77,13 @@ export class PostsService {
   async findOne(id: string): Promise<any> {
     const postData = await this.postsRepository.findOne({
       where: { id },
-      relations: ["tags", "likes", "likes.user", "user"],
+      relations: ["tags", "likes", "likes.user", "user", "comment", "comment.user"],
     });
     if (!postData) {
       throw new HttpException("Post not found", 404);
     }
     // Transform user object to only include name and profile_image
-    const { user, likes, ...rest } = postData;
+    const { user, likes, comments, ...rest } = postData;
     return {
       ...rest,
       user: {
@@ -82,6 +97,18 @@ export class PostsService {
               id: like.user.id,
               name: like.user.name,
               profile_image: like.user.profile_image,
+            }
+          : null,
+      })),
+      comments: comments.map((comment) => ({
+        id: comment.id,
+        content: comment.content,
+        created: comment.created,
+        user: comment.user
+          ? {
+              id: comment.id,
+              name: comment.user.name,
+              profile_image: comment.user.profile_image,
             }
           : null,
       })),

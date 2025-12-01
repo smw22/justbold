@@ -1,3 +1,4 @@
+import type { CommentType } from "./comment";
 import type { ProfileType } from "./profile";
 export interface PostType {
   user_id: string;
@@ -7,5 +8,6 @@ export interface PostType {
   media: string;
   created: Date;
   likes: ProfileType[];
+  comments: CommentType[];
   user: ProfileType;
 }
