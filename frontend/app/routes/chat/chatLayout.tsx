@@ -1,6 +1,8 @@
 import { Outlet, useLocation } from "react-router";
 import Footer from "~/components/Footer";
 import ChatFooter from "./components/ChatFooter";
+import Threadheader from "./components/ThreadHeader";
+import MessagesHeader from "./components/MessagesHeader";
 
 export default function ChatLayout() {
   const location = useLocation();
@@ -8,6 +10,7 @@ export default function ChatLayout() {
 
   return (
     <div>
+      {isThreadPage ? <Threadheader /> : <MessagesHeader />}
       Chat Layout
       <Outlet />
       {isThreadPage ? <Footer /> : <ChatFooter />}

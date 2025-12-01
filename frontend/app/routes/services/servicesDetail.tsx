@@ -4,14 +4,8 @@ import ReviewStars from "./components/ReviewStars";
 import { Link, useLoaderData } from "react-router";
 import AvatarHeader from "./components/AvatarHeader";
 
-export async function clientLoader({
-  params,
-}: {
-  params: { serviceId: string };
-}): Promise<{}> {
-  const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/services/${params.serviceId}`
-  );
+export async function clientLoader({ params }: { params: { serviceId: string } }): Promise<{}> {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/services/${params.serviceId}`);
 
   if (response.status === 404) {
     throw new Response("Service not Found", { status: 404 });
@@ -34,11 +28,7 @@ export default function ServicesDetail() {
   return (
     <div className=" p-4 outer-wrapper">
       <div className="flex items-center justify-between mb-4">
-        <AvatarHeader
-          imageUrl={service.user.profile_image}
-          imageSize={40}
-          title={service.user.name}
-        />
+        <AvatarHeader imageUrl={service.user.profile_image} imageSize={40} title={service.user.name} color="black" />
 
         <span className="text-lightgrey">#{service.tag.title}</span>
         <div>
@@ -46,18 +36,9 @@ export default function ServicesDetail() {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        <img
-          src={service.media}
-          alt={service.title}
-          className="w-full rounded-2xl"
-        />
+        <img src={service.media} alt={service.title} className="w-full rounded-2xl" />
         <p>{service.content}</p>
-        <Button
-          variant="primary"
-          text="Start a chat"
-          icon="ChatLines"
-          fullWidth={false}
-        />
+        <Button variant="primary" text="Start a chat" icon="ChatLines" fullWidth={false} />
         <div>
           <span className="font-bold">Location: </span>
           <span>{service.location}</span>
@@ -76,10 +57,7 @@ export default function ServicesDetail() {
           </div>
         </div>
         <div>
-          <p>
-            "She made an amazing album cover that perfectly captured our band's
-            vibe." - Alex P.
-          </p>
+          <p>"She made an amazing album cover that perfectly captured our band's vibe." - Alex P.</p>
           <Link to="/" className="font-bold underline">
             See more
           </Link>
