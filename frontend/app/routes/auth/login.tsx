@@ -34,7 +34,7 @@ export async function clientAction({ params, request }: { params: any; request: 
     console.log("Login successful! User:", email);
 
     localStorage.setItem("access_token", result.access_token);
-    localStorage.setItem("user_id", result.userId);
+    localStorage.setItem("user_id", result.user_id);
 
     const url = new URL(request.url);
     const redirectTo = url.searchParams.get("redirectTo") || "/";
