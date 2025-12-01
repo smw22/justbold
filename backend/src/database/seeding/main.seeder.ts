@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { DataSource } from "typeorm";
 import { Seeder, SeederFactoryManager } from "typeorm-extension";
+import * as bcrypt from "bcrypt";
 
 // Entities
 import { User } from "../../users/entities/user.entity";
@@ -12,21 +13,11 @@ import { Service } from "../../services/entities/service.entity";
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
-    // Seed users: always create one predefined user, then random users
     const userFactory = factoryManager.get(User);
     const predefinedUser = await userFactory.make({
       name: "Test User",
       email: "test@user.com",
-      password: "admin",
-      //   phone: "1234567890",
-      //   year_of_birth: 1990,
-      //   location: "Test City",
-      //   theme: "header-bg-1",
-      //   connections: [],
-      //   subscription: "free",
-      //   user_type: "standard",
-      //   genres: [],
-      //   profile_image: "default.png",
+      password: await bcrypt.hash("admin", 10),
     });
     const savedPredefinedUser = await dataSource.getRepository(User).save(predefinedUser);
     const users = [savedPredefinedUser, ...(await userFactory.saveMany(9))];
