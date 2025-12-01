@@ -11,9 +11,24 @@ import { Collaboration } from "../../collaborations/entities/collaboration.entit
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
-    // Seed users
+    // Seed users: always create one predefined user, then random users
     const userFactory = factoryManager.get(User);
-    const users = await userFactory.saveMany(10);
+    const predefinedUser = await userFactory.make({
+      name: "Test User",
+      email: "test@user.com",
+      password: "admin",
+      //   phone: "1234567890",
+      //   year_of_birth: 1990,
+      //   location: "Test City",
+      //   theme: "header-bg-1",
+      //   connections: [],
+      //   subscription: "free",
+      //   user_type: "standard",
+      //   genres: [],
+      //   profile_image: "default.png",
+    });
+    const savedPredefinedUser = await dataSource.getRepository(User).save(predefinedUser);
+    const users = [savedPredefinedUser, ...(await userFactory.saveMany(9))];
 
     // Seed tags
     const TagFactory = factoryManager.get(Tag);
