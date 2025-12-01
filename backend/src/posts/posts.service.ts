@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Post } from "./entities/post.entity";
 import { Tag } from "../tags/entities/tag.entity";
+import { Like } from "../likes/entities/like.entity";
 
 @Injectable()
 export class PostsService {
@@ -13,7 +14,9 @@ export class PostsService {
     @InjectRepository(Post)
     private readonly postsRepository: Repository<Post>,
     @InjectRepository(Tag)
-    private readonly tagsRepository: Repository<Tag>
+    private readonly tagsRepository: Repository<Tag>,
+    @InjectRepository(Like)
+    private readonly likesRepository: Repository<Like>
   ) {}
 
   async create(CreatePostDto: CreatePostDto) {
@@ -26,20 +29,45 @@ export class PostsService {
       skip: (page - 1) * limit,
       take: limit,
       order: { created: "DESC" },
-      relations: ["tags"], // Ensure tags are loaded as objects
+      relations: ["tags", "likes", "user"], // Ensure tags and likes are loaded as objects
     });
-    return { data, total };
+
+    console.log("First post user:", data[0]?.user); // <-- Add this
+
+    const transformedData: any[] = []; // <-- Add type here
+    for (const post of data) {
+      const { user, ...rest } = post;
+      transformedData.push({
+        ...rest,
+        user: user
+          ? {
+              name: user.name,
+              profile_image: user.profile_image,
+            }
+          : null,
+      });
+    }
+
+    return { data: transformedData, total };
   }
 
   async findOne(id: string): Promise<any> {
     const postData = await this.postsRepository.findOne({
       where: { id },
-      relations: ["tags"], // Ensure tags are loaded as objects
+      relations: ["tags", "likes", "user"], // Ensure tags are loaded as objects
     });
     if (!postData) {
       throw new HttpException("Post not found", 404);
     }
-    return postData;
+    // Transform user object to only include name and profile_image
+    const { user, ...rest } = postData;
+    return {
+      ...rest,
+      user: {
+        name: user.name,
+        profile_image: user.profile_image,
+      },
+    };
   }
 
   async update(id: string, updatePostDto: UpdatePostDto): Promise<Post> {

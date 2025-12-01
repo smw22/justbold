@@ -53,7 +53,25 @@ export class UsersService {
   }
 
   async findUserPosts(id: string) {
-    return await this.postsRepository.findAndCount({ where: { user: { id } } });
+    const posts = await this.postsRepository.find({
+      where: { user: { id } },
+      relations: ["user", "tags", "likes"],
+    });
+
+    const transformedPosts = posts.map(({ user, ...rest }) => ({
+      ...rest,
+      user: user
+        ? {
+            name: user.name,
+            profile_image: user.profile_image,
+          }
+        : null,
+    }));
+
+    return {
+      data: transformedPosts,
+      total_posts: transformedPosts.length, // <-- Return the count here
+    };
   }
 
   async findUserReviews(id: string) {
