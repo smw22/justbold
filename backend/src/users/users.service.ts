@@ -58,19 +58,29 @@ export class UsersService {
       relations: ["user", "tags", "likes"],
     });
 
-    const transformedPosts = posts.map(({ user, ...rest }) => ({
+    const transformedPosts = posts.map(({ user, likes, ...rest }) => ({
       ...rest,
       user: user
         ? {
+            id: user.id,
             name: user.name,
             profile_image: user.profile_image,
           }
         : null,
+      likes: likes.map((like) => ({
+        user: like.user
+          ? {
+              id: like.user.id,
+              name: like.user.name,
+              profile_image: like.user.profile_image,
+            }
+          : null,
+      })),
     }));
 
     return {
       data: transformedPosts,
-      total_posts: transformedPosts.length, // <-- Return the count here
+      total_posts: transformedPosts.length,
     };
   }
 

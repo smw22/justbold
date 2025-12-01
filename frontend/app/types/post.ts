@@ -6,5 +6,6 @@ export interface PostType {
   tags: { title: string }[];
   media: string;
   created: Date;
+  likes: ProfileType[];
   user: ProfileType;
 }

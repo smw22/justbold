@@ -8,7 +8,7 @@ export class Like {
   id: string;
 
   // The user who has given the like
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   @JoinColumn({ name: "user_id" })
   user: User;
 

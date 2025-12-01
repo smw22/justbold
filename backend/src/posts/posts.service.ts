@@ -29,22 +29,30 @@ export class PostsService {
       skip: (page - 1) * limit,
       take: limit,
       order: { created: "DESC" },
-      relations: ["tags", "likes", "user"], // Ensure tags and likes are loaded as objects
+      relations: ["tags", "likes", "likes.user", "user"],
     });
 
-    console.log("First post user:", data[0]?.user); // <-- Add this
-
-    const transformedData: any[] = []; // <-- Add type here
+    const transformedData: any[] = [];
     for (const post of data) {
-      const { user, ...rest } = post;
+      const { user, likes, ...rest } = post;
       transformedData.push({
         ...rest,
         user: user
           ? {
+              id: user.id,
               name: user.name,
               profile_image: user.profile_image,
             }
           : null,
+        likes: likes.map((like) => ({
+          user: like.user
+            ? {
+                id: like.user.id,
+                name: like.user.name,
+                profile_image: like.user.profile_image,
+              }
+            : null,
+        })),
       });
     }
 
@@ -54,19 +62,29 @@ export class PostsService {
   async findOne(id: string): Promise<any> {
     const postData = await this.postsRepository.findOne({
       where: { id },
-      relations: ["tags", "likes", "user"], // Ensure tags are loaded as objects
+      relations: ["tags", "likes", "likes.user", "user"],
     });
     if (!postData) {
       throw new HttpException("Post not found", 404);
     }
     // Transform user object to only include name and profile_image
-    const { user, ...rest } = postData;
+    const { user, likes, ...rest } = postData;
     return {
       ...rest,
       user: {
+        id: user.id,
         name: user.name,
         profile_image: user.profile_image,
       },
+      likes: likes.map((like) => ({
+        user: like.user
+          ? {
+              id: like.user.id,
+              name: like.user.name,
+              profile_image: like.user.profile_image,
+            }
+          : null,
+      })),
     };
   }
 

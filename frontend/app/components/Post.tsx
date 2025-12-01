@@ -83,7 +83,7 @@ export default function Post({ post }: { post: PostType }) {
           >
             <Icon name="Heart" size={24} className="text-neutral-grey" />
           </button>
-          <p className="text-sm text-neutral-grey">X</p>
+          <p className="text-sm text-neutral-grey">{post.likes.length}</p>
         </div>
         <div className="flex items-center gap-1">
           <button
