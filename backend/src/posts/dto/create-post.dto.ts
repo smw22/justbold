@@ -1,7 +1,7 @@
 export class CreatePostDto {
   title: string;
   content: string;
-  tags: string[];
+  tagIds: string[];
   media: string;
   user_id: string;
 }

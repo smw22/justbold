@@ -9,6 +9,7 @@ import CardMedia from "./CardMedia";
 export default function Post({ post }: { post: PostType }) {
   const [showContextMenu, setShowContextMenu] = useState(false);
 
+  console.log(post);
   return (
     <div className="bg-white flex flex-col gap-4 w-full items-start overflow-hidden p-4 md:p-8">
       <div className={`flex flex-row items-center w-full px-2 gap-2`}>
