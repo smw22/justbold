@@ -8,6 +8,7 @@ import { User } from "./entities/user.entity";
 import { Post } from "../posts/entities/post.entity";
 import { Review } from "src/reviews/entities/review.entity";
 import { Question } from "src/questions/entities/question.entity";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class UsersService {
@@ -24,8 +25,13 @@ export class UsersService {
     private readonly questionsRepository: Repository<Question>
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return "This action adds a new user";
+  async create(createUserDto: CreateUserDto) {
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    const user = this.usersRepository.create({
+      ...createUserDto,
+      password: hashedPassword,
+    });
+    return this.usersRepository.save(user);
   }
 
   async findAll(): Promise<User[]> {

@@ -6,7 +6,7 @@ import {
   Patch,
   Param,
   Delete,
-  Query, // <-- add Query import
+  Query,
 } from "@nestjs/common";
 import { PostsService } from "./posts.service";
 import { CreatePostDto } from "./dto/create-post.dto";
