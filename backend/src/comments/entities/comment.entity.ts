@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { Post } from "../../posts/entities/post.entity";
 import { User } from "../../users/entities/user.entity";
+import { Like } from "src/likes/entities/like.entity";
 
 @Entity()
 export class Comment {
@@ -24,6 +25,10 @@ export class Comment {
   // Child comments (replies to this comment)
   @OneToMany(() => Comment, (comment) => comment.parent)
   replies: Comment[];
+
+  // Likes on this comment
+  @OneToMany(() => Like, (like) => like.comment)
+  likes: Like[];
 
   @Column("text")
   content: string;

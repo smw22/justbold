@@ -6,10 +6,9 @@ import ContextMenu from "./ContextMenu";
 import Button from "./Button";
 import CardMedia from "./CardMedia";
 
-export default function Post({ post }: { post: PostType }) {
+export default function Post({ post, clickable = true }: { post: PostType; clickable?: boolean }) {
   const [showContextMenu, setShowContextMenu] = useState(false);
 
-  console.log(post);
   return (
     <div className="bg-white flex flex-col gap-4 w-full items-start overflow-hidden p-4 md:p-8">
       <div className={`flex flex-row items-center w-full px-2 gap-2`}>
@@ -18,10 +17,7 @@ export default function Post({ post }: { post: PostType }) {
             to={`/profile/${post.user.id}`}
             className="flex flex-row gap-2 items-center hover:opacity-40 transition-opacity duration-400 ease-in-out"
           >
-            <div
-              style={{ backgroundImage: `url('${post.user.profile_image}')` }}
-              className="w-8 h-8 bg-black bg-cover rounded-full min-w-8"
-            ></div>
+            <img src={post.user.profile_image} className="w-8 h-8 bg-black bg-cover rounded-full min-w-8" />
             <p className="text-sm">{post.user.name}</p>
           </Link>
           <div className="flex flex-1 gap-2 text-neutral-grey flex-wrap">
@@ -86,12 +82,17 @@ export default function Post({ post }: { post: PostType }) {
           <p className="text-sm text-neutral-grey">{post.likes.length}</p>
         </div>
         <div className="flex items-center gap-1">
-          <button
-            className="cursor-pointer hover:bg-gray-100 w-8 h-8 flex justify-center items-center rounded-full transition-colors duration-200 ease-in-out"
-            onClick={() => alert("Tilføj funktionalitet")}
-          >
-            <Icon name="MultiBubble" size={24} className="text-neutral-grey" />
-          </button>
+          {clickable ? (
+            <Link to={`/posts/${post.id}`}>
+              <button className="cursor-pointer hover:bg-gray-100 w-8 h-8 flex justify-center items-center rounded-full transition-colors duration-200 ease-in-out">
+                <Icon name="MultiBubble" size={24} className="text-neutral-grey" />
+              </button>
+            </Link>
+          ) : (
+            <button className="cursor-pointer hover:bg-gray-100 w-8 h-8 flex justify-center items-center rounded-full transition-colors duration-200 ease-in-out">
+              <Icon name="MultiBubble" size={24} className="text-neutral-grey" />
+            </button>
+          )}
           <p className="text-sm text-neutral-grey">{post.comments.length}</p>
         </div>
         <button
