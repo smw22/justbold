@@ -17,7 +17,7 @@ export default function Post({ post, clickable = true }: { post: PostType; click
             to={`/profile/${post.user.id}`}
             className="flex flex-row gap-2 items-center hover:opacity-40 transition-opacity duration-400 ease-in-out"
           >
-            <img src={post.user.profile_image} className="w-8 h-8 bg-black bg-cover rounded-full min-w-8" />
+            <img src={post.user.profile_image} className="w-8 h-8 bg-black object-cover rounded-full min-w-8" />
             <p className="text-sm">{post.user.name}</p>
           </Link>
           <div className="flex flex-1 gap-2 text-neutral-grey flex-wrap">

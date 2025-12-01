@@ -51,7 +51,7 @@ export default function Users() {
 
   return (
     <div className="outer-wrapper">
-      <div className="">
+      <div className="px-4">
         {/* // The profile header component */}
         <ProfileHeader
           name={profile.data.name}
@@ -61,20 +61,15 @@ export default function Users() {
           image={profile.data.profile_image}
           theme={profile.data.theme}
         />
-        {/* // Tabs component, "About" and "Posts" - the current tab is held as a number in a state. */}
-        <Tabs tabs={["About", "Posts"]} currentTab={tab} setTab={(e) => setTab(e)} />
-        {/* // if tab is 0 we show about - otherwise we show posts. */}
-        {tab === 0 ? (
-          <About
-            profile={profile.data}
-            reviews={reviews.data}
-            questions={questions.data}
-            avg_user_rating={reviews.avg_rating}
-          />
-        ) : (
-          <Posts posts={user_posts.data} />
-        )}
       </div>
+      {/* // Tabs component, "About" and "Posts" - the current tab is held as a number in a state. */}
+      <Tabs tabs={["About", "Posts"]} currentTab={tab} setTab={(e) => setTab(e)} />
+      {/* // if tab is 0 we show about - otherwise we show posts. */}
+      {tab === 0 ? (
+        <About profile={profile.data} reviews={reviews.data} questions={questions.data} avg_user_rating={reviews.avg_rating} />
+      ) : (
+        <Posts posts={user_posts.data} />
+      )}
     </div>
   );
 }
