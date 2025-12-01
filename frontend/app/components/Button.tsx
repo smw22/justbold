@@ -1,12 +1,7 @@
 import Icon from "./icon";
 
 // Using a type union (recommended for simple cases)
-type ButtonVariant =
-  | "primary"
-  | "primary-glass"
-  | "secondary"
-  | "secondary-glass"
-  | "context-menu";
+type ButtonVariant = "primary" | "primary-glass" | "secondary" | "secondary-glass" | "context-menu";
 
 export default function Button({
   text,
