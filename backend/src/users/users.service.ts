@@ -53,7 +53,47 @@ export class UsersService {
   }
 
   async findUserPosts(id: string) {
-    return await this.postsRepository.findAndCount({ where: { user: { id } } });
+    const posts = await this.postsRepository.find({
+      where: { user: { id } },
+      relations: ["user", "tags", "likes", "comments", "comments.user"],
+    });
+
+    const transformedPosts = posts.map(({ user, likes, comments, ...rest }) => ({
+      ...rest,
+      user: user
+        ? {
+            id: user.id,
+            name: user.name,
+            profile_image: user.profile_image,
+          }
+        : null,
+      likes: likes.map((like) => ({
+        user: like.user
+          ? {
+              id: like.user.id,
+              name: like.user.name,
+              profile_image: like.user.profile_image,
+            }
+          : null,
+      })),
+      comments: comments.map((comment) => ({
+        id: comment.id,
+        content: comment.content,
+        created: comment.created,
+        user: comment.user
+          ? {
+              id: comment.user.id,
+              name: comment.user.name,
+              profile_image: comment.user.profile_image,
+            }
+          : null,
+      })),
+    }));
+
+    return {
+      data: transformedPosts,
+      total_posts: transformedPosts.length,
+    };
   }
 
   async findUserReviews(id: string) {

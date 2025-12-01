@@ -57,11 +57,11 @@ export class UsersController {
   @Get(":id/posts")
   async findUserPosts(@Param("id") id: string) {
     try {
-      const [data, total] = await this.usersService.findUserPosts(id);
+      const result = await this.usersService.findUserPosts(id); // <-- Don't destructure
       return {
         success: true,
-        total_posts: total,
-        data,
+        data: result.data,
+        total_posts: result.total_posts,
         message: "User posts retrieved successfully",
       };
     } catch (error) {
