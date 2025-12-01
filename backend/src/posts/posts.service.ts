@@ -26,27 +26,20 @@ export class PostsService {
       skip: (page - 1) * limit,
       take: limit,
       order: { created: "DESC" },
+      relations: ["tags"], // Ensure tags are loaded as objects
     });
-    const tags = await this.tagsRepository.find();
-    const tagMap = new Map(tags.map((tag) => [tag.id, tag]));
-    const postsWithTags = data.map((post) => ({
-      ...post,
-      tags: post.tags.map((tagId) => tagMap.get(tagId)).filter(Boolean),
-    }));
-    return { data: postsWithTags, total };
+    return { data, total };
   }
 
   async findOne(id: string): Promise<any> {
-    const postData = await this.postsRepository.findOneBy({ id });
+    const postData = await this.postsRepository.findOne({
+      where: { id },
+      relations: ["tags"], // Ensure tags are loaded as objects
+    });
     if (!postData) {
       throw new HttpException("Post not found", 404);
     }
-    const tags = await this.tagsRepository.find();
-    const tagMap = new Map(tags.map((tag) => [tag.id, tag]));
-    return {
-      ...postData,
-      tags: postData.tags.map((tagId) => tagMap.get(tagId)).filter(Boolean),
-    };
+    return postData;
   }
 
   async update(id: string, updatePostDto: UpdatePostDto): Promise<Post> {
