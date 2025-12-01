@@ -1,6 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Post } from "../../posts/entities/post.entity";
-import { Review } from "../../reviews/entities/review.entity";
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")
@@ -77,7 +76,4 @@ export class User {
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
-
-  @OneToMany(() => Review, (review) => review.user)
-  reviews: Review[];
 }
