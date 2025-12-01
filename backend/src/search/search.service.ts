@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, Like } from "typeorm";
+import { Repository, ILike } from "typeorm";
 import { User } from "../users/entities/user.entity";
 import { Collaboration } from "../collaborations/entities/collaboration.entity";
 import { Service } from "../services/entities/service.entity";
 import { Tag } from "../tags/entities/tag.entity";
 import { Post } from "../posts/entities/post.entity";
-import { SearchQueryDto, SearchCategory } from "./dto/search-query.dto";
+import { SearchQueryDto, SearchCategory } from "./dto/search-query-dto";
 
 @Injectable()
 export class SearchService {
@@ -23,8 +23,8 @@ export class SearchService {
     private readonly postsRepository: Repository<Post>
   ) {}
 
-  async search(searchQueryDTO: SearchQueryDto) {
-    const { query, catergory, page, limit } = searchQueryDto;
+  async search(searchQueryDto: SearchQueryDto) {
+    const { query, category = SearchCategory.ALL, page = 1, limit = 10 } = searchQueryDto;
 
     // If no search query, return empty arrays
     if (!query || query.trim() === "") {
@@ -37,7 +37,7 @@ export class SearchService {
       };
     }
 
-    const searchTerm = `%${query}`;
+    const searchTerm = `%${query}%`;
     const skip = (page - 1) * limit;
 
     switch (category) {
@@ -67,7 +67,7 @@ export class SearchService {
 
   private async searchPeople(searchTerm: string, skip: number, limit: number) {
     return this.usersRepository.find({
-      where: [{ name: Like(searchTerm) }, { location: Like(searchTerm) }, { user_type: Like(searchTerm) }],
+      where: [{ name: ILike(searchTerm) }, { location: ILike(searchTerm) }, { user_type: ILike(searchTerm) }],
       take: limit,
       skip,
       select: ["id", "name", "profile_image", "location"],
@@ -76,7 +76,7 @@ export class SearchService {
 
   private async searchCollaborations(searchTerm: string, skip: number, limit: number) {
     return this.collaborationsRepository.find({
-      where: [{ title: Like(searchTerm) }, { content: Like(searchTerm) }],
+      where: [{ title: ILike(searchTerm) }, { content: ILike(searchTerm) }, { location: ILike(searchTerm) }],
       relations: ["user", "tags", "genres"],
       take: limit,
       skip,
@@ -85,7 +85,7 @@ export class SearchService {
 
   private async searchServices(searchTerm: string, skip: number, limit: number) {
     return this.servicesRepository.find({
-      where: [{ title: Like(searchTerm) }, { content: Like(searchTerm) }, { location: Like(searchTerm) }],
+      where: [{ title: ILike(searchTerm) }, { content: ILike(searchTerm) }, { location: ILike(searchTerm) }],
       relations: ["user", "tag"],
       take: limit,
       skip,
@@ -94,7 +94,7 @@ export class SearchService {
 
   private async searchTags(searchTerm: string, skip: number, limit: number) {
     return this.tagsRepository.find({
-      where: { title: Like(searchTerm) },
+      where: { title: ILike(searchTerm) },
       take: limit,
       skip,
     });
@@ -102,7 +102,7 @@ export class SearchService {
 
   private async searchPosts(searchTerm: string, skip: number, limit: number) {
     return this.postsRepository.find({
-      where: [{ title: Like(searchTerm) }, { content: Like(searchTerm) }],
+      where: [{ title: ILike(searchTerm) }, { content: ILike(searchTerm) }],
       relations: ["user", "tags"],
       take: limit,
       skip,
