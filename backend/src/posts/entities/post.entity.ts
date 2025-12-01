@@ -14,7 +14,7 @@ export class Post {
   content: string;
 
   @ManyToMany(() => Tag, { eager: true })
-  @JoinTable({ name: "collaboration_tags" })
+  @JoinTable({ name: "posts_tags" })
   tags: Tag[];
 
   @Column()

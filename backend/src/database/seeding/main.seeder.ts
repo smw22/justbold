@@ -58,7 +58,7 @@ export class MainSeeder implements Seeder {
             min: 1,
             max: 5,
           });
-          return postFactory.make({ user, tags: postTags.map((tag) => tag.id) }); // Use tag IDs
+          return postFactory.make({ user, tags: postTags }); // Use tag entities directly
         })
     );
     await dataSource.getRepository(Post).save(posts);
