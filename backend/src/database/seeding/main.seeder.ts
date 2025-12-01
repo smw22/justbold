@@ -9,6 +9,7 @@ import { Tag } from "../../tags/entities/tag.entity";
 import { Genre } from "../../genres/entities/genre.entity";
 import { Collaboration } from "../../collaborations/entities/collaboration.entity";
 import { Service } from "../../services/entities/service.entity";
+import { Review } from "../../reviews/entities/review.entity";
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
@@ -104,5 +105,36 @@ export class MainSeeder implements Seeder {
         })
     );
     await dataSource.getRepository(Service).save(services);
+
+    // Seed reviews for services, each linked to a random user and service
+    const reviewFactory = factoryManager.get(Review);
+    const serviceReviews = await Promise.all(
+      Array(100)
+        .fill("")
+        .map(async () => {
+          const sender = faker.helpers.arrayElement(users);
+          const service = faker.helpers.arrayElement(services);
+          return reviewFactory.make({
+            sender,
+            type: "service",
+            object_id: service.id,
+          });
+        })
+    );
+    const userReviews = await Promise.all(
+      Array(100)
+        .fill("")
+        .map(async () => {
+          const sender = faker.helpers.arrayElement(users);
+          const user = faker.helpers.arrayElement(users);
+          return reviewFactory.make({
+            sender,
+            type: "user",
+            object_id: user.id,
+          });
+        })
+    );
+    await dataSource.getRepository(Review).save(serviceReviews);
+    await dataSource.getRepository(Review).save(userReviews);
   }
 }
