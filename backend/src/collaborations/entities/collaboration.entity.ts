@@ -30,6 +30,9 @@ export class Collaboration {
   @Column("text")
   content: string;
 
+  @Column("text")
+  role: string;
+
   @ManyToMany(() => Genre, { eager: true })
   @JoinTable({ name: "collaboration_genres" })
   genres: Genre[];
