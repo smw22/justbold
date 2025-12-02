@@ -7,11 +7,15 @@ meta {
 get {
   url: {{domain}}/api/posts/:postId
   body: none
-  auth: inherit
+  auth: bearer
 }
 
 params:path {
   postId: {{post_id}}
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
 
 settings {

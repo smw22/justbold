@@ -63,7 +63,7 @@ import { AuthModule } from "./auth/auth.module";
         Comment,
         Like,
       ],
-      synchronize: false,
+      synchronize: true,
     }),
     UsersModule,
     PostsModule,

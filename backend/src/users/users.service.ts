@@ -8,6 +8,7 @@ import { User } from "./entities/user.entity";
 import { Post } from "../posts/entities/post.entity";
 import { Review } from "../reviews/entities/review.entity";
 import { Question } from "../questions/entities/question.entity";
+import { Like } from "../likes/entities/like.entity";
 
 @Injectable()
 export class UsersService {
@@ -21,7 +22,9 @@ export class UsersService {
     @InjectRepository(Review)
     private readonly reviewsRepository: Repository<Review>,
     @InjectRepository(Question)
-    private readonly questionsRepository: Repository<Question>
+    private readonly questionsRepository: Repository<Question>,
+    @InjectRepository(Like)
+    private readonly likesRepository: Repository<Like>
   ) {}
 
   create(createUserDto: CreateUserDto) {
@@ -44,6 +47,10 @@ export class UsersService {
     return userData;
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    return this.usersRepository.findOne({ where: { email } });
+  }
+
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
@@ -55,40 +62,49 @@ export class UsersService {
   async findUserPosts(id: string) {
     const posts = await this.postsRepository.find({
       where: { user: { id } },
-      relations: ["user", "tags", "likes", "comments", "comments.user"],
+      relations: ["user", "tags", "comments", "comments.user"], // Remove likes from relations
     });
 
-    const transformedPosts = posts.map(({ user, likes, comments, ...rest }) => ({
-      ...rest,
-      user: user
-        ? {
-            id: user.id,
-            name: user.name,
-            profile_image: user.profile_image,
-          }
-        : null,
-      likes: likes.map((like) => ({
-        user: like.user
-          ? {
-              id: like.user.id,
-              name: like.user.name,
-              profile_image: like.user.profile_image,
-            }
-          : null,
-      })),
-      comments: comments.map((comment) => ({
-        id: comment.id,
-        content: comment.content,
-        created: comment.created,
-        user: comment.user
-          ? {
-              id: comment.user.id,
-              name: comment.user.name,
-              profile_image: comment.user.profile_image,
-            }
-          : null,
-      })),
-    }));
+    const transformedPosts = await Promise.all(
+      posts.map(async (post) => {
+        const likes = await this.likesRepository.find({
+          where: { type: "post", object_id: post.id },
+          relations: ["user"],
+        });
+        return {
+          ...post,
+          user: post.user
+            ? {
+                id: post.user.id,
+                name: post.user.name,
+                profile_image: post.user.profile_image,
+              }
+            : null,
+          likes: likes.map((like) => ({
+            user: like.user
+              ? {
+                  id: like.user.id,
+                  name: like.user.name,
+                  profile_image: like.user.profile_image,
+                }
+              : null,
+            type: like.type,
+          })),
+          comments: (Array.isArray(post.comments) ? post.comments : []).map((comment) => ({
+            id: comment.id,
+            content: comment.content,
+            created: comment.created,
+            user: comment.user
+              ? {
+                  id: comment.user.id,
+                  name: comment.user.name,
+                  profile_image: comment.user.profile_image,
+                }
+              : null,
+          })),
+        };
+      })
+    );
 
     return {
       data: transformedPosts,
@@ -124,10 +140,5 @@ export class UsersService {
 
   async findUserQuestions(id: string) {
     return await this.questionsRepository.find({ where: { user: { id } } });
-  }
-
-  async findByEmail(email: string): Promise<User | undefined> {
-    const user = await this.usersRepository.findOne({ where: { email } });
-    return user === null ? undefined : user;
   }
 }
