@@ -38,31 +38,14 @@ export default function Login({ onNext, onLogin }: LoginProps) {
             onChange={(e) => setPassword(e.target.value)}
             name="password"
           />
-          <Button
-            text="Continue"
-            variant="primary"
-            onClick={onNext}
-            className="mt-1.5 w-fit self-center"
-          />
+          <Button text="Continue" variant="primary" onClick={onNext} className="mt-1.5 w-fit self-center" />
         </form>
         <p>or</p>
-        <Button
-          text="Login with Google"
-          variant="secondary"
-          className="text-bold"
-        />
-        <Button
-          text="Login with AppleID"
-          variant="secondary"
-          className="text-bold"
-        />
+        <Button text="Login with Google" variant="secondary" className="font-bold" />
+        <Button text="Login with AppleID" variant="secondary" className="font-bold" />
         <div>
           <span>Don't have an account? </span>
-          <Link
-            to={"/onboarding/steps"}
-            onClick={onLogin}
-            className="cursor-pointer text-[#007AFF]"
-          >
+          <Link to={"/onboarding/steps"} onClick={onLogin} className="cursor-pointer text-[#007AFF]">
             Sign up
           </Link>
         </div>
