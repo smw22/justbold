@@ -13,15 +13,9 @@ import SoMeYouTube from "../../assets/icons/SoMeYouTube.svg";
 import SoMeTikTok from "../../assets/icons/SoMeTikTok.svg";
 import type { PostType } from "~/types/post";
 import type { ProfileType } from "~/types/profile";
-import { apiFetch } from "~/lib/apiFetch";
-
-export async function clientLoader({ params }: { params: { profileId: string } }) {
-  const profileResponse = await apiFetch(`/users/${params.profileId}`);
-  const postsResponse = await apiFetch(`/users/${params.profileId}/posts`);
-  if (!profileResponse.ok || !postsResponse.ok) {
-  import type { ReviewType } from "~/types/review";
-  import type { QuestionType } from "~/types/question";
-  import ReviewStars from "../services/components/ReviewStars";
+import type { ReviewType } from "~/types/review";
+import type { QuestionType } from "~/types/question";
+import ReviewStars from "../services/components/ReviewStars";
 
 export async function clientLoader({ params }: { params: { profileId: string } }) {
   const apiUrl = import.meta.env.VITE_API_URL;
