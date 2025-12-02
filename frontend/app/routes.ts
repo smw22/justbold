@@ -34,9 +34,12 @@ export default [
     route(":threadId", "routes/chat/chat.tsx"),
   ]),
 
-  // Login / Signup
+  // Login / Signup / Onboarding
   route("login", "routes/auth/login.tsx"),
   route("register", "routes/auth/register.tsx"),
   route("onboarding", "routes/onboarding/index.tsx"),
   route("onboarding/steps", "routes/onboarding/steps.tsx"),
+
+  // Search
+  route("search", "./routes/search/index.tsx"),
 ] as unknown as RouteConfig[];
