@@ -24,11 +24,7 @@ export default function ProfileHeader({
           <p className="text-xs">{connection_count === 1 ? "Connection" : "Connections"}</p>
         </div>
 
-        <div
-          style={{ backgroundImage: `url('${image}')` }}
-          className={`w-36 h-36 rounded-full bg-cover bg-gray-400  border-2 border-white`}
-        ></div>
-
+        <img src={image} className="w-36 h-36 rounded-full object-cover bg-gray-400  border-2 border-white" />
         <div className="flex flex-col items-center w-24 gap-1">
           <p className="text-lg">{post_count}</p>
           <p className="text-xs">{post_count === 1 ? "Post" : "Posts"}</p>

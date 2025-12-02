@@ -51,7 +51,7 @@ export default function Users() {
 
   return (
     <div className="outer-wrapper">
-      <div className="">
+      <div className="px-4">
         {/* // The profile header component */}
         <ProfileHeader
           name={profile.data.name}
@@ -61,20 +61,15 @@ export default function Users() {
           image={profile.data.profile_image}
           theme={profile.data.theme}
         />
-        {/* // Tabs component, "About" and "Posts" - the current tab is held as a number in a state. */}
-        <Tabs tabs={["About", "Posts"]} currentTab={tab} setTab={(e) => setTab(e)} />
-        {/* // if tab is 0 we show about - otherwise we show posts. */}
-        {tab === 0 ? (
-          <About
-            profile={profile.data}
-            reviews={reviews.data}
-            questions={questions.data}
-            avg_user_rating={reviews.avg_rating}
-          />
-        ) : (
-          <Posts posts={user_posts.data} />
-        )}
       </div>
+      {/* // Tabs component, "About" and "Posts" - the current tab is held as a number in a state. */}
+      <Tabs tabs={["About", "Posts"]} currentTab={tab} setTab={(e) => setTab(e)} />
+      {/* // if tab is 0 we show about - otherwise we show posts. */}
+      {tab === 0 ? (
+        <About profile={profile.data} reviews={reviews.data} questions={questions.data} avg_user_rating={reviews.avg_rating} />
+      ) : (
+        <Posts posts={user_posts.data} />
+      )}
     </div>
   );
 }
@@ -125,7 +120,7 @@ function About({
               <p className="text-sm text-neutral-grey">{reviews?.length} reviews</p>
             </div>
             <p className="text-sm">
-              "{reviews[0].content}" - {reviews[0].sender.name}
+              {reviews[0]?.content} - {reviews[0]?.sender?.name ?? "No sender found."}
             </p>
             <button
               className="hover:opacity-40 cursor-pointer text-neutral-grey text-sm transition-opacity duration-200 ease-in-out"
@@ -140,7 +135,7 @@ function About({
                     <ReviewStars rating={review.rating} />
                     <p>"{review.content}"</p>
                     <p className="text-sm text-neutral-grey">
-                      {review.sender.name} · {new Date(review.created).toLocaleDateString("da-DK")}
+                      {review.sender?.name ?? "No sender found."} · {new Date(review.created).toLocaleDateString("da-DK")}
                     </p>
                   </div>
                 </div>
