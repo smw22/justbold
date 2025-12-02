@@ -51,7 +51,7 @@ export default function Users() {
 
   return (
     <div className="outer-wrapper">
-      <div className="">
+      <div className="px-4">
         {/* // The profile header component */}
         <ProfileHeader
           name={profile.data.name}
