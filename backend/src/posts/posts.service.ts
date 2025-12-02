@@ -77,7 +77,7 @@ export class PostsService {
   async findOne(id: string): Promise<any> {
     const postData = await this.postsRepository.findOne({
       where: { id },
-      relations: ["tags", "likes", "likes.user", "user", "comment", "comment.user"],
+      relations: ["tags", "likes", "likes.user", "user", "comments", "comments.user", "comments.likes", "comments.likes.user"],
     });
     if (!postData) {
       throw new HttpException("Post not found", 404);
@@ -111,6 +111,17 @@ export class PostsService {
               profile_image: comment.user.profile_image,
             }
           : null,
+        likes: comment.likes
+          ? comment.likes.map((like) => ({
+              id: like.id,
+              user: like.user
+                ? {
+                    name: like.user.name,
+                    profile_image: like.user.profile_image,
+                  }
+                : null,
+            }))
+          : [],
       })),
     };
   }

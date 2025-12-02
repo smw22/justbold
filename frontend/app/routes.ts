@@ -10,10 +10,10 @@ export default [
 
     // Collaborations
     route("collaborations", "routes/collaborations/collaborations.tsx"),
-    route(
-      "collaborations/:collaborationId",
-      "routes/collaborations/collaborationsDetails.tsx"
-    ),
+    route("collaborations/:collaborationId", "routes/collaborations/collaborationsDetails.tsx"),
+
+    // Posts
+    route("posts/:postId", "routes/post/postDetail.tsx"),
 
     // Services
     route("services", "routes/services/services.tsx"),
