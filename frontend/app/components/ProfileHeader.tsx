@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { Link } from "react-router";
+import ContextMenu from "./ContextMenu";
 import Button from "./Button";
 import Icon from "./icon";
 
@@ -16,8 +19,22 @@ export default function ProfileHeader({
   image: string;
   theme: string;
 }) {
+  const [showContextMenu, setShowContextMenu] = useState(false);
   return (
     <article className={`p-5 rounded-4xl mb-12 mt-4 bg-${theme} text-white flex flex-col justify-center gap-3 items-center`}>
+      <div className="w-full relative flex items-end justify-end">
+        <button
+          className="cursor-pointer hover:bg-gray-100 w-8 h-8 flex justify-center items-center rounded-full transition-colors duration-200 ease-in-out"
+          onClick={() => setShowContextMenu(!showContextMenu)}
+        >
+          <Icon name="More" size={24} className="invert" />
+        </button>
+        <ContextMenu show={showContextMenu} setShow={(e) => setShowContextMenu(e)}>
+          <Link to="/profile/edit">
+            <Button text="Edit profile" icon="EditPencil" variant="context-menu" fullWidth={true} />
+          </Link>
+        </ContextMenu>
+      </div>
       <section className="flex justify-center gap-1 items-center">
         <div className="flex flex-col items-center w-24 gap-1">
           <p className="text-lg">{connection_count}</p>
