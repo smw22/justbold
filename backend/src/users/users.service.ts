@@ -125,4 +125,9 @@ export class UsersService {
   async findUserQuestions(id: string) {
     return await this.questionsRepository.find({ where: { user: { id } } });
   }
+
+  async findByEmail(email: string): Promise<User | undefined> {
+    const user = await this.usersRepository.findOne({ where: { email } });
+    return user === null ? undefined : user;
+  }
 }

@@ -3,9 +3,10 @@ import Icon from "~/components/icon";
 import { Link, useLoaderData } from "react-router";
 import Post from "~/components/Post";
 import type { CommentType } from "~/types/comment";
+import { apiFetch } from "~/lib/apiFetch";
 
 export async function clientLoader({ params }: { params: { postId: string } }): Promise<{}> {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/posts/${params.postId}`);
+  const response = await apiFetch(`/posts/${params.postId}`);
 
   if (response.status === 404) {
     throw new Response("Post not Found", { status: 404 });
