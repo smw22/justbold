@@ -13,16 +13,16 @@ import SoMeYouTube from "../../assets/icons/SoMeYouTube.svg";
 import SoMeTikTok from "../../assets/icons/SoMeTikTok.svg";
 import type { PostType } from "~/types/post";
 import type { ProfileType } from "~/types/profile";
+import { apiFetch } from "~/lib/apiFetch";
 import type { ReviewType } from "~/types/review";
 import type { QuestionType } from "~/types/question";
 import ReviewStars from "../services/components/ReviewStars";
 
 export async function clientLoader({ params }: { params: { profileId: string } }) {
-  const apiUrl = import.meta.env.VITE_API_URL;
-  const profileResponse = await fetch(`${apiUrl}/users/${params.profileId}`);
-  const postsResponse = await fetch(`${apiUrl}/users/${params.profileId}/posts`);
-  const reviewsResponse = await fetch(`${apiUrl}/users/${params.profileId}/reviews`);
-  const questionsResponse = await fetch(`${apiUrl}/users/${params.profileId}/questions`);
+  const profileResponse = await apiFetch(`/users/${params.profileId}`);
+  const postsResponse = await apiFetch(`/users/${params.profileId}/posts`);
+  const reviewsResponse = await apiFetch(`/users/${params.profileId}/reviews`);
+  const questionsResponse = await apiFetch(`/users/${params.profileId}/questions`);
   if (!profileResponse.ok || !postsResponse.ok || !reviewsResponse.ok || !questionsResponse.ok) {
     throw new Error("Unknown error.");
   }

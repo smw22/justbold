@@ -1,0 +1,23 @@
+meta {
+  name: Get JWT
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{domain}}/api/auth/login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "test@user.com",
+    "password": "admin"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
