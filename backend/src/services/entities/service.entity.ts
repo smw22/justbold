@@ -11,7 +11,6 @@ import {
 } from "typeorm";
 import { User } from "../../users/entities/user.entity";
 import { Tag } from "../../tags/entities/tag.entity";
-import { Review } from "../../reviews/entities/review.entity";
 
 @Entity()
 @Index(["user", "created"]) // Composite index for queries
@@ -57,10 +56,4 @@ export class Service {
   // Track when service was last updated
   @UpdateDateColumn()
   updated: Date;
-
-  // Reviews relationship
-  @OneToMany(() => Review, (review) => review.service, {
-    cascade: ["insert", "update"],
-  })
-  reviews: Review[];
 }

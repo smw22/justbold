@@ -22,24 +22,23 @@ export async function clientLoader({ params }: { params: { collaborationId: stri
 function CollabHeader({
   userName,
   userImage,
-  tag,
+  role,
   created,
 }: {
   userName: string;
   userImage: string;
-  tag: string;
+  role: string;
   created: string;
 }) {
-  const tagText = typeof tag === "string" ? tag : tag?.title || "";
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-1 ">
+      <div className="flex items-center gap-1 flex-wrap">
         <div className="flex items-center gap-1">
           <img className="size-10 rounded-full" src={userImage} alt={userName} />
           <span className="">{userName.split(" ")[0]}</span>
         </div>
         <span className="text-gray-400">looking for a</span>
-        <span className="text-gray-400">#{tagText}</span>
+        <span className="text-gray-400">#{role}</span>
       </div>
       <span className="text-gray-400">{dayjs(created).fromNow()}</span>
     </div>
@@ -119,7 +118,7 @@ export default function CollaborationDetails() {
       <CollabHeader
         userName={collab.user.name}
         userImage={collab.user.profile_image}
-        tag={collab.tags[0]}
+        role={collab.role}
         created={collab.created}
       />
       <CollabTags tags={collab.tags} />
