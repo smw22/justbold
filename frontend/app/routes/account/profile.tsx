@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useLoaderData, useActionData, useNavigation, useRouteError, Link, href, Outlet } from "react-router";
+import { useParams, useLoaderData, useActionData, useNavigation, useRouteError, Link, href, Outlet, Form } from "react-router";
 import Icon from "~/components/icon";
 import ProfileHeader from "~/components/ProfileHeader";
 import Tabs from "~/components/Tabs";
@@ -93,6 +93,19 @@ function About({
   const [showArtistsILike, setShowArtistsILike] = useState(false);
   const [showPastCollabs, setShowPastCollabs] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
+
+  const actionData = useActionData();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+
+    let formData = new FormData(e.target);
+    if (!formData.get("question")) {
+      return;
+    }
+  };
 
   return (
     <article className="bg-white p-4 flex flex-col gap-4">
@@ -295,14 +308,34 @@ function About({
       </section>
       <section>
         <h5 className="font-normal text-lg">Ask me a question</h5>
-        <div className={`flex items-center border-${profile.theme} border rounded-full mx-2 my-4`}>
-          <input className="outline-none px-5 py-5 w-full" placeholder="Type your question here..." />
-          <button
-            className={`cursor-pointer hover:opacity-40 bg-${profile.theme} text-white min-w-12 w-12 h-12 m-2 flex items-center justify-center rounded-full transition-opacity duration-200 ease-in-out`}
-          >
-            <Icon name="SendDiagonal" size={24} />
-          </button>
-        </div>
+        <Form method="post" action="">
+          <div className={`flex items-center border-${profile.theme} border rounded-full mx-2 my-4`}>
+            <input
+              name="question"
+              className="outline-none px-5 py-5 w-full"
+              placeholder="Type your question here..."
+              disabled={isSubmitting}
+            />
+            <button
+              type="submit"
+              className={`cursor-pointer hover:opacity-40 bg-${profile.theme} text-white min-w-12 w-12 h-12 m-2 flex items-center justify-center rounded-full transition-opacity duration-200 ease-in-out`}
+              disabled={isSubmitting}
+            >
+              <Icon name="SendDiagonal" size={24} />
+            </button>
+          </div>
+        </Form>
+        {/* Show success or error message */}
+        {actionData?.error && (
+          <div className="flex flex-row items-center justify-center bg-gray-100 border border-gray-200 rounded-2xl p-2 mx-2">
+            <p className="text-red-500 text-sm mx-4">{actionData.error}</p>
+          </div>
+        )}
+        {actionData?.success && (
+          <div className="flex flex-row items-center justify-center bg-gray-100 border border-gray-200 rounded-2xl p-2 mx-2">
+            <p className="text-green-500 text-sm mx-4">Question submitted successfully!</p>
+          </div>
+        )}
       </section>
     </article>
   );
@@ -316,4 +349,44 @@ function Posts({ posts }: { posts: PostType[] }) {
       ))}
     </>
   );
+}
+
+export async function clientAction({ request, params }: { request: Request; params: { profileId: string } }) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  // Extract form data
+  const formData = await request.formData();
+  const question = formData.get("question")?.toString();
+
+  // Validate question content
+  if (!question || !question.trim()) {
+    return { error: "Question cannot be empty" };
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/questions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        question: question.trim(),
+        user_id: params.profileId,
+      }),
+    });
+
+    // Check for validation errors (400)
+    if (response.status === 400) {
+      const error = await response.json();
+      return { error: error.error || "Invalid question data" };
+    }
+
+    // Check for other errors
+    if (!response.ok) {
+      return { error: `Failed to submit question: ${response.status}` };
+    }
+
+    return { success: true };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : String(error) };
+  }
 }
