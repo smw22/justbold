@@ -5,8 +5,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { User } from "./entities/user.entity";
 import { Post } from "../posts/entities/post.entity";
-import { Review } from "src/reviews/entities/review.entity";
-import { Question } from "src/questions/entities/question.entity";
+import { Review } from "../reviews/entities/review.entity";
+import { Question } from "../questions/entities/question.entity";
 
 // This is a module. It packages everything related to users together.
 // The module is called by app.module.ts.
