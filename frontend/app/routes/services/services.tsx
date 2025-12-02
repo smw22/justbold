@@ -1,10 +1,9 @@
 import { useLoaderData } from "react-router";
 import ServicesCard from "./components/ServicesCard";
 import type { Service } from "~/types/services/servicesProps";
-import { apiFetch } from "~/lib/apiFetch";
 
 export async function clientLoader(): Promise<{}> {
-  const response = await apiFetch(`/services`);
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/services`);
 
   if (!response.ok) {
     throw new Error(`Failed to load service: ${response.status}`);
