@@ -1,6 +1,6 @@
 import Icon from "~/components/icon";
 import { Link } from "react-router";
-import AvatarHeader from "./AvatarHeader";
+import AvatarHeader from "../../../components/AvatarHeader";
 import type { Service } from "~/types/services/servicesProps";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";

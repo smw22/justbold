@@ -11,7 +11,6 @@ export default function ChatLayout() {
   return (
     <div>
       {isThreadPage ? <Threadheader /> : <MessagesHeader />}
-      Chat Layout
       <Outlet />
       {isThreadPage ? <Footer /> : <ChatFooter />}
     </div>

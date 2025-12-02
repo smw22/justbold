@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import Icon from "~/components/icon";
-import AvatarHeader from "~/routes/services/components/AvatarHeader";
+import AvatarHeader from "~/components/AvatarHeader";
 
 export default function Threadheader() {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ export default function Threadheader() {
           <Icon name="NavArrowLeft" color="white" size={20} />
         </button>
         <AvatarHeader
-          imageUrl="https://avatar.iran.liara.run/public/14"
+          imageUrl="https://avatar.iran.liara.run/public"
           imageSize={60}
           title="Jonas Jacobsen"
           color="white"

@@ -4,7 +4,7 @@ import Icon from "~/components/icon";
 export default function Threadheader() {
   return (
     <header className="outer-wrapper bg-header-bg-3">
-      <nav className="flex justify-between items-center px-4 py-6">
+      <nav className="flex justify-between items-center px-4 py-8 -translate-y-2">
         <button aria-label="Go to messages">
           <Link to="/chats" className="font-bold text-xl text-white">
             Messages

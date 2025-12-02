@@ -2,7 +2,7 @@ import Button from "~/components/Button";
 import Icon from "~/components/icon";
 import ReviewStars from "./components/ReviewStars";
 import { Link, useLoaderData } from "react-router";
-import AvatarHeader from "./components/AvatarHeader";
+import AvatarHeader from "../../components/AvatarHeader";
 
 export async function clientLoader({ params }: { params: { serviceId: string } }): Promise<{}> {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/services/${params.serviceId}`);
