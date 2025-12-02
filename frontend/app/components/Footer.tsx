@@ -44,10 +44,10 @@ export default function Footer() {
           </li>
           <li>
             <NavLink
-              to={currentUser ? `/profile/${currentUser}` : "/profile"}
+              to="/chat"
               className={({ isActive, isPending }) => (isPending ? pasiveClass : isActive ? activeClass : pasiveClass)}
             >
-              <Icon name="UserCircle" size={24} /> Profile
+              <Icon name="ChatLines" size={24} /> Chats
             </NavLink>
           </li>
           <li>
