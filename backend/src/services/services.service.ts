@@ -56,8 +56,37 @@ export class ServicesService {
     return this.servicesRepository.save(service);
   }
 
-  async findAll(): Promise<Service[]> {
-    return await this.servicesRepository.find();
+  async findAll(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<{
+    services: Service[];
+    total: number;
+    page: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  }> {
+    // Calculate skip value for pagination
+    const skip = (page - 1) * limit;
+
+    const [services, total] = await this.servicesRepository.findAndCount({
+      relations: ["user", "tag"],
+      order: { created: "DESC" },
+      take: limit,
+      skip: skip, // OFFSET
+    });
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      services,
+      total,
+      page,
+      totalPages,
+      hasNextPage: page < totalPages,
+      hasPreviousPage: page > 1,
+    };
   }
 
   async findOne(id: string): Promise<Service> {

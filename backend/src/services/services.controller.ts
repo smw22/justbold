@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
 import { ServicesService } from "./services.service";
 import { CreateServiceDto } from "./dto/create-service.dto";
 import { UpdateServiceDto } from "./dto/update-service.dto";
@@ -26,9 +26,12 @@ export class ServicesController {
   }
 
   @Get()
-  async findAll() {
+  async findAll(@Query("page") page: string = "1", @Query("limit") limit: string = "10") {
     try {
-      const data = await this.servicesService.findAll();
+      const pageNumber = Math.max(1, parseInt(page, 10) || 1);
+      const limitNumber = Math.min(50, Math.max(1, parseInt(limit, 10) || 10)); // Max 50 per page
+
+      const data = await this.servicesService.findAll(pageNumber, limitNumber);
       return {
         success: true,
         data,
