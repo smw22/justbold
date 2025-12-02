@@ -1,7 +1,15 @@
 import Icon from "./icon";
 import { NavLink } from "react-router";
 
+import { useEffect, useState } from "react";
+
 export default function Footer() {
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
+
+  useEffect(() => {
+    setCurrentUser(localStorage.getItem("user_id"));
+  }, []);
+
   const pasiveClass = "flex flex-col items-center text-sm text-white gap-1 p-3";
   const activeClass = "flex flex-col items-center text-sm bg-neutral-grey text-primary-yellow rounded-full gap-1 p-3 px-4";
 
@@ -44,7 +52,7 @@ export default function Footer() {
           </li>
           <li>
             <NavLink
-              to="/profile/:profileId"
+              to={`/profile/${currentUser}`}
               className={({ isActive, isPending }) => (isPending ? pasiveClass : isActive ? activeClass : pasiveClass)}
             >
               <Icon name="UserCircle" size={24} /> Profile
