@@ -33,7 +33,6 @@ import { CommentsModule } from "./comments/comments.module";
 import { Comment } from "./comments/entities/comment.entity";
 import { LikesModule } from "./likes/likes.module";
 import { Like } from "./likes/entities/like.entity";
-import { AuthModule } from './auth/auth.module';
 import { SearchModule } from "./search/search.module";
 
 @Module({
@@ -80,7 +79,6 @@ import { SearchModule } from "./search/search.module";
     QuestionsModule,
     CommentsModule,
     LikesModule,
-    AuthModule,
     SearchModule,
   ],
   controllers: [AppController],

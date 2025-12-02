@@ -35,6 +35,5 @@ import { Question } from "../questions/entities/question.entity";
   // PROVIDERS EXPLANATION:
   // This one is quite a bitch to understand.
   providers: [UsersService],
-  exports: [UsersService],
 })
 export class UsersModule {}

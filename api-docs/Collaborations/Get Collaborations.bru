@@ -7,7 +7,7 @@ meta {
 get {
   url: {{domain}}/api/collaborations
   body: none
-  auth: bearer
+  auth: inherit
 }
 
 params:query {
@@ -16,10 +16,6 @@ params:query {
   ~limit: 10
   ~role: 
   ~orderby: 
-}
-
-auth:bearer {
-  token: {{access_token}}
 }
 
 settings {

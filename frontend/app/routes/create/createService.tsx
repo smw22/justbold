@@ -1,12 +1,18 @@
-import { redirect, useLoaderData, useActionData, useNavigation } from "react-router";
+import {
+  redirect,
+  useLoaderData,
+  useActionData,
+  useNavigation,
+} from "react-router";
 import AvatarHeader from "../services/components/AvatarHeader";
 import CreateServiceForm from "./components/CreateServiceForm";
-import { apiFetch } from "~/lib/apiFetch";
 
 export async function clientLoader(): Promise<{}> {
   const userId = "9ec7b46e-3538-47eb-9067-c2fad0ddf97f"; // Replace with actual logic to get current user ID
 
-  const userResponse = await apiFetch(`/users/${userId}`);
+  const userResponse = await fetch(
+    `${import.meta.env.VITE_API_URL}/users/${userId}`
+  );
 
   if (!userResponse.ok) {
     throw new Error(`Failed to load user: ${userResponse.status}`);
@@ -14,7 +20,7 @@ export async function clientLoader(): Promise<{}> {
 
   const user = await userResponse.json();
 
-  const tagResponse = await apiFetch(`/tags`);
+  const tagResponse = await fetch(`${import.meta.env.VITE_API_URL}/tags`);
 
   if (!tagResponse.ok) {
     throw new Error(`Failed to load tags: ${tagResponse.status}`);
@@ -68,12 +74,15 @@ export async function clientAction({ request }: { request: Request }) {
   }
 
   if (location.length < 3) {
-    console.error("Error creating service; Location too short:", location.length);
+    console.error(
+      "Error creating service; Location too short:",
+      location.length
+    );
     return { error: "Location must be at least 3 characters long" };
   }
 
   try {
-    const response = await apiFetch(`/services`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/services`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -117,7 +126,11 @@ export default function CreateService() {
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <AvatarHeader imageUrl={user.profile_image} imageSize={40} title={user.name} />
+      <AvatarHeader
+        imageUrl={user.profile_image}
+        imageSize={40}
+        title={user.name}
+      />
       <CreateServiceForm tags={tags} isSubmitting={isSubmitting} />
       {actionData?.error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">

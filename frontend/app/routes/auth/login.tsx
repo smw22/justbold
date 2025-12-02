@@ -1,91 +1,48 @@
-import { Link, Form, redirect, useActionData, useNavigation } from "react-router";
+import { Link } from "react-router";
+import { useState } from "react";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
-import { apiFetch } from "~/lib/apiFetch";
 
 interface LoginProps {
   onNext: () => void;
   onLogin: () => void;
 }
 
-export async function clientAction({ params, request }: { params: any; request: any }) {
-  const formData = await request.formData();
-  const email = formData.get("email");
-  const password = formData.get("password");
-  if (!email || !password) {
-    return { error: "Email and password are required" };
-  }
-  const getAccessToken = await apiFetch(`/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
-  });
-
-  if (getAccessToken.status === 401) {
-    return { error: "Invalid email or password" };
-  }
-
-  const result = await getAccessToken.json();
-
-  if (result.access_token) {
-    console.log("Login successful! User:", email);
-
-    localStorage.setItem("access_token", result.access_token);
-    localStorage.setItem("user_id", result.user_id);
-
-    const url = new URL(request.url);
-    const redirectTo = url.searchParams.get("redirectTo") || "/";
-    return redirect(redirectTo);
-  }
-
-  return { error: result.error || "Login failed" };
-}
-
 export default function Login({ onNext, onLogin }: LoginProps) {
-  const actionData = useActionData();
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onNext();
+  };
 
   return (
     <div className="h-dvh w-screen flex flex-col items-center relative py-[50px]">
       <div className="m-auto flex flex-col items-center justify-center h-full gap-6 w-[263px]">
         <h1 className="text-primary-purple!">Login</h1>
-        <Form method="POST" className="flex flex-col gap-3.5">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
           <Input
             variant="onboarding"
+            placeholder="Enter your email"
             type="email"
-            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             name="email"
-            required
-            autoComplete="email"
-            placeholder="you@example.com"
           />
-
           <Input
             variant="onboarding"
+            placeholder="Enter your password"
             type="password"
-            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             name="password"
-            required
-            autoComplete="current-password"
-            placeholder="Your password"
           />
-
-          {isSubmitting ? (
-            <Button text="Logging in..." variant="primary" className="mt-1.5 w-fit self-center" />
-          ) : (
-            <Button text="Log in" variant="primary" className="mt-1.5 w-fit self-center" />
-          )}
-
-          {actionData?.error && (
-            <div className="bg-red-300 border border-red-600 text-red-600 rounded-lg px-6 py-4">{actionData.error}</div>
-          )}
-        </Form>
+          <Button text="Continue" variant="primary" onClick={onNext} className="mt-1.5 w-fit self-center" />
+        </form>
         <p>or</p>
-        <Button text="Login with Google" variant="secondary" className="text-bold" />
-        <Button text="Login with AppleID" variant="secondary" className="text-bold" />
+        <Button text="Login with Google" variant="secondary" className="font-bold" />
+        <Button text="Login with AppleID" variant="secondary" className="font-bold" />
         <div>
           <span>Don't have an account? </span>
           <Link to={"/onboarding/steps"} onClick={onLogin} className="cursor-pointer text-[#007AFF]">
