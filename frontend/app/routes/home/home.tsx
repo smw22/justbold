@@ -2,6 +2,7 @@ import StoriesSlider from "./StoriesSlider";
 import { useLoaderData } from "react-router";
 import CollaborationsSlider from "./CollaborationsSlider";
 import PostsFeed from "./PostsFeed";
+import { apiFetch } from "~/lib/apiFetch";
 
 const stories = [
   { id: 1, userName: "Alice", imageUrl: "https://unsplash.it/640/425?1" },
@@ -18,9 +19,7 @@ const stories = [
 
 export async function clientLoader(): Promise<{}> {
   // Get Collaborations
-  const collabResponse = await fetch(
-    `${import.meta.env.VITE_API_URL}/collaborations`
-  );
+  const collabResponse = await apiFetch(`/collaborations`);
 
   if (!collabResponse.ok) {
     throw new Error(`Failed to fetch collaborations: ${collabResponse.status}`);
@@ -29,7 +28,7 @@ export async function clientLoader(): Promise<{}> {
   const collaborations = await collabResponse.json();
 
   // Get Posts
-  const postsResponse = await fetch(`${import.meta.env.VITE_API_URL}/posts`);
+  const postsResponse = await apiFetch(`/posts`);
 
   if (!postsResponse.ok) {
     throw new Error(`Failed to fetch posts: ${postsResponse.status}`);
