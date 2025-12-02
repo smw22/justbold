@@ -32,7 +32,7 @@ export default function ProfileHeader({
       </section>
       <section className="flex flex-col items-center gap-2 flex-1">
         <div className="flex items-center gap-1">
-          <h4 className="text-white font-normal">{name}</h4>
+          <h4 className="text-white! font-normal">{name}</h4>
           <Icon name="TwitterVerifiedBadge" size={20} />
         </div>
         <p className="text-xs">{bio}</p>

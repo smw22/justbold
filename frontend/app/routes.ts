@@ -21,7 +21,7 @@ export default [
 
     // Account
     route("profile/:profileId", "routes/account/profile.tsx"),
-    route("profile/:profileId/edit", "routes/account/profileEdit.tsx"),
+    route("profile/edit", "routes/account/profileEdit.tsx"),
 
     // Favorites
     route("favorites", "routes/favorites/favorites.tsx"),
