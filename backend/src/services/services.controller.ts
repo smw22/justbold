@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
 import { ServicesService } from "./services.service";
 import { CreateServiceDto } from "./dto/create-service.dto";
 import { UpdateServiceDto } from "./dto/update-service.dto";
@@ -67,11 +59,25 @@ export class ServicesController {
     }
   }
 
+  @Get(":id/reviews")
+  async findServiceReviews(@Param("id") id: string) {
+    try {
+      const data = await this.servicesService.findServiceReviews(id);
+      return {
+        success: true,
+        data,
+        message: "Service reviews retrieved successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
+
   @Patch(":id")
-  async update(
-    @Param("id") id: string,
-    @Body() updateServiceDto: UpdateServiceDto
-  ) {
+  async update(@Param("id") id: string, @Body() updateServiceDto: UpdateServiceDto) {
     try {
       await this.servicesService.update(id, updateServiceDto);
       return {

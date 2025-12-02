@@ -6,6 +6,7 @@ import { Repository } from "typeorm";
 import { Service } from "./entities/service.entity";
 import { User } from "../users/entities/user.entity";
 import { Tag } from "../tags/entities/tag.entity";
+import { Review } from "../reviews/entities/review.entity";
 
 @Injectable()
 export class ServicesService {
@@ -15,7 +16,9 @@ export class ServicesService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
     @InjectRepository(Tag)
-    private readonly tagsRepository: Repository<Tag>
+    private readonly tagsRepository: Repository<Tag>,
+    @InjectRepository(Review)
+    private readonly reviewsRepository: Repository<Review>
   ) {}
 
   async create(createServiceDto: CreateServiceDto): Promise<Service> {
@@ -63,6 +66,20 @@ export class ServicesService {
       throw new HttpException("Service not found", 404);
     }
     return serviceData;
+  }
+
+  async findServiceReviews(id: string): Promise<{ reviews: Review[]; avg_rating: number }> {
+    const [data, count] = await this.reviewsRepository.findAndCount({
+      where: { object_id: id, type: "service" },
+      relations: ["sender"], // Only include existing relations
+    });
+
+    if (count === 0) {
+      return { reviews: [], avg_rating: 0 };
+    }
+
+    const avg_rating = data.reduce((sum: number, review: Review) => sum + review.rating, 0) / count;
+    return { reviews: data, avg_rating };
   }
 
   async update(id: string, updateServiceDto: UpdateServiceDto): Promise<Service> {
