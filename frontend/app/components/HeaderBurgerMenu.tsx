@@ -9,7 +9,8 @@ export default function HeaderBurgerMenu() {
     setIsOpen(!isOpen);
   };
 
-  const baseClasses = "fixed top-0 right-0 w-full h-full bg-white transition-transform duration-400 ease-out z-50 p-4";
+  const baseClasses =
+    "fixed top-0 right-0 w-full h-full bg-white transition-transform duration-400 ease-out z-50 max-w-lg sm:shadow-xl";
   const openClasses = isOpen ? "translate-x-0" : "translate-x-full";
 
   const menuItems = [
@@ -33,7 +34,7 @@ export default function HeaderBurgerMenu() {
 
       <div className={`${baseClasses} ${openClasses}`}>
         <div className="flex flex-col gap-4">
-          <div className="grid grid-cols-3 gap-4 items-center">
+          <div className="grid grid-cols-3 gap-4 items-center px-4 py-4">
             <button onClick={toggleMenu}>
               <Icon name="Close" color="black" size={24} />
             </button>
@@ -41,8 +42,8 @@ export default function HeaderBurgerMenu() {
           </div>
           <ul>
             {menuItems.map((item, index) => (
-              <li key={index} className={`flex items-center gap-2 py-4 relative `}>
-                <Link to={item.Link} className="flex items-center gap-2 w-full">
+              <li key={index} className={`flex items-center gap-2 relative `}>
+                <Link to={item.Link} className="flex items-center p-4 gap-2 w-full hover:bg-gray-200">
                   <Icon
                     name={item.Icon}
                     color="black"
