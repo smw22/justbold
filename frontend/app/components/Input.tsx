@@ -1,61 +1,45 @@
+import React from "react";
 import Icon from "./icon";
 
-type InputVariant = "onboarding" | "other";
+type InputVariant = "onboarding" | "search";
 
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: string;
   variant: InputVariant;
   className?: string;
-  placeholder?: string;
-  type?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  name?: string;
-  required?: boolean;
 }
 
-export default function Input({
-  icon,
-  variant,
-  className = "",
-  placeholder = "",
-  type = "text",
-  value,
-  onChange,
-  name,
-  required = false,
-}: InputProps) {
+const Input = React.forwardRef<HTMLInputElement, InputProps>(({ icon, variant, className = "", ...rest }, ref) => {
   switch (variant) {
     case "onboarding":
       return (
         <input
-          type={type}
-          name={name}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          required={required}
+          ref={ref}
           className={`bg-transparent p-2.5 text-center rounded-lg border border-black/20 focus:outline-1 ${className}`}
+          {...rest}
         />
       );
-    case "other":
+    case "search":
       return (
         <div className="relative">
           <input
-            type={type}
-            name={name}
-            placeholder={placeholder}
-            value={value}
-            onChange={onChange}
-            required={required}
-            className={`bg-lightgrey pr-10 ${className}`}
+            ref={ref}
+            className={`relative bg-black/5 p-2.5 pl-9 rounded-lg focus:outline-1 text-sm font-medium ${className}`}
+            placeholder={rest.placeholder}
+            {...rest}
           />
           {icon && (
-            <div className="absolute right-2 top-1/2 -translate-y-1/2">
-              <Icon name={icon} size={24} />
+            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-neutral-grey">
+              <Icon name={icon} size={16} />
             </div>
           )}
         </div>
       );
+    default:
+      return null;
   }
-}
+});
+
+Input.displayName = "Input";
+
+export default Input;
