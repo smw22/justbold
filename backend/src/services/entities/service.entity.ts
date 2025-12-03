@@ -50,6 +50,9 @@ export class Service {
   @Column({ type: "varchar", length: 255 })
   location: string;
 
+  @Column("text")
+  category: string;
+
   @CreateDateColumn()
   created: Date;
 
