@@ -35,6 +35,8 @@ import { LikesModule } from "./likes/likes.module";
 import { Like } from "./likes/entities/like.entity";
 import { SearchModule } from "./search/search.module";
 import { AuthModule } from "./auth/auth.module";
+import { SkillsModule } from "./skills/skills.module";
+import { Skill } from "./skills/entities/skill.entity";
 
 @Module({
   imports: [
@@ -62,6 +64,7 @@ import { AuthModule } from "./auth/auth.module";
         Question,
         Comment,
         Like,
+        Skill,
       ],
       synchronize: false,
     }),
@@ -82,6 +85,7 @@ import { AuthModule } from "./auth/auth.module";
     LikesModule,
     SearchModule,
     AuthModule,
+    SkillsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
