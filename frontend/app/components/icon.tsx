@@ -48,9 +48,7 @@ export default function Icon({
 
   const sizeValue = typeof size === "number" ? `${size}px` : size;
 
-  return (
-    <Cmp className={className} width={sizeValue} height={sizeValue} minWidth={sizeValue} aria-label={ariaLabel} {...rest} />
-  );
+  return <Cmp className={className} width={sizeValue} height={sizeValue} aria-label={ariaLabel} {...rest} />;
 }
 
 export { iconsMap };
