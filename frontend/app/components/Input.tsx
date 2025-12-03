@@ -7,9 +7,19 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: string;
   variant: InputVariant;
   className?: string;
+  onClear?: () => void;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(({ icon, variant, className = "", ...rest }, ref) => {
+const Input = React.forwardRef<HTMLInputElement, InputProps>(({ icon, variant, className = "", onClear, ...rest }, ref) => {
+  const handleClear = () => {
+    if (onClear) {
+      onClear();
+    }
+    if (ref && typeof ref !== "function") {
+      ref.current?.focus();
+    }
+  };
+
   switch (variant) {
     case "onboarding":
       return (
@@ -21,7 +31,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ icon, variant, c
       );
     case "search":
       return (
-        <div className="relative">
+        <div className="relative w-full">
           <input
             ref={ref}
             className={`relative bg-black/5 p-2.5 pl-9 rounded-lg focus:outline-1 text-sm font-medium ${className}`}
@@ -32,6 +42,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ icon, variant, c
             <div className="absolute left-2 top-1/2 -translate-y-1/2 text-neutral-grey">
               <Icon name={icon} size={16} />
             </div>
+          )}
+          {rest.value && (
+            <button
+              type="button"
+              onClick={handleClear}
+              aria-label="Clear search"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-(--darkgrey-text)"
+            >
+              <Icon name="Close" size={20} />
+            </button>
           )}
         </div>
       );

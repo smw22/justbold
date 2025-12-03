@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import Input from "~/components/Input";
 import ForYou from "./tabs/ForYou";
 
@@ -45,7 +45,7 @@ export default function SearchPage() {
 
   return (
     <div className="flex flex-col gap-3 py-2 px-2.5 max-w-4xl m-auto">
-      <div>
+      <div className="flex justify-between gap-1.5 items-center">
         <Input
           variant="search"
           icon="Search"
@@ -53,7 +53,12 @@ export default function SearchPage() {
           type="text"
           value={searchQuery}
           onChange={(e) => handleSearch(e.target.value)}
+          onClear={() => handleSearch("")}
+          className="w-full"
         />
+        <Link className="cursor-pointer text-sm font-medium" to={"../"}>
+          Cancel
+        </Link>
       </div>
 
       <div className="flex gap-3">
