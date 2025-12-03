@@ -5,9 +5,13 @@ meta {
 }
 
 post {
-  url: {{domain}}/api/collaborations
+  url: {{domain}}/collaborations
   body: json
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
 
 body:json {

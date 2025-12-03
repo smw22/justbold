@@ -13,14 +13,6 @@ export class Like {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @ManyToOne(() => Post, (post) => post.likes, { nullable: true })
-  @JoinColumn({ name: "object_id" })
-  post: Post | null;
-
-  @ManyToOne(() => Comment, (comment) => comment.likes, { nullable: true })
-  @JoinColumn({ name: "object_id" })
-  comment: Comment | null;
-
   @Column()
   object_id: string;
 

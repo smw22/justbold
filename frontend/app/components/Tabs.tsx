@@ -1,8 +1,16 @@
-export default function Tabs({ tabs, currentTab, setTab }: { tabs: string[]; currentTab: number; setTab: (e: number) => void }) {
+export default function Tabs({
+  tabs,
+  currentTab,
+  setTab,
+}: {
+  tabs: string[];
+  currentTab: number;
+  setTab: (e: number) => void;
+}) {
   return (
     <div className="bg-white flex flex-row w-full items-center rounded-tl-3xl rounded-tr-3xl -mt-6 overflow-hidden">
       {tabs?.map((tab, index) => (
-        <>
+        <div className="w-full flex items-center justify-center" key={tab + index}>
           <button
             key={tab + index}
             onClick={() => setTab(index)}
@@ -12,7 +20,7 @@ export default function Tabs({ tabs, currentTab, setTab }: { tabs: string[]; cur
           </button>
           {/* // add a divider line if it is NOT the last tab. */}
           {index !== tabs.length - 1 ? <div className="w-px bg-gray-300 h-8"></div> : null}
-        </>
+        </div>
       ))}
     </div>
   );

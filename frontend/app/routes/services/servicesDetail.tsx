@@ -6,10 +6,10 @@ import AvatarHeader from "./components/AvatarHeader";
 import { useState } from "react";
 import SheetView from "~/components/SheetView";
 import type { ReviewType } from "~/types/review";
+import { apiFetch } from "~/lib/apiFetch";
 
 export async function clientLoader({ params }: { params: { serviceId: string } }): Promise<{}> {
-  const apiUrl = import.meta.env.VITE_API_URL;
-  const servicesResponse = await fetch(`${apiUrl}/services/${params.serviceId}`);
+  const servicesResponse = await apiFetch(`/services/${params.serviceId}`);
 
   if (servicesResponse.status === 404) {
     throw new Response("Service not Found", { status: 404 });
@@ -21,7 +21,7 @@ export async function clientLoader({ params }: { params: { serviceId: string } }
 
   const result = await servicesResponse.json();
 
-  const reviewsResponse = await fetch(`${apiUrl}/services/${params.serviceId}/reviews`);
+  const reviewsResponse = await apiFetch(`/services/${params.serviceId}/reviews`);
 
   if (!reviewsResponse.ok) {
     throw new Error(`Failed to load reviews: ${reviewsResponse.status}`);

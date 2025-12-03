@@ -3,11 +3,12 @@ import Badge from "~/components/Badge";
 import Icon from "~/components/icon";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { apiFetch } from "~/lib/apiFetch";
 
 dayjs.extend(relativeTime);
 
 export async function clientLoader({ params }: { params: { collaborationId: string } }): Promise<{}> {
-  const collabResponse = await fetch(`${import.meta.env.VITE_API_URL}/collaborations/${params.collaborationId}`);
+  const collabResponse = await apiFetch(`/collaborations/${params.collaborationId}`);
 
   if (!collabResponse.ok) {
     throw new Error(`Failed to fetch collaborations: ${collabResponse.status}`);
@@ -85,13 +86,13 @@ function CollabChat({ collabId }: { collabId: string }) {
   );
 }
 
-function CollabGenres({ genres }: { genres: string[] }) {
+function CollabGenres({ genres }: { genres: { title: string }[] }) {
   return (
     <div className="flex flex-col gap-4">
       <h3>Genre</h3>
       <div className="flex items-center gap-2 flex-wrap">
         {genres.map((genre) => (
-          <Badge key={genre} color="header-bg-1" text={typeof genre === "string" ? genre : genre?.title || ""} />
+          <Badge key={genre.title} color="header-bg-1" text={genre.title} />
         ))}
       </div>
     </div>

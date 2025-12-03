@@ -26,10 +26,6 @@ export class Comment {
   @OneToMany(() => Comment, (comment) => comment.parent)
   replies: Comment[];
 
-  // Likes on this comment
-  @OneToMany(() => Like, (like) => like.comment)
-  likes: Like[];
-
   @Column("text")
   content: string;
 

@@ -1,6 +1,7 @@
 import { redirect, useLoaderData, useActionData, useNavigation } from "react-router";
 import AvatarHeader from "../services/components/AvatarHeader";
 import CreateServiceForm from "./components/CreateServiceForm";
+import { apiFetch } from "~/lib/apiFetch";
 
 const categories = [
   "Recording Studio",
@@ -33,7 +34,7 @@ const categories = [
 export async function clientLoader(): Promise<{}> {
   const userId = "888fe723-82fd-4df5-b39f-ac59ee87a9f1"; // Replace with actual logic to get current user ID
 
-  const userResponse = await fetch(`${import.meta.env.VITE_API_URL}/users/${userId}`);
+  const userResponse = await apiFetch(`/users/${userId}`);
 
   if (!userResponse.ok) {
     throw new Error(`Failed to load user: ${userResponse.status}`);
@@ -92,7 +93,7 @@ export async function clientAction({ request }: { request: Request }) {
   }
 
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/services`, {
+    const response = await apiFetch(`/services`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -137,7 +138,11 @@ export default function CreateService() {
   return (
     <div className="flex flex-col gap-4 p-4">
       <AvatarHeader imageUrl={user.profile_image} imageSize={40} title={user.name} />
+<<<<<<< HEAD
       <CreateServiceForm categories={categories} isSubmitting={isSubmitting} />
+=======
+      <CreateServiceForm tags={tags} isSubmitting={isSubmitting} />
+>>>>>>> origin/main
       {actionData?.error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
           <strong>Error:</strong> {actionData.error}

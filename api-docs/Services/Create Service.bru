@@ -1,0 +1,30 @@
+meta {
+  name: Create Service
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{domain}}/services
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "title": "Service title",
+    "content": "This is the collaboration content",
+    "user_id": "",
+    "tag_id": "",
+    "location": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

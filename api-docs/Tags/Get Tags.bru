@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{domain}}/api/tags
+  url: {{domain}}/tags
   body: none
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
 
 settings {

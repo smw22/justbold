@@ -5,6 +5,7 @@ import Pagination from "~/components/Pagination";
 import { useEffect, useState } from "react";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
+import { apiFetch } from "~/lib/apiFetch";
 
 export async function clientLoader({ request }: { request: Request }): Promise<{}> {
   const url = new URL(request.url);
@@ -14,10 +15,10 @@ export async function clientLoader({ request }: { request: Request }): Promise<{
 
   // Use search endpoint if query exists, otherwise use findAll
   const endpoint = search
-    ? `${import.meta.env.VITE_API_URL}/services/search?search=${encodeURIComponent(search)}&page=${page}&limit=${limit}`
-    : `${import.meta.env.VITE_API_URL}/services?page=${page}&limit=${limit}`;
+    ? `/services/search?search=${encodeURIComponent(search)}&page=${page}&limit=${limit}`
+    : `/services?page=${page}&limit=${limit}`;
 
-  const response = await fetch(endpoint);
+  const response = await apiFetch(endpoint);
 
   if (!response.ok) {
     throw new Error(`Failed to load services: ${response.status}`);

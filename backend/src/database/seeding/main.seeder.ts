@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { DataSource } from "typeorm";
 import { Seeder, SeederFactoryManager } from "typeorm-extension";
+import * as bcrypt from "bcrypt";
 
 // Entities
 import { User } from "../../users/entities/user.entity";
@@ -15,7 +16,14 @@ export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
     // Seed users
     const userFactory = factoryManager.get(User);
-    const users = await userFactory.saveMany(10);
+    const users = await userFactory.saveMany(9);
+    // Create an admin user
+    const adminUser = await userFactory.make({
+      name: "Admin User",
+      email: "test@user.com",
+      password: await bcrypt.hash("admin", 10),
+    });
+    await dataSource.getRepository(User).save(adminUser);
 
     // Seed tags
     const TagFactory = factoryManager.get(Tag);
