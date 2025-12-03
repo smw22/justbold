@@ -7,7 +7,11 @@ meta {
 post {
   url: {{domain}}/posts
   body: json
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
 
 body:json {
