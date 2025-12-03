@@ -11,6 +11,7 @@ import { Genre } from "../../genres/entities/genre.entity";
 import { Collaboration } from "../../collaborations/entities/collaboration.entity";
 import { Service } from "../../services/entities/service.entity";
 import { Review } from "../../reviews/entities/review.entity";
+import { Skill } from "../../skills/entities/skill.entity";
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
@@ -56,6 +57,26 @@ export class MainSeeder implements Seeder {
     const genres = await Promise.all(genreTitles.map((title: string) => GenreFactory.make({ title })));
     await dataSource.getRepository(Genre).save(genres);
 
+    // Seed Skills
+    const SkillFactory = factoryManager.get(Skill);
+    const skillTitles = [
+      "Guitar",
+      "Drums",
+      "Bass",
+      "Vocals",
+      "Piano",
+      "Mixing",
+      "Mastering",
+      "Songwriting",
+      "Producing",
+      "Sound Design",
+      "Low tuning",
+      "Odd time signatures",
+      "Good tone knowledge",
+    ];
+    const skills = await Promise.all(skillTitles.map((title: string) => SkillFactory.make({ title })));
+    await dataSource.getRepository(Skill).save(skills);
+
     // Seed posts, each linked to a random user
     const postFactory = factoryManager.get(Post);
     const tags = await dataSource.getRepository(Tag).find();
@@ -76,7 +97,7 @@ export class MainSeeder implements Seeder {
     // Seed collaborations, each linked to a random user
     const collaborationFactory = factoryManager.get(Collaboration);
     const collaborations = await Promise.all(
-      Array(50)
+      Array(100)
         .fill("")
         .map(async () => {
           const user = faker.helpers.arrayElement(users);
@@ -96,6 +117,13 @@ export class MainSeeder implements Seeder {
           });
           collaboration.tags = randomTags; // Use tag entities directly
 
+          // Assign random skills
+          const randomSkills = faker.helpers.arrayElements(skills, {
+            min: 1,
+            max: 4,
+          });
+          collaboration.skills = randomSkills;
+
           return collaboration;
         })
     );
@@ -104,7 +132,7 @@ export class MainSeeder implements Seeder {
     // seed services, each linked to a random user and tag
     const serviceFactory = factoryManager.get(Service);
     const services = await Promise.all(
-      Array(50)
+      Array(100)
         .fill("")
         .map(async () => {
           const user = faker.helpers.arrayElement(users);
