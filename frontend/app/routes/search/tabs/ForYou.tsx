@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 interface ForYouProps {
   query: string;
@@ -48,7 +52,7 @@ export default function ForYou({ query }: ForYouProps) {
                   className="rounded-full w-12 h-12 object-cover"
                 />
                 <div className="flex flex-col gap-1.5">
-                  <p className="text-(--darkgrey-text) font-medium text-sm">{person.name}</p>
+                  <p className="text-neutral-grey font-medium text-sm">{person.name}</p>
                   <p className="text-(--lightgrey-text) text-xs">{person.location}</p>
                 </div>
               </div>
@@ -58,13 +62,31 @@ export default function ForYou({ query }: ForYouProps) {
       )}
 
       {results.collaborations?.length > 0 && (
-        <section className="flex flex-col gap-3">
+        <section className="flex flex-col gap-3 max-w-[331px]">
           <p className="font-medium text-xs text-neutral-grey">Collaboration requests</p>
           <div className="flex flex-col gap-3">
             {results.collaborations.map((collab: any) => (
-              <div key={collab.id} className="rounded-3xl border border-black/15 p-3.5">
+              <div key={collab.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
+                <div className="flex items-center gap-1.5">
+                  <img src={collab.user.profile_image} alt={collab.user.name} className="h-5 w-5 object-cover rounded-full" />
+                  <p className="text-xs text-(--lightgrey-text)">
+                    <span className="text-neutral-grey">{collab.user.name}</span> looking for
+                    {collab.user.looking_for.map((looking_for: any) => (
+                      <span key={looking_for}> #{looking_for}</span>
+                    ))}
+                  </p>
+                </div>
+                <div className="h-px bg-black/15 mx-9 my-2"></div>
                 <h4>{collab.title}</h4>
                 <p className="text-md text-(--lightgrey-text)">{collab.content}</p>
+                <div className="flex justify-between text-xs">
+                  <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
+                  <div className="text-(--lightgrey-text)">
+                    <p>
+                      {collab.location} - {dayjs(collab.created).fromNow()}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -72,40 +94,31 @@ export default function ForYou({ query }: ForYouProps) {
       )}
 
       {results.services?.length > 0 && (
-        <section>
+        <section className="flex flex-col gap-3 max-w-[331px]">
           <p className="font-medium text-xs text-neutral-grey">Services</p>
-          <div>
+          <div className="flex flex-col gap-3">
             {results.services.map((service: any) => (
-              <div key={service.id}>
-                <p>{service.title}</p>
-                <p>{service.content}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {results.tags?.length > 0 && (
-        <section>
-          <p className="font-medium text-xs text-neutral-grey">Tags</p>
-          <div>
-            {results.tags.map((tag: any) => (
-              <div key={tag.id}>
-                <p>{tag.title}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {results.posts?.length > 0 && (
-        <section>
-          <p className="font-medium text-xs text-neutral-grey">Posts</p>
-          <div>
-            {results.posts.map((post: any) => (
-              <div key={post.id}>
-                <p>{post.title}</p>
-                <p>{post.content}</p>
+              <div key={service.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
+                <div className="flex items-center gap-1.5">
+                  <img src={service.user.profile_image} alt={service.user.name} className="h-5 w-5 object-cover rounded-full" />
+                  <p className="text-xs text-(--lightgrey-text)">
+                    <span className="text-neutral-grey">{service.user.name}</span> looking for
+                    {service.user.looking_for.map((looking_for: any) => (
+                      <span key={looking_for}> #{looking_for}</span>
+                    ))}
+                  </p>
+                </div>
+                <div className="h-px bg-black/15 mx-9 my-2"></div>
+                <h4>{service.title}</h4>
+                <p className="text-md text-(--lightgrey-text)">{service.content}</p>
+                <div className="flex justify-between text-xs">
+                  <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
+                  <div className="text-(--lightgrey-text)">
+                    <p>
+                      {service.location} - {dayjs(service.created).fromNow()}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
