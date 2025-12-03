@@ -1,18 +1,11 @@
-import {
-  redirect,
-  useLoaderData,
-  useActionData,
-  useNavigation,
-} from "react-router";
+import { redirect, useLoaderData, useActionData, useNavigation } from "react-router";
 import AvatarHeader from "../services/components/AvatarHeader";
 import CreateServiceForm from "./components/CreateServiceForm";
 
 export async function clientLoader(): Promise<{}> {
-  const userId = "9ec7b46e-3538-47eb-9067-c2fad0ddf97f"; // Replace with actual logic to get current user ID
+  const userId = "e98cdb79-f65b-4183-88bf-0a7433455236"; // Replace with actual logic to get current user ID
 
-  const userResponse = await fetch(
-    `${import.meta.env.VITE_API_URL}/users/${userId}`
-  );
+  const userResponse = await fetch(`${import.meta.env.VITE_API_URL}/users/${userId}`);
 
   if (!userResponse.ok) {
     throw new Error(`Failed to load user: ${userResponse.status}`);
@@ -40,7 +33,7 @@ export async function clientAction({ request }: { request: Request }) {
   const price = formData.get("price") as string;
   const location = formData.get("location") as string;
 
-  const user_id = "9ec7b46e-3538-47eb-9067-c2fad0ddf97f"; // NOTE: Replace with actual logic to get current user ID when we add auth
+  const user_id = "e98cdb79-f65b-4183-88bf-0a7433455236"; // NOTE: Replace with actual logic to get current user ID when we add auth
 
   if (!title || !content || !tag_id || !price || !location) {
     console.error("Error creating service; Missing fields:", {
@@ -74,10 +67,7 @@ export async function clientAction({ request }: { request: Request }) {
   }
 
   if (location.length < 3) {
-    console.error(
-      "Error creating service; Location too short:",
-      location.length
-    );
+    console.error("Error creating service; Location too short:", location.length);
     return { error: "Location must be at least 3 characters long" };
   }
 
@@ -126,11 +116,7 @@ export default function CreateService() {
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <AvatarHeader
-        imageUrl={user.profile_image}
-        imageSize={40}
-        title={user.name}
-      />
+      <AvatarHeader imageUrl={user.profile_image} imageSize={40} title={user.name} />
       <CreateServiceForm tags={tags} isSubmitting={isSubmitting} />
       {actionData?.error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">

@@ -18,7 +18,6 @@ export default function Pagination({
 
   return (
     <div className="flex justify-center items-center gap-4 my-8">
-      {/* NOTE - Add disabled to button component  */}
       <Button
         variant="secondary"
         text="Previous"

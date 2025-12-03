@@ -45,6 +45,29 @@ export class ServicesController {
     }
   }
 
+  @Get("search")
+  async searchByTitle(
+    @Query("search") search: string,
+    @Query("page") page: string = "1",
+    @Query("limit") limit: string = "10"
+  ) {
+    try {
+      const pageNumber = Math.max(1, parseInt(page, 10) || 1);
+      const limitNumber = Math.min(50, Math.max(1, parseInt(limit, 10) || 10)); // Max 50 per page
+      const data = await this.servicesService.searchByTitle(search, pageNumber, limitNumber);
+      return {
+        success: true,
+        data,
+        message: "Services retrieved successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
+
   @Get(":id")
   async findOne(@Param("id") id: string) {
     try {

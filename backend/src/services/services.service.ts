@@ -111,6 +111,48 @@ export class ServicesService {
     return { reviews: data, avg_rating };
   }
 
+  async searchByTitle(
+    query: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<{
+    services: Service[];
+    total: number;
+    page: number;
+    totalPages: number;
+  }> {
+    const search = (query ?? "").trim();
+    const skip = (page - 1) * limit;
+
+    // If empty query, return all services
+    if (!search) {
+      return this.findAll(page, limit);
+    }
+
+    // % wildcard for partial matching (it searches everything that contains the term)
+    const searchTerm = `%${search}%`;
+
+    // Using QueryBuilder (more flexible than find())
+    const qb = this.servicesRepository
+      .createQueryBuilder("service")
+      .leftJoinAndSelect("service.user", "user")
+      .leftJoinAndSelect("service.tag", "tag")
+      .where("service.title LIKE :searchTerm", { searchTerm })
+      .orderBy("service.created", "DESC")
+      .skip(skip)
+      .take(limit);
+
+    const [services, total] = await qb.getManyAndCount();
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      services,
+      total,
+      page,
+      totalPages,
+    };
+  }
+
   async update(id: string, updateServiceDto: UpdateServiceDto): Promise<Service> {
     const existingService = await this.servicesRepository.findOneBy({ id });
     if (!existingService) {
