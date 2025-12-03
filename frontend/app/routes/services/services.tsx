@@ -2,6 +2,7 @@ import { useLoaderData, useNavigate, useSearchParams } from "react-router";
 import ServicesCard from "./components/ServicesCard";
 import type { Service } from "~/types/services/servicesProps";
 import Button from "~/components/Button";
+import Pagination from "~/components/Pagination";
 
 export async function clientLoader({ request }: { request: Request }): Promise<{}> {
   const url = new URL(request.url);
@@ -26,11 +27,6 @@ export async function clientLoader({ request }: { request: Request }): Promise<{
 
 export default function Services() {
   const { services, currentPage, totalPages } = useLoaderData();
-  const navigate = useNavigate();
-
-  const handlePageChange = (newPage: number) => {
-    navigate(`/services?page=${newPage}`);
-  };
 
   return (
     <div className="flex flex-col gap-8 outer-wrapper">
@@ -38,27 +34,7 @@ export default function Services() {
         <ServicesCard key={service.id} servicesData={service} />
       ))}
 
-      {/* Pagination Controls */}
-      {/* NOTE - Add disabled to button component  */}
-      <div className="flex justify-center items-center gap-4 my-8">
-        <Button
-          variant="secondary"
-          text="Previous"
-          onClick={() => handlePageChange(currentPage - 1)}
-          // disabled={currentPage === 1}
-        />
-
-        <span className="text-sm">
-          Page {currentPage} of {totalPages}
-        </span>
-
-        <Button
-          variant="secondary"
-          text="Next"
-          onClick={() => handlePageChange(currentPage + 1)}
-          // disabled={currentPage === totalPages}
-        />
-      </div>
+      <Pagination currentPage={currentPage} totalPages={totalPages} redirectRoute="/services" />
     </div>
   );
 }
