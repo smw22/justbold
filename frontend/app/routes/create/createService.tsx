@@ -138,11 +138,7 @@ export default function CreateService() {
   return (
     <div className="flex flex-col gap-4 p-4">
       <AvatarHeader imageUrl={user.profile_image} imageSize={40} title={user.name} />
-<<<<<<< HEAD
       <CreateServiceForm categories={categories} isSubmitting={isSubmitting} />
-=======
-      <CreateServiceForm tags={tags} isSubmitting={isSubmitting} />
->>>>>>> origin/main
       {actionData?.error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
           <strong>Error:</strong> {actionData.error}
