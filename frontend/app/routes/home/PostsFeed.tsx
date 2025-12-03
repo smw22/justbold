@@ -5,7 +5,7 @@ export default function PostsFeed({ posts }: { posts: PostType[] }) {
   return (
     <div className="outer-wrapper">
       {posts.map((post: PostType) => (
-        <Post post={post} />
+        <Post post={post} key={post.id} />
       ))}
     </div>
   );

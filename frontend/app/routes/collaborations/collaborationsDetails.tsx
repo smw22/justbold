@@ -86,13 +86,13 @@ function CollabChat({ collabId }: { collabId: string }) {
   );
 }
 
-function CollabGenres({ genres }: { genres: string[] }) {
+function CollabGenres({ genres }: { genres: { title: string }[] }) {
   return (
     <div className="flex flex-col gap-4">
       <h3>Genre</h3>
       <div className="flex items-center gap-2 flex-wrap">
         {genres.map((genre) => (
-          <Badge key={genre} color="header-bg-1" text={typeof genre === "string" ? genre : genre?.title || ""} />
+          <Badge key={genre.title} color="header-bg-1" text={genre.title} />
         ))}
       </div>
     </div>
