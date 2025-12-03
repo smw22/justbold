@@ -20,7 +20,7 @@ export default function HeaderBurgerMenu() {
     { label: "Rate the app", Link: "", Icon: "Star", active: false },
     { label: "Settings", Link: "", Icon: "Settings", active: false },
     { label: "Help", Link: "", Icon: "HelpCircle", active: false },
-    { label: "Log Out", Link: "", Icon: "LogOut", active: true },
+    { label: "Log Out", Link: "/log-out", Icon: "LogOut", active: true },
   ];
 
   const menuDisabledClasses = "opacity-50 pointer-events-none";

@@ -42,4 +42,5 @@ export default [
   route("register", "routes/auth/register.tsx"),
   route("onboarding", "routes/onboarding/index.tsx"),
   route("onboarding/steps", "routes/onboarding/steps.tsx"),
+  route("log-out", "routes/auth/logOut.tsx"),
 ] as unknown as RouteConfig[];
