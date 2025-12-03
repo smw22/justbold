@@ -1,6 +1,6 @@
 import Icon from "./icon";
 import Logo from "../assets/icons/artwork/Logo";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, Link } from "react-router";
 import HeaderBurgerMenu from "./HeaderBurgerMenu";
 
 export default function Header() {
@@ -15,18 +15,26 @@ export default function Header() {
         {isHomePage ? (
           <Logo />
         ) : (
-          <button onClick={() => navigate(-1)} aria-label="Go back">
+          <button
+            onClick={() => navigate(-1)}
+            aria-label="Go back"
+            className="hover:bg-gray-200 p-2 rounded-full transition-colors duration-200 ease-in-out cursor-pointer size-10 flex items-center justify-center"
+          >
             <Icon name="NavArrowLeft" color="black" size={20} />
           </button>
         )}
-        <ul className="flex gap-4">
-          <li>
-            <Icon name="Search" color="black" size={20} />
+        <ul className="flex gap-0">
+          <li className="hover:bg-gray-200 p-2 rounded-full transition-colors duration-200 ease-in-out cursor-pointer size-10 flex items-center justify-center">
+            <Link to="/search">
+              <Icon name="Search" color="black" size={20} />
+            </Link>
           </li>
-          <li>
-            <Icon name="BellNotification" color="black" size={20} />
+          <li className="hover:bg-gray-200 p-2 rounded-full transition-colors duration-200 ease-in-out cursor-pointer size-10 flex items-center justify-center">
+            <Link to="/notifications">
+              <Icon name="BellNotification" color="black" size={20} />
+            </Link>
           </li>
-          <li>
+          <li className="hover:bg-gray-200 p-2 rounded-full transition-colors duration-200 ease-in-out cursor-pointer size-10 flex items-center justify-center">
             <HeaderBurgerMenu />
           </li>
         </ul>
