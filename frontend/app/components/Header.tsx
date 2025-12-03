@@ -1,6 +1,8 @@
 import Icon from "./icon";
 import Logo from "../assets/icons/artwork/Logo";
 import { useLocation, useNavigate, Link } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import HeaderBurgerMenu from "./HeaderBurgerMenu";
 
 export default function Header() {
   const location = useLocation();
@@ -8,8 +10,8 @@ export default function Header() {
   const isHomePage = location.pathname === "/";
 
   return (
-    <header className="outer-wrapper">
-      <nav className="flex justify-between items-center p-4">
+    <header className="outer-wrapper sticky top-0 z-90">
+      <nav className="flex justify-between items-center px-4 py-6">
         {/* navigate(-1) : Lets you go back to the previous page  */}
         {isHomePage ? (
           <Logo />
@@ -34,13 +36,7 @@ export default function Header() {
             </Link>
           </li>
           <li>
-            <button
-              onClick={() => alert("Open burger menu")}
-              className="hover:bg-gray-200 p-2 rounded-full transition-colors duration-200 ease-in-out cursor-pointer"
-              aria-label="Open side menu"
-            >
-              <Icon name="Menu" color="black" size={20} />
-            </button>
+            <HeaderBurgerMenu />
           </li>
         </ul>
       </nav>
