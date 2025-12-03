@@ -1,13 +1,21 @@
 meta {
-  name: Get Users
+  name: Get Services
   type: http
   seq: 1
 }
 
 get {
-  url: {{domain}}/users
+  url: {{domain}}/services
   body: none
   auth: bearer
+}
+
+params:query {
+  ~genre: Gospel
+  ~page: 1
+  ~limit: 10
+  ~role: 
+  ~orderby: 
 }
 
 auth:bearer {

@@ -1,17 +1,17 @@
 meta {
-  name: Update Tag
+  name: Update Service
   type: http
   seq: 4
 }
 
 patch {
-  url: {{domain}}/tags/:tagTitle
+  url: {{domain}}/services/:servicesId
   body: json
   auth: bearer
 }
 
 params:path {
-  tagTitle: {{tag_title}}
+  servicesId: {{service_id}}
 }
 
 auth:bearer {
@@ -20,7 +20,8 @@ auth:bearer {
 
 body:json {
   {
-    "title": "Updated Tag title"
+    "title": "Updates Service title",
+    "content": "updated content"
   }
 }
 

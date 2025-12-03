@@ -1,13 +1,17 @@
 meta {
-  name: Get Users
+  name: Get Users Reviews
   type: http
-  seq: 1
+  seq: 3
 }
 
 get {
-  url: {{domain}}/users
+  url: {{domain}}/users/:userId/reviews
   body: none
   auth: bearer
+}
+
+params:path {
+  userId: {{user_id}}
 }
 
 auth:bearer {

@@ -1,13 +1,17 @@
 meta {
-  name: Get Users
+  name: Get One Service
   type: http
-  seq: 1
+  seq: 2
 }
 
 get {
-  url: {{domain}}/users
+  url: {{domain}}/services/:servicesId
   body: none
   auth: bearer
+}
+
+params:path {
+  servicesId: {{service_id}}
 }
 
 auth:bearer {

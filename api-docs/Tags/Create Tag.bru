@@ -5,9 +5,13 @@ meta {
 }
 
 post {
-  url: {{domain}}/api/tags
+  url: {{domain}}/tags
   body: json
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
 
 body:json {
