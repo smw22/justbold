@@ -34,6 +34,7 @@ import { Comment } from "./comments/entities/comment.entity";
 import { LikesModule } from "./likes/likes.module";
 import { Like } from "./likes/entities/like.entity";
 import { SearchModule } from "./search/search.module";
+import { AuthModule } from "./auth/auth.module";
 
 @Module({
   imports: [
@@ -62,7 +63,7 @@ import { SearchModule } from "./search/search.module";
         Comment,
         Like,
       ],
-      synchronize: false,
+      synchronize: true,
     }),
     UsersModule,
     PostsModule,
@@ -80,6 +81,7 @@ import { SearchModule } from "./search/search.module";
     CommentsModule,
     LikesModule,
     SearchModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

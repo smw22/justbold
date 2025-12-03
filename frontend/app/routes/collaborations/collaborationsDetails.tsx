@@ -3,17 +3,12 @@ import Badge from "~/components/Badge";
 import Icon from "~/components/icon";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { apiFetch } from "~/lib/apiFetch";
 
 dayjs.extend(relativeTime);
 
-export async function clientLoader({
-  params,
-}: {
-  params: { collaborationId: string };
-}): Promise<{}> {
-  const collabResponse = await fetch(
-    `${import.meta.env.VITE_API_URL}/collaborations/${params.collaborationId}`
-  );
+export async function clientLoader({ params }: { params: { collaborationId: string } }): Promise<{}> {
+  const collabResponse = await apiFetch(`/collaborations/${params.collaborationId}`);
 
   if (!collabResponse.ok) {
     throw new Error(`Failed to fetch collaborations: ${collabResponse.status}`);
@@ -27,28 +22,23 @@ export async function clientLoader({
 function CollabHeader({
   userName,
   userImage,
-  tag,
+  role,
   created,
 }: {
   userName: string;
   userImage: string;
-  tag: string;
+  role: string;
   created: string;
 }) {
-  const tagText = typeof tag === "string" ? tag : tag?.title || "";
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-1 ">
+      <div className="flex items-center gap-1 flex-wrap">
         <div className="flex items-center gap-1">
-          <img
-            className="size-10 rounded-full"
-            src={userImage}
-            alt={userName}
-          />
+          <img className="size-10 rounded-full" src={userImage} alt={userName} />
           <span className="">{userName.split(" ")[0]}</span>
         </div>
         <span className="text-gray-400">looking for a</span>
-        <span className="text-gray-400">#{tagText}</span>
+        <span className="text-gray-400">#{role}</span>
       </div>
       <span className="text-gray-400">{dayjs(created).fromNow()}</span>
     </div>
@@ -60,14 +50,7 @@ function CollabTags({ tags }: { tags: any[] }) {
     <div className="flex gap-2 flex-wrap">
       {tags.map((tag) => {
         const tagText = typeof tag === "string" ? tag : tag?.title || "";
-        return (
-          <Badge
-            key={tagText}
-            text={tagText}
-            Variant="outline"
-            color="neutral-grey"
-          />
-        );
+        return <Badge key={tagText} text={tagText} Variant="outline" color="neutral-grey" />;
       })}
     </div>
   );
@@ -80,11 +63,7 @@ function CollabTitle({ title }: { title: string }) {
 function CollabImage({ imageUrl }: { imageUrl: string }) {
   return (
     <div className="w-full h-64 bg-gray-200 rounded-3xl overflow-hidden">
-      <img
-        src={imageUrl}
-        alt="Collaboration"
-        className="w-full h-full object-cover"
-      />
+      <img src={imageUrl} alt="Collaboration" className="w-full h-full object-cover" />
     </div>
   );
 }
@@ -107,17 +86,13 @@ function CollabChat({ collabId }: { collabId: string }) {
   );
 }
 
-function CollabGenres({ genres }: { genres: string[] }) {
+function CollabGenres({ genres }: { genres: { title: string }[] }) {
   return (
     <div className="flex flex-col gap-4">
       <h3>Genre</h3>
       <div className="flex items-center gap-2 flex-wrap">
         {genres.map((genre) => (
-          <Badge
-            key={genre}
-            color="header-bg-1"
-            text={typeof genre === "string" ? genre : genre?.title || ""}
-          />
+          <Badge key={genre.title} color="header-bg-1" text={genre.title} />
         ))}
       </div>
     </div>
@@ -128,9 +103,7 @@ function CollabSkills() {
   return (
     <div className="flex flex-col gap-4">
       <h3>Skills</h3>
-      <div className="flex items-center gap-2 flex-wrap  bg-red-400 p-8 rounded">
-        Mangler data
-      </div>
+      <div className="flex items-center gap-2 flex-wrap  bg-red-400 p-8 rounded">Mangler data</div>
     </div>
   );
 }
@@ -145,7 +118,7 @@ export default function CollaborationDetails() {
       <CollabHeader
         userName={collab.user.name}
         userImage={collab.user.profile_image}
-        tag={collab.tags[0]}
+        role={collab.role}
         created={collab.created}
       />
       <CollabTags tags={collab.tags} />

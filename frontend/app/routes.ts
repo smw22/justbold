@@ -23,6 +23,9 @@ export default [
     route("profile/:profileId", "routes/account/profile.tsx"),
     route("profile/:profileId/edit", "routes/account/profileEdit.tsx"),
 
+    // Notifications
+    route("notifications", "routes/notifications/notifications.tsx"),
+
     // Favorites
     route("favorites", "routes/favorites/favorites.tsx"),
   ]),
@@ -39,6 +42,7 @@ export default [
   route("register", "routes/auth/register.tsx"),
   route("onboarding", "routes/onboarding/index.tsx"),
   route("onboarding/steps", "routes/onboarding/steps.tsx"),
+  route("log-out", "routes/auth/logOut.tsx"),
 
   // Search
   route("search", "./routes/search/index.tsx"),

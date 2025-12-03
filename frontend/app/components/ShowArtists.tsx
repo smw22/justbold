@@ -13,7 +13,10 @@ export default function ShowArtists({ users, theme, onShowMore }: { users: strin
           <>
             <div className="flex relative">
               {users.map((user, index) => (
-                <div className={`relative w-20 h-20 bg-${theme} border-4 border-white opacity-100 rounded-full shadow ${index === 0 ? "" : "-ml-8"}`}></div>
+                <div
+                  key={index + 1}
+                  className={`relative w-20 h-20 bg-${theme} border-4 border-white opacity-100 rounded-full shadow ${index === 0 ? "" : "-ml-8"}`}
+                ></div>
               ))}
             </div>
           </>
@@ -22,13 +25,21 @@ export default function ShowArtists({ users, theme, onShowMore }: { users: strin
           <>
             <div className="flex relative">
               {users.slice(0, 3).map((user, index) => (
-                <div className={`relative w-20 h-20 bg-${theme} border-4 border-white opacity-100 rounded-full shadow-lg ${index === 0 ? "" : "-ml-8"}`}></div>
+                <div
+                  key={index + 1}
+                  className={`relative w-20 h-20 bg-${theme} border-4 border-white opacity-100 rounded-full shadow-lg ${index === 0 ? "" : "-ml-8"}`}
+                ></div>
               ))}
-              <div className={`flex justify-center items-center relative w-20 h-20 bg-${theme} border-4 border-white opacity-100 rounded-full shadow-lg -ml-8`}>
+              <div
+                className={`flex justify-center items-center relative w-20 h-20 bg-${theme} border-4 border-white opacity-100 rounded-full shadow-lg -ml-8`}
+              >
                 <p className="text-white">+{users.length - 3}</p>
               </div>
             </div>
-            <button className="hover:opacity-40 cursor-pointer text-neutral-grey text-sm transition-opacity duration-200 ease-in-out" onClick={onShowMore}>
+            <button
+              className="hover:opacity-40 cursor-pointer text-neutral-grey text-sm transition-opacity duration-200 ease-in-out"
+              onClick={onShowMore}
+            >
               See more
             </button>
           </>

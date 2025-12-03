@@ -26,18 +26,29 @@ for (const path in modules) {
 
 export const ICON_NAMES = Object.keys(iconsMap);
 
-export default function Icon({ name, size = 16, className, "aria-label": ariaLabel, ...rest }: IconProps & React.SVGProps<SVGSVGElement>) {
+export default function Icon({
+  name,
+  size = 16,
+  className,
+  "aria-label": ariaLabel,
+  ...rest
+}: IconProps & React.SVGProps<SVGSVGElement>) {
   const Cmp = iconsMap[name];
   if (!Cmp) {
     // helpful fallback for development
     // eslint-disable-next-line no-console
+
+    if (!name) {
+      return null;
+    }
+
     console.warn(`Icon \"${name}\" not found. Available: ${ICON_NAMES.join(", ")}`);
     return null;
   }
 
   const sizeValue = typeof size === "number" ? `${size}px` : size;
 
-  return <Cmp className={className} width={sizeValue} height={sizeValue} minWidth={sizeValue} aria-label={ariaLabel} {...rest} />;
+  return <Cmp className={className} width={sizeValue} height={sizeValue} aria-label={ariaLabel} {...rest} />;
 }
 
 export { iconsMap };

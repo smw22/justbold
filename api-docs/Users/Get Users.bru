@@ -7,7 +7,11 @@ meta {
 get {
   url: {{domain}}/api/users
   body: none
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
 
 settings {

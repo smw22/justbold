@@ -1,10 +1,17 @@
 import Icon from "./icon";
 import { NavLink } from "react-router";
 
+import { useEffect, useState } from "react";
+
 export default function Footer() {
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
+
+  useEffect(() => {
+    setCurrentUser(localStorage.getItem("user_id"));
+  }, []);
+
   const pasiveClass = "flex flex-col items-center text-sm text-white gap-1 p-3";
-  const activeClass =
-    "flex flex-col items-center text-sm bg-neutral-grey text-primary-yellow rounded-full gap-1 p-3 px-4";
+  const activeClass = "flex flex-col items-center text-sm bg-neutral-grey text-primary-yellow rounded-full gap-1 p-3 px-4";
 
   return (
     <footer className="bg-black fixed bottom-5 left-[5%] w-[90%] py-1 text-white rounded-full">
@@ -13,9 +20,7 @@ export default function Footer() {
           <li>
             <NavLink
               to="/"
-              className={({ isActive, isPending }) =>
-                isPending ? pasiveClass : isActive ? activeClass : pasiveClass
-              }
+              className={({ isActive, isPending }) => (isPending ? pasiveClass : isActive ? activeClass : pasiveClass)}
             >
               <Icon name="HomeSimpleDoor" size={24} />
               Home
@@ -24,9 +29,7 @@ export default function Footer() {
           <li>
             <NavLink
               to="/services"
-              className={({ isActive, isPending }) =>
-                isPending ? pasiveClass : isActive ? activeClass : pasiveClass
-              }
+              className={({ isActive, isPending }) => (isPending ? pasiveClass : isActive ? activeClass : pasiveClass)}
             >
               <Icon name="SmallShopAlt" size={24} /> Services
             </NavLink>
@@ -34,29 +37,23 @@ export default function Footer() {
           <li>
             <NavLink
               to="/create"
-              className={({ isActive, isPending }) =>
-                isPending ? pasiveClass : isActive ? activeClass : pasiveClass
-              }
+              className={({ isActive, isPending }) => (isPending ? pasiveClass : isActive ? activeClass : pasiveClass)}
             >
               <Icon name="AddCircle" size={24} /> Create
             </NavLink>
           </li>
           <li>
             <NavLink
-              to="/chats"
-              className={({ isActive, isPending }) =>
-                isPending ? pasiveClass : isActive ? activeClass : pasiveClass
-              }
+              to="/chat"
+              className={({ isActive, isPending }) => (isPending ? pasiveClass : isActive ? activeClass : pasiveClass)}
             >
               <Icon name="ChatLines" size={24} /> Chats
             </NavLink>
           </li>
           <li>
             <NavLink
-              to="/profile/:profileId"
-              className={({ isActive, isPending }) =>
-                isPending ? pasiveClass : isActive ? activeClass : pasiveClass
-              }
+              to={`/profile/${currentUser}`}
+              className={({ isActive, isPending }) => (isPending ? pasiveClass : isActive ? activeClass : pasiveClass)}
             >
               <Icon name="UserCircle" size={24} /> Profile
             </NavLink>
