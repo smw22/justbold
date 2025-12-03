@@ -22,7 +22,9 @@ export default function Post({ post, clickable = true }: { post: PostType; click
           </Link>
           <div className="flex flex-1 gap-2 text-neutral-grey flex-wrap">
             {post.tags.map((tag) => (
-              <div className="border border-neutral-grey py-0 px-2 rounded-full text-sm ">#{tag.title}</div>
+              <div className="border border-neutral-grey py-0 px-2 rounded-full text-sm " key={tag.title}>
+                #{tag.title}
+              </div>
             ))}
           </div>
         </div>
