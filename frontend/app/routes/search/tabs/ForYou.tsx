@@ -35,7 +35,7 @@ export default function ForYou({ query }: ForYouProps) {
     return () => clearTimeout(debounce);
   }, [query]);
 
-  if (loading) return <div>Loading...</div>; // Use custom loader instead
+  if (loading) return <div className="text-xs text-(--lightgrey-text)">Loading...</div>; // Use custom loader instead
   if (!results) return null;
 
   return (
