@@ -7,11 +7,15 @@ meta {
 patch {
   url: {{domain}}/posts/:postId
   body: json
-  auth: inherit
+  auth: bearer
 }
 
 params:path {
   postId: {{post_id}}
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
 
 body:json {

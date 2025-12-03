@@ -7,11 +7,15 @@ meta {
 patch {
   url: {{domain}}/collaborations/:collaborationId
   body: json
-  auth: inherit
+  auth: bearer
 }
 
 params:path {
   collaborationId: {{collaboration_id}}
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
 
 body:json {
