@@ -44,6 +44,9 @@ export class CollaborationsService {
     // Add tags join
     query.leftJoinAndSelect("collaboration.tags", "tag");
 
+    // add skills join
+    query.leftJoinAndSelect("collaboration.skills", "skill");
+
     // Filter by tags if provided
     if (tags.length > 0) {
       query.andWhere("tag.title IN (:...tags)", { tags });
