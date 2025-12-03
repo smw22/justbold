@@ -15,13 +15,9 @@ export default function ServicesCard({ servicesData }: ServicesCardProps) {
   return (
     <div className="flex flex-col gap-4 p-4 m-auto w-[90%] border border-gray-300 rounded-3xl shadow-lg">
       <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-        <AvatarHeader
-          imageUrl={servicesData.user.profile_image}
-          imageSize={25}
-          title={servicesData.user.name}
-        />
+        <AvatarHeader imageUrl={servicesData.user.profile_image} imageSize={25} title={servicesData.user.name} />
 
-        <span className="text-lightgrey">#{servicesData.tag.title}</span>
+        <span className="text-lightgrey">#{servicesData.category}</span>
         <div>
           <Icon name="BookmarkEmpty" size={24}></Icon>
         </div>
@@ -38,13 +34,7 @@ export default function ServicesCard({ servicesData }: ServicesCardProps) {
             size={24}
             className="absolute top-4 right-4 bg-neutral-grey rounded-md text-white p-1"
           /> */}
-          {servicesData.media && (
-            <img
-              src={servicesData.media}
-              alt="service image"
-              className="w-full rounded-2xl"
-            />
-          )}
+          {servicesData.media && <img src={servicesData.media} alt="service image" className="w-full rounded-2xl" />}
         </div>
         <p className="line-clamp-3">{servicesData.content}</p>
         <div className="flex justify-between mt-2">

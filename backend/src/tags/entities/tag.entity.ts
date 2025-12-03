@@ -1,11 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  ManyToMany,
-} from "typeorm";
-import { Service } from "../../services/entities/service.entity";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from "typeorm";
 import { Post } from "../../posts/entities/post.entity";
 import { Collaboration } from "../../collaborations/entities/collaboration.entity";
 
@@ -18,9 +11,6 @@ export class Tag {
   title: string; // "recording", "mixing", etc.
 
   // Relations
-  @OneToMany(() => Service, (service) => service.tag)
-  services: Service[];
-
   @ManyToMany(() => Post, (post) => post.tags)
   posts: Post[];
 

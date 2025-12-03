@@ -9,8 +9,6 @@ export type Service = {
   media: string;
   price: number;
   location: string;
-  tag: {
-    title: string;
-  };
+  category: string;
   created: Date | string;
 };

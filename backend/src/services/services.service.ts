@@ -5,7 +5,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Service } from "./entities/service.entity";
 import { User } from "../users/entities/user.entity";
-import { Tag } from "../tags/entities/tag.entity";
 import { Review } from "../reviews/entities/review.entity";
 
 @Injectable()
@@ -15,8 +14,6 @@ export class ServicesService {
     private readonly servicesRepository: Repository<Service>,
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-    @InjectRepository(Tag)
-    private readonly tagsRepository: Repository<Tag>,
     @InjectRepository(Review)
     private readonly reviewsRepository: Repository<Review>
   ) {}
@@ -32,15 +29,6 @@ export class ServicesService {
       throw new NotFoundException(`User with ID ${createServiceDto.user_id} not found`);
     }
 
-    // Fetch the Tag entity
-    const tag = await this.tagsRepository.findOne({
-      where: { id: createServiceDto.tag_id },
-    });
-
-    if (!tag) {
-      throw new NotFoundException(`Tag with ID ${createServiceDto.tag_id} not found`);
-    }
-
     // Create service with entity references (not IDs)
     const service = this.servicesRepository.create({
       title: createServiceDto.title,
@@ -48,10 +36,10 @@ export class ServicesService {
       content: createServiceDto.content,
       price: createServiceDto.price,
       location: createServiceDto.location,
+      category: createServiceDto.category,
       user, // User entity object { id: "uuid", name: "John", ... }
-      tag, // Tag entity object { id: "uuid", title: "recording" }
     });
-    // TypeORM extracts user.id and tag.id to populate user_id and tag_id columns
+    // TypeORM extracts user.id to populate user_id column
 
     return this.servicesRepository.save(service);
   }
@@ -71,7 +59,7 @@ export class ServicesService {
     const skip = (page - 1) * limit;
 
     const [services, total] = await this.servicesRepository.findAndCount({
-      relations: ["user", "tag"],
+      relations: ["user"],
       order: { created: "DESC" },
       take: limit,
       skip: skip, // OFFSET
@@ -136,7 +124,6 @@ export class ServicesService {
     const qb = this.servicesRepository
       .createQueryBuilder("service")
       .leftJoinAndSelect("service.user", "user")
-      .leftJoinAndSelect("service.tag", "tag")
       .where("service.title LIKE :searchTerm", { searchTerm })
       .orderBy("service.created", "DESC")
       .skip(skip)
