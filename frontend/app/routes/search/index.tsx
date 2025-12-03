@@ -47,7 +47,8 @@ export default function SearchPage() {
     <div className="flex flex-col gap-3 py-2 px-2.5 max-w-4xl m-auto">
       <div>
         <Input
-          variant="onboarding"
+          variant="search"
+          icon="Search"
           placeholder="Search"
           type="text"
           value={searchQuery}
