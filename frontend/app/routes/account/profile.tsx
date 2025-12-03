@@ -99,7 +99,9 @@ function About({
         <h5 className="font-normal text-gray-400! text-sm">What I am looking for</h5>
         <div className="flex flex-row gap-1 mx-4 my-3">
           {profile.looking_for.map((str) => (
-            <p className={`inline-flex text-white bg-${profile.theme} capitalize px-3 py-1 rounded-full`}>{str}</p>
+            <p key={str} className={`inline-flex text-white bg-${profile.theme} capitalize px-3 py-1 rounded-full`}>
+              {str}
+            </p>
           ))}
         </div>
       </section>
