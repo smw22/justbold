@@ -1,6 +1,7 @@
 import Icon from "./icon";
 import Logo from "../assets/icons/artwork/Logo";
 import { useLocation, useNavigate } from "react-router";
+import HeaderBurgerMenu from "./HeaderBurgerMenu";
 
 export default function Header() {
   const location = useLocation();
@@ -8,7 +9,7 @@ export default function Header() {
   const isHomePage = location.pathname === "/";
 
   return (
-    <header className="outer-wrapper">
+    <header className="outer-wrapper sticky top-0 z-90">
       <nav className="flex justify-between items-center px-4 py-6">
         {/* navigate(-1) : Lets you go back to the previous page  */}
         {isHomePage ? (
@@ -26,7 +27,7 @@ export default function Header() {
             <Icon name="BellNotification" color="black" size={20} />
           </li>
           <li>
-            <Icon name="Menu" color="black" size={20} />
+            <HeaderBurgerMenu />
           </li>
         </ul>
       </nav>

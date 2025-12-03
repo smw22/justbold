@@ -94,6 +94,13 @@ body {
   margin-inline: auto;
 }
 
+body > div.bg-white header {
+  background-color: var(--color-white);
+}
+body > div.bg-light-grey header {
+  background-color: var(--color-light-grey);
+}
+
 /* Heading defaults */
 h1 {
   font-family: var(--font-sans);
