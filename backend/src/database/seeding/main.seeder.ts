@@ -137,8 +137,7 @@ export class MainSeeder implements Seeder {
         .fill("")
         .map(async () => {
           const user = faker.helpers.arrayElement(users);
-          const tag = faker.helpers.arrayElement(tags);
-          return serviceFactory.make({ user, tag });
+          return serviceFactory.make({ user });
         })
     );
     await dataSource.getRepository(Service).save(services);

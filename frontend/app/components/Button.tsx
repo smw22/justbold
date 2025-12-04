@@ -10,6 +10,8 @@ export default function Button({
   fullWidth,
   onClick,
   className,
+  disabled = false,
+  type = "button",
 }: {
   text: string;
   icon?: string;
@@ -17,12 +19,19 @@ export default function Button({
   fullWidth?: boolean;
   onClick?: () => void;
   className?: string;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 }) {
+  // Common disabled styles
+  const disabledStyles = disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : "";
+
   switch (variant) {
     case "primary":
       return (
         <button
-          className={`bg-primary-yellow text-black flex items-center justify-center gap-2 rounded-full px-4 py-2 hover:bg-primary-yellow-hover focus:bg-primary-yellow-pressed cursor-pointer transition-colors duration-400 ease-in-out ${fullWidth ? "w-full" : "w-fit"} ${className ?? ""}`}
+          type={type}
+          disabled={disabled}
+          className={`bg-primary-yellow text-black flex items-center justify-center gap-2 rounded-full px-4 py-2 hover:bg-primary-yellow-hover focus:bg-primary-yellow-pressed cursor-pointer transition-colors duration-400 ease-in-out ${fullWidth ? "w-full" : "w-fit"} ${disabledStyles} ${className ?? ""}`}
           onClick={onClick}
         >
           <Icon name={icon ? icon : ""} size={18} />
@@ -32,7 +41,9 @@ export default function Button({
     case "primary-glass":
       return (
         <button
-          className={`glass-button bg-primary-yellow text-white flex items-center justify-center gap-2 rounded-full px-4 py-2 cursor-pointer transition-colors duration-400 ease-in-out ${fullWidth ? "w-full" : "w-fit"} ${className ?? ""}`}
+          type={type}
+          disabled={disabled}
+          className={`glass-button bg-primary-yellow text-white flex items-center justify-center gap-2 rounded-full px-4 py-2 cursor-pointer transition-colors duration-400 ease-in-out ${fullWidth ? "w-full" : "w-fit"} ${disabledStyles} ${className ?? ""}`}
           onClick={onClick}
         >
           {text}
@@ -42,7 +53,9 @@ export default function Button({
     case "secondary":
       return (
         <button
-          className={`bg-transparent text-neutral-grey flex items-center justify-center gap-2 rounded-full px-4 py-2 hover:bg-primary-yellow-hover focus:bg-primary-yellow-semi-transparent cursor-pointer transition-colors duration-400 ease-in-out outline-1 outline-neutral-grey -outline-offset-1" ${fullWidth ? "w-full" : "w-fit"} ${className ?? ""}`}
+          type={type}
+          disabled={disabled}
+          className={`bg-transparent text-neutral-grey flex items-center justify-center gap-2 rounded-full px-4 py-2 hover:bg-primary-yellow-hover focus:bg-primary-yellow-semi-transparent cursor-pointer transition-colors duration-400 ease-in-out outline outline-1 outline-neutral-grey -outline-offset-1 ${fullWidth ? "w-full" : "w-fit"} ${disabledStyles} ${className ?? ""}`}
           onClick={onClick}
         >
           <Icon name={icon ? icon : ""} size={18} />
@@ -52,7 +65,9 @@ export default function Button({
     case "secondary-glass":
       return (
         <button
-          className={`bg-primary-yellow text-black flex items-center justify-center gap-2 text-sm rounded-full px-3 py-1 hover:bg-primary-yellow-hover focus:bg-primary-yellow-pressed cursor-pointer transition-colors duration-400 ease-in-out ${fullWidth ? "w-full" : "w-fit"} ${className ?? ""}`}
+          type={type}
+          disabled={disabled}
+          className={`bg-primary-yellow text-black flex items-center justify-center gap-2 text-sm rounded-full px-3 py-1 hover:bg-primary-yellow-hover focus:bg-primary-yellow-pressed cursor-pointer transition-colors duration-400 ease-in-out ${fullWidth ? "w-full" : "w-fit"} ${disabledStyles} ${className ?? ""}`}
           onClick={onClick}
         >
           <Icon name={icon ? icon : ""} size={18} />
@@ -62,7 +77,9 @@ export default function Button({
     case "context-menu":
       return (
         <button
-          className={`hover:bg-neutral-grey flex items-center justify-start gap-2 text-left rounded-2xl leading-tight transition-colors cursor-pointer p-2 duration-400 ease-in-out ${fullWidth ? "w-full" : "w-fit"} ${className ?? ""}`}
+          type={type}
+          disabled={disabled}
+          className={`hover:bg-neutral-grey flex items-center justify-start gap-2 text-left rounded-2xl leading-tight transition-colors cursor-pointer p-2 duration-400 ease-in-out ${fullWidth ? "w-full" : "w-fit"} ${disabledStyles} ${className ?? ""}`}
           onClick={onClick}
         >
           <Icon name={icon ? icon : ""} size={24} />
