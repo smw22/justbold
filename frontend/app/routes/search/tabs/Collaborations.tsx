@@ -15,16 +15,12 @@ export default function Collaborations({ query }: CollaborationsProps) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!query) {
-      setResults(null);
-      return;
-    }
-
     const fetchResults = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await apiFetch(`/search?query=${encodeURIComponent(query)}&category=all`);
+        const searchParams = query ? `query=${encodeURIComponent(query)}&category=all` : "limit=10&category=collaborations";
+        const response = await apiFetch(`/search?${searchParams}`);
         if (!response.ok) throw new Error("Search failed");
         const json = await response.json();
         setResults(json.data);
@@ -42,7 +38,7 @@ export default function Collaborations({ query }: CollaborationsProps) {
 
   if (loading) return <div className="text-xs text-(--lightgrey-text)">Loading...</div>;
   if (error) return <div className="text-xs text-red-500">{error}</div>;
-  if (!results) return null;
+  if (!results) return <div className="text-xs text-(--lightgrey-text)">Loading...</div>;
 
   const isEmpty =
     !results.people?.length && !results.collaborations?.length && !results.services?.length && !results.posts?.length;

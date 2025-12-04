@@ -26,15 +26,9 @@ export class SearchService {
   async search(searchQueryDto: SearchQueryDto) {
     const { query, category = SearchCategory.ALL, page = 1, limit = 10 } = searchQueryDto;
 
-    // If no search query, return empty arrays
+    // If no search query, return recent content
     if (!query || query.trim() === "") {
-      return {
-        people: [],
-        collaborations: [],
-        services: [],
-        tags: [],
-        posts: [],
-      };
+      return this.getRecentResults(limit);
     }
 
     const searchTerm = `%${query}%`;
@@ -157,5 +151,40 @@ export class SearchService {
       take: limit,
       skip,
     });
+  }
+
+  private async getRecentResults(limit: number) {
+    // Divide limit evenly among 4 categories
+    const limitPerCategory = Math.floor(limit / 4);
+
+    const [people, collaborations, services, posts] = await Promise.all([
+      this.usersRepository.find({
+        order: { created: "DESC" },
+        take: limitPerCategory,
+        select: ["id", "name", "profile_image", "location"],
+      }),
+      this.collaborationsRepository.find({
+        order: { created: "DESC" },
+        take: limitPerCategory,
+        relations: ["user", "tags", "genres"],
+      }),
+      this.servicesRepository.find({
+        order: { created: "DESC" },
+        take: limitPerCategory,
+        relations: ["user", "tag"],
+      }),
+      this.postsRepository.find({
+        order: { created: "DESC" },
+        take: limitPerCategory,
+        relations: ["user", "tags"],
+      }),
+    ]);
+
+    return {
+      people,
+      collaborations,
+      services,
+      posts,
+    };
   }
 }
