@@ -5,13 +5,17 @@ meta {
 }
 
 get {
-  url: {{domain}}/api/collaborations/:collaborationId
+  url: {{domain}}/collaborations/:collaborationId
   body: none
-  auth: inherit
+  auth: bearer
 }
 
 params:path {
   collaborationId: {{collaboration_id}}
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
 
 settings {

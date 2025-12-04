@@ -1,0 +1,24 @@
+meta {
+  name: Get Users Questions
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{domain}}/users/:userId/questions
+  body: none
+  auth: bearer
+}
+
+params:path {
+  userId: {{user_id}}
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

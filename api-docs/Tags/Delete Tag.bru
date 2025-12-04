@@ -5,13 +5,17 @@ meta {
 }
 
 delete {
-  url: {{domain}}/api/tags/:tagTitle
+  url: {{domain}}/tags/:tagTitle
   body: none
-  auth: inherit
+  auth: bearer
 }
 
 params:path {
   tagTitle: {{tag_title}}
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
 
 settings {

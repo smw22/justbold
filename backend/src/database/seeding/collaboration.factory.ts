@@ -10,6 +10,7 @@ export const CollaborationFactory = setSeederFactory(Collaboration, (faker: Fake
    * - User
    * - Genres
    * - Tags
+   * - Skills
    */
 
   collaboration.media = faker.image.url();

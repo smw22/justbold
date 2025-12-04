@@ -1,26 +1,61 @@
-import { Injectable } from '@nestjs/common';
-import { CreateGenreDto } from './dto/create-genre.dto';
-import { UpdateGenreDto } from './dto/update-genre.dto';
+import { Injectable, HttpException } from "@nestjs/common";
+import { CreateGenreDto } from "./dto/create-genre.dto";
+import { UpdateGenreDto } from "./dto/update-genre.dto";
+
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Genre } from "./entities/genre.entity";
 
 @Injectable()
 export class GenresService {
-  create(createGenreDto: CreateGenreDto) {
-    return 'This action adds a new genre';
+  constructor(
+    @InjectRepository(Genre)
+    private genresRepository: Repository<Genre>
+  ) {}
+
+  async create(createGenreDto: CreateGenreDto): Promise<Genre> {
+    const existingGenre = await this.genresRepository.findOneBy({
+      title: createGenreDto.title,
+    });
+    if (existingGenre) {
+      throw new HttpException("Genre already exists", 400);
+    }
+    const genre = await this.genresRepository.create(createGenreDto);
+    return this.genresRepository.save(genre);
   }
 
-  findAll() {
-    return `This action returns all genres`;
+  async findAll(): Promise<Genre[]> {
+    return this.genresRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} genre`;
+  async findOne(title: string): Promise<Genre> {
+    const genreData = await this.genresRepository.findOneBy({
+      title: title,
+    });
+    if (!genreData) {
+      throw new HttpException("Genre not found", 404);
+    }
+    return genreData;
   }
 
-  update(id: number, updateGenreDto: UpdateGenreDto) {
-    return `This action updates a #${id} genre`;
+  async update(title: string, updateGenreDto: UpdateGenreDto): Promise<Genre> {
+    const existingGenre = await this.genresRepository.findOneBy({
+      title: title,
+    });
+    if (!existingGenre) {
+      throw new HttpException("Genre not found", 404);
+    }
+    const genreData = this.genresRepository.merge(existingGenre, updateGenreDto);
+    return this.genresRepository.save(genreData);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} genre`;
+  async remove(title: string): Promise<Genre> {
+    const existingGenre = await this.genresRepository.findOneBy({
+      title: title,
+    });
+    if (!existingGenre) {
+      throw new HttpException("Genre not found", 404);
+    }
+    return this.genresRepository.remove(existingGenre);
   }
 }

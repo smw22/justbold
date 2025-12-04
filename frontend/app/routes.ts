@@ -5,8 +5,11 @@ export default [
     index("routes/home/home.tsx"),
 
     // Create
-    route("create", "routes/create/create.tsx"),
-    route("create/service", "routes/create/createService.tsx"), //This should be made with a parent route later (Outlet)
+    route("create", "routes/create/createLayout.tsx", [
+      index("routes/create/create.tsx"),
+      route("service", "routes/create/createService.tsx"), //This should be made with a parent route later (Outlet)
+      route("collaboration", "routes/create/createCollaboration.tsx"), //This should be made with a parent route later (Outlet)
+    ]),
 
     // Collaborations
     route("collaborations", "routes/collaborations/collaborations.tsx"),
@@ -21,7 +24,7 @@ export default [
 
     // Account
     route("profile/:profileId", "routes/account/profile.tsx"),
-    route("profile/:profileId/edit", "routes/account/profileEdit.tsx"),
+    route("profile/edit", "routes/account/profileEdit.tsx"),
 
     // Notifications
     route("notifications", "routes/notifications/notifications.tsx"),
