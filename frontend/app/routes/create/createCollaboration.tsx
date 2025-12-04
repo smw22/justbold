@@ -25,7 +25,8 @@ export async function clientAction({ request }: { request: Request }) {
   const genreIds = formData.getAll("genreIds").filter(Boolean) as string[];
   const paid = formData.get("paid") === "on" ? true : undefined;
   const location = formData.get("location") as string;
-  const skillIds = formData.getAll("skills").filter(Boolean) as string[];
+  const skillIds = formData.getAll("skillIds").filter(Boolean) as string[];
+  const role = formData.get("role") as string;
 
   const user_id = localStorage.getItem("user_id");
 
@@ -33,23 +34,27 @@ export async function clientAction({ request }: { request: Request }) {
     return { error: "User not logged in" };
   }
 
+  const CollabData = {
+    media,
+    title,
+    content,
+    role,
+    paid,
+    location,
+    genreIds,
+    tagIds,
+    skillIds,
+  };
+
+  console.log(CollabData);
+
   try {
     const response = await apiFetch(`/collaborations`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        user_id: user_id,
-        media,
-        title,
-        content,
-        genreIds,
-        tagIds,
-        skillIds,
-        paid,
-        location,
-      }),
+      body: JSON.stringify(CollabData),
     });
 
     if (!response.ok) {
@@ -92,7 +97,7 @@ export default function CreateCollaboration() {
         </p>
         <p className="flex flex-col gap-2">
           <label htmlFor="media">Media (Image/Video) *</label>
-          <input type="text" name="media" id="media" accept="image/*,video/*" className={inputStyle} required />
+          <input type="url" name="media" id="media" accept="image/*,video/*" className={inputStyle} required />
         </p>
         <p className="flex flex-col gap-2">
           <label htmlFor="content">Description *</label>
@@ -127,6 +132,10 @@ export default function CreateCollaboration() {
               </option>
             ))}
           </select>
+        </p>
+        <p className="flex flex-col gap-2">
+          <label htmlFor="role">Role *</label>
+          <input type="text" name="role" id="role" placeholder="e.g. Violin" className={inputStyle} required />
         </p>
         <p className="flex flex-col gap-2">
           <label htmlFor="paid" className="flex items-center gap-2">
