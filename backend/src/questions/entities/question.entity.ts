@@ -14,7 +14,7 @@ export class Question {
   @Column("text")
   question: string;
 
-  @Column("text", { nullable: true })
+  @Column("text", { default: null, nullable: true })
   answer: string;
 
   @CreateDateColumn()
