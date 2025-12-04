@@ -2,6 +2,10 @@ import { useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import Input from "~/components/Input";
 import ForYou from "./tabs/ForYou";
+import People from "./tabs/People";
+import Collaborations from "./tabs/Collaborations";
+import Services from "./tabs/Services";
+import Tags from "./tabs/Tags";
 
 const TABS = [
   { label: "For you", value: "all" },
@@ -38,6 +42,14 @@ export default function SearchPage() {
     switch (activeTab) {
       case "all":
         return <ForYou query={searchQuery} />;
+      case "people":
+        return <People query={searchQuery} />;
+      case "collaborations":
+        return <Collaborations query={searchQuery} />;
+      case "services":
+        return <Services query={searchQuery} />;
+      case "tags":
+        return <Tags query={searchQuery} />;
       default:
         return <ForYou query={searchQuery} />;
     }
