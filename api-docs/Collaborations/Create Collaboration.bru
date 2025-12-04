@@ -16,13 +16,14 @@ auth:bearer {
 
 body:json {
   {
-    "title": "Collaboration title",
-    "content": "This is the collaboration content",
-    "media": "http://localhost:3000/image",
-    "genre_ids": [],
-    "paid": "",
-    "tag_ids": "",
-    "user_id": "1"
+    "user_id": "string (uuid, required)",
+    "media": "string (optional)",
+    "title": "string (required)",
+    "content": "string (required)",
+    "genreIds": ["string (uuid, required, array)"],
+    "paid": true, // or false (optional)
+    "location": "string (optional)",
+    "tagIds": ["string (uuid, required, array)"]
   }
 }
 

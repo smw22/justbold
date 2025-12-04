@@ -1,10 +1,4 @@
-import {
-  IsString,
-  IsBoolean,
-  IsOptional,
-  IsArray,
-  IsUUID,
-} from "class-validator";
+import { IsString, IsBoolean, IsOptional, IsArray, IsUUID } from "class-validator";
 
 export class CreateCollaborationDto {
   @IsUUID()
@@ -35,4 +29,9 @@ export class CreateCollaborationDto {
   @IsArray()
   @IsUUID("4", { each: true })
   tagIds: string[];
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  skillIds?: string[];
 }
