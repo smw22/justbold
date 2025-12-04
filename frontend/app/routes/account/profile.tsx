@@ -23,12 +23,14 @@ export async function clientLoader({ params }: { params: { profileId: string } }
   const user_posts = await postsResponse.json();
   const reviews = await reviewsResponse.json();
   const questions = await questionsResponse.json();
+  const currentUsersProfile = localStorage.getItem("user_id") === params.profileId;
 
   return {
     profile,
     user_posts,
     reviews,
     questions,
+    currentUsersProfile,
   };
 }
 
@@ -74,7 +76,7 @@ export async function clientAction({ request, params }: { request: Request; para
 
 export default function Profile() {
   // Access the profile from the loader
-  const { profile, user_posts, reviews, questions } = useLoaderData();
+  const { profile, user_posts, reviews, questions, currentUsersProfile } = useLoaderData();
   const [tab, setTab] = useState(0);
 
   return (
@@ -88,6 +90,7 @@ export default function Profile() {
           post_count={user_posts.total_posts}
           image={profile.data.profile_image}
           theme={profile.data.theme}
+          currentUsersProfile={currentUsersProfile}
         />
       </div>
       {/* // Tabs component, "About" and "Posts" - the current tab is held as a number in a state. */}
