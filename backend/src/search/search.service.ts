@@ -55,12 +55,30 @@ export class SearchService {
 
       case SearchCategory.ALL:
       default:
+        const collabByTitle = await this.searchCollaborations(searchTerm, 0, 5);
+        const postsByTitle = await this.searchPosts(searchTerm, 0, 5);
+        const tagResults = await this.searchTags(searchTerm, 0, 5);
+
+        // Merge collaborations and posts from both title search and tag search
+        const allCollaborations = [
+          ...collabByTitle,
+          ...tagResults.collaborations.filter(
+            (tagCollab: any) => !collabByTitle.some((titleCollab: any) => titleCollab.id === tagCollab.id)
+            // Only add tag results that aren't already in title results (by checking ID)
+          ),
+        ].slice(0, 5);
+
+        const allPosts = [
+          ...postsByTitle,
+          ...tagResults.posts.filter((tagPost: any) => !postsByTitle.some((titlePost: any) => titlePost.id === tagPost.id)),
+        ].slice(0, 5);
+
         return {
-          people: await this.searchPeople(searchTerm, 0, 5), // Only 5 results per category
-          collaborations: await this.searchCollaborations(searchTerm, 0, 5),
+          people: await this.searchPeople(searchTerm, 0, 5),
+          collaborations: allCollaborations,
           services: await this.searchServices(searchTerm, 0, 5),
-          tags: await this.searchTags(searchTerm, 0, 5),
-          posts: await this.searchPosts(searchTerm, 0, 5),
+          tags: tagResults.tags,
+          posts: allPosts,
         };
     }
   }
@@ -76,7 +94,7 @@ export class SearchService {
 
   private async searchCollaborations(searchTerm: string, skip: number, limit: number) {
     return this.collaborationsRepository.find({
-      where: [{ title: ILike(searchTerm) }, { content: ILike(searchTerm) }, { location: ILike(searchTerm) }],
+      where: [{ title: ILike(searchTerm) }, { location: ILike(searchTerm) }],
       relations: ["user", "tags", "genres"],
       take: limit,
       skip,
@@ -85,7 +103,7 @@ export class SearchService {
 
   private async searchServices(searchTerm: string, skip: number, limit: number) {
     return this.servicesRepository.find({
-      where: [{ title: ILike(searchTerm) }, { content: ILike(searchTerm) }, { location: ILike(searchTerm) }],
+      where: [{ title: ILike(searchTerm) }, { location: ILike(searchTerm) }],
       relations: ["user", "tag"],
       take: limit,
       skip,
@@ -104,7 +122,7 @@ export class SearchService {
 
     const tagIds = tags.map((tag) => tag.id);
 
-    // Find collaborations with these tags
+    // Find collaborations with given tag
     const collaborations = await this.collaborationsRepository
       .createQueryBuilder("collaboration")
       .leftJoinAndSelect("collaboration.user", "user")
@@ -115,7 +133,7 @@ export class SearchService {
       .skip(skip)
       .getMany();
 
-    // Find posts with these tags
+    // Find posts with given tag
     const posts = await this.postsRepository
       .createQueryBuilder("post")
       .leftJoinAndSelect("post.user", "user")
@@ -134,7 +152,7 @@ export class SearchService {
 
   private async searchPosts(searchTerm: string, skip: number, limit: number) {
     return this.postsRepository.find({
-      where: [{ title: ILike(searchTerm) }, { content: ILike(searchTerm) }],
+      where: [{ title: ILike(searchTerm) }],
       relations: ["user", "tags"],
       take: limit,
       skip,
