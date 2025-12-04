@@ -1,15 +1,15 @@
 import { IsString, IsBoolean, IsOptional, IsArray, IsUUID } from "class-validator";
 
 export class CreateCollaborationDto {
-  @IsUUID()
-  user_id: string;
-
   @IsOptional()
   @IsString()
   media?: string;
 
   @IsString()
   title: string;
+
+  @IsString()
+  role: string;
 
   @IsString()
   content: string;
