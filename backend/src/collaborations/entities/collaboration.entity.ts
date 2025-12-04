@@ -28,7 +28,7 @@ export class Collaboration {
   @Column()
   title: string;
 
-  @Column("text")
+  @Column({ charset: "utf8mb4" })
   content: string;
 
   @Column("text")
