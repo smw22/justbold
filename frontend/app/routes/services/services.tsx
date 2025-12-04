@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate, useSearchParams } from "react-router";
+import { useLoaderData, useSearchParams } from "react-router";
 import ServicesCard from "./components/ServicesCard";
 import type { Service } from "~/types/services/servicesProps";
 import Pagination from "~/components/Pagination";

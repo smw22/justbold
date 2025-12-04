@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import Button from "./Button";
 
 export default function Pagination({
@@ -11,9 +11,12 @@ export default function Pagination({
   redirectRoute: string;
 }) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const handlePageChange = (newPage: number) => {
-    navigate(`${redirectRoute}?page=${newPage}`);
+    const params = new URLSearchParams(searchParams);
+    params.set("page", newPage.toString());
+    navigate(`${redirectRoute}?${params.toString()}`);
   };
 
   return (
