@@ -17,6 +17,6 @@ export class Question {
   @Column("text", { default: null, nullable: true })
   answer: string;
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @CreateDateColumn()
   created: Date;
 }

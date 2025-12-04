@@ -1,5 +1,5 @@
-import Button from "./Button";
-import Icon from "./icon";
+import Button from "~/components/Button";
+import Icon from "~/components/icon";
 
 export default function ProfileHeader({
   name,
