@@ -7,20 +7,13 @@ export default function CreateServiceForm({
   tags: Array<{ id: string; title: string }>;
   isSubmitting: boolean;
 }) {
-  const inputStyle = "bg-light-grey p-4 rounded-lg border border-neutral-grey";
+  const inputStyle = "bg-light-grey p-4 rounded-lg border border-neutral-grey w-full";
 
   return (
     <Form method="post" className="flex flex-col gap-4">
       <p className="flex flex-col gap-2">
         <label htmlFor="title">Title *</label>
-        <input
-          type="text"
-          name="title"
-          id="title"
-          placeholder="Studio Session"
-          className={inputStyle}
-          required
-        />
+        <input type="text" name="title" id="title" placeholder="Studio Session" className={inputStyle} required />
       </p>
 
       {/*NOTE: We need a imageUploader component here or placeholder images with a select input */}
@@ -49,37 +42,17 @@ export default function CreateServiceForm({
 
       <p className="flex flex-col gap-2">
         <label htmlFor="content">Description *</label>
-        <textarea
-          name="content"
-          id="content"
-          placeholder="Write your description here..."
-          className={inputStyle}
-          required
-        />
+        <textarea name="content" id="content" placeholder="Write your description here..." className={inputStyle} required />
       </p>
 
       <p className="flex flex-col gap-2">
         <label htmlFor="price">Price *</label>
-        <input
-          type="number"
-          name="price"
-          id="price"
-          placeholder="100"
-          className={inputStyle}
-          required
-        />
+        <input type="number" name="price" id="price" placeholder="100" className={inputStyle} required />
       </p>
 
       <p className="flex flex-col gap-2">
         <label htmlFor="location">Location *</label>
-        <input
-          type="text"
-          name="location"
-          id="location"
-          placeholder="Odense"
-          className={inputStyle}
-          required
-        />
+        <input type="text" name="location" id="location" placeholder="Odense" className={inputStyle} required />
       </p>
 
       {/* NOTE: had to use normal button because of missing type prop in button component, maybe fix in future */}

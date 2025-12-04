@@ -1,34 +1,97 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { GenresService } from './genres.service';
-import { CreateGenreDto } from './dto/create-genre.dto';
-import { UpdateGenreDto } from './dto/update-genre.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { GenresService } from "./genres.service";
+import { CreateGenreDto } from "./dto/create-genre.dto";
+import { UpdateGenreDto } from "./dto/update-genre.dto";
 
-@Controller('genres')
+@Controller("genres")
 export class GenresController {
   constructor(private readonly genresService: GenresService) {}
 
   @Post()
-  create(@Body() createGenreDto: CreateGenreDto) {
-    return this.genresService.create(createGenreDto);
+  async create(@Body() createGenreDto: CreateGenreDto) {
+    try {
+      const data = await this.genresService.create(createGenreDto);
+      return {
+        success: true,
+        data,
+        message: "Genre created successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 
   @Get()
-  findAll() {
-    return this.genresService.findAll();
+  async findAll() {
+    try {
+      const data = await this.genresService.findAll();
+      return {
+        success: true,
+        data,
+        message: "Genres retrieved successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.genresService.findOne(+id);
+  @Get(":title")
+  async findOne(@Param("title") title: string) {
+    try {
+      const normalizedTitle = title.replace(/-/g, " ");
+      const data = await this.genresService.findOne(normalizedTitle);
+      return {
+        success: true,
+        data,
+        message: "Genre retrieved successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGenreDto: UpdateGenreDto) {
-    return this.genresService.update(+id, updateGenreDto);
+  @Patch(":title")
+  async update(@Param("title") title: string, @Body() updateGenreDto: UpdateGenreDto) {
+    try {
+      const normalizedTitle = title.replace(/-/g, " ");
+      const data = await this.genresService.update(normalizedTitle, updateGenreDto);
+      return {
+        success: true,
+        data,
+        message: "Genre updated successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.genresService.remove(+id);
+  @Delete(":title")
+  async remove(@Param("title") title: string) {
+    try {
+      const normalizedTitle = title.replace(/-/g, " ");
+      const data = await this.genresService.remove(normalizedTitle);
+      return {
+        success: true,
+        data,
+        message: "Genre removed successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 }
