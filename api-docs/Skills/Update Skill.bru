@@ -1,0 +1,31 @@
+meta {
+  name: Update Skill
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{domain}}/skills/:skillTitle
+  body: json
+  auth: bearer
+}
+
+params:path {
+  skillTitle: 
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "title": "Updates Service title",
+    "content": "updated content"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
