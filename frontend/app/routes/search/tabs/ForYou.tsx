@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import Icon from "~/components/icon";
+import Button from "~/components/Button";
+import { apiFetch } from "~/lib/apiFetch";
 
 dayjs.extend(relativeTime);
 
@@ -21,7 +24,7 @@ export default function ForYou({ query }: ForYouProps) {
     const fetchResults = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/search?query=${encodeURIComponent(query)}&category=all`);
+        const response = await apiFetch(`/search?query=${encodeURIComponent(query)}&category=all`);
         const json = await response.json();
         setResults(json.data);
       } catch (error) {
@@ -45,16 +48,24 @@ export default function ForYou({ query }: ForYouProps) {
           <p className="font-medium text-xs text-neutral-grey">People</p>
           <div className="flex flex-col gap-3">
             {results.people.map((person: any) => (
-              <div key={person.id} className="flex items-center gap-1.5">
-                <img
-                  src={person.profile_image || "placeholder.jpg"}
-                  alt={person.name}
-                  className="rounded-full w-12 h-12 object-cover"
-                />
-                <div className="flex flex-col gap-1.5">
-                  <p className="text-neutral-grey font-medium text-sm">{person.name}</p>
-                  <p className="text-(--lightgrey-text) text-xs">{person.location}</p>
+              <div key={person.id} className="flex items-center gap-1.5 w-full justify-between">
+                <div className="flex gap-1.5">
+                  <img
+                    src={person.profile_image || "placeholder.jpg"}
+                    alt={person.name}
+                    className="rounded-full w-12 h-12 object-cover"
+                  />
+                  <div className="flex flex-col gap-1.5">
+                    <p className="text-neutral-grey font-medium text-sm">{person.name}</p>
+                    <p className="text-(--lightgrey-text) text-xs">{person.location}</p>
+                  </div>
                 </div>
+                <Button
+                  variant="primary"
+                  text="Connect"
+                  icon="AddCircle"
+                  className="flex flex-row-reverse text-sm font-medium"
+                />
               </div>
             ))}
           </div>
@@ -99,14 +110,21 @@ export default function ForYou({ query }: ForYouProps) {
           <div className="flex flex-col gap-3">
             {results.services.map((service: any) => (
               <div key={service.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <img src={service.user.profile_image} alt={service.user.name} className="h-5 w-5 object-cover rounded-full" />
-                  <p className="text-xs text-(--lightgrey-text)">
-                    <span className="text-neutral-grey">{service.user.name}</span> looking for
-                    {service.user.looking_for.map((looking_for: any) => (
-                      <span key={looking_for}> #{looking_for}</span>
-                    ))}
-                  </p>
+                <div className="flex items-center gap-1.5 w-full justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <img
+                      src={service.user.profile_image}
+                      alt={service.user.name}
+                      className="h-5 w-5 object-cover rounded-full"
+                    />
+                    <p className="text-xs text-(--lightgrey-text)">
+                      <span className="text-neutral-grey">{service.user.name}</span> looking for
+                      {service.user.looking_for.map((looking_for: any) => (
+                        <span key={looking_for}> #{looking_for}</span>
+                      ))}
+                    </p>
+                  </div>
+                  <Icon name="HomeSale" size={24} className="min-h-6 min-w-6" />
                 </div>
                 <div className="h-px bg-black/15 mx-9 my-2"></div>
                 <h4>{service.title}</h4>
