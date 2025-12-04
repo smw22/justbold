@@ -6,18 +6,39 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { Collaboration } from "./entities/collaboration.entity";
-import { DataSource } from "typeorm/browser";
+import { Genre } from "../genres/entities/genre.entity";
+import { Tag } from "../tags/entities/tag.entity";
+import { Skill } from "../skills/entities/skill.entity";
 
 @Injectable()
 export class CollaborationsService {
   constructor(
     @InjectRepository(Collaboration)
-    private readonly collaborationRepository: Repository<Collaboration>
+    private readonly collaborationRepository: Repository<Collaboration>,
+    @InjectRepository(Genre)
+    private readonly genresRepository: Repository<Genre>,
+    @InjectRepository(Tag)
+    private readonly tagsRepository: Repository<Tag>,
+    @InjectRepository(Skill)
+    private readonly skillsRepository: Repository<Skill>
   ) {}
 
-  async create(createCollaborationDto: CreateCollaborationDto): Promise<Collaboration> {
-    const collabData = await this.collaborationRepository.create(createCollaborationDto);
-    return this.collaborationRepository.save(collabData);
+  async create(createCollaborationDto: CreateCollaborationDto, userId: string): Promise<Collaboration> {
+    const genres = createCollaborationDto.genreIds
+      ? await this.genresRepository.findByIds(createCollaborationDto.genreIds)
+      : [];
+    const tags = createCollaborationDto.tagIds ? await this.tagsRepository.findByIds(createCollaborationDto.tagIds) : [];
+    const skills = createCollaborationDto.skillIds
+      ? await this.skillsRepository.findByIds(createCollaborationDto.skillIds)
+      : [];
+    const collabData = this.collaborationRepository.create({
+      ...createCollaborationDto,
+      user: { id: userId },
+      genres,
+      tags,
+      skills,
+    });
+    return await this.collaborationRepository.save(collabData);
   }
 
   async findAll(
@@ -71,6 +92,9 @@ export class CollaborationsService {
   }
 
   async update(id: string, updateCollaborationDto: UpdateCollaborationDto): Promise<Collaboration> {
+    if (!updateCollaborationDto || Object.keys(updateCollaborationDto).length === 0) {
+      throw new HttpException("No update values provided", 400);
+    }
     const existingCollab = await this.collaborationRepository.findOneBy({ id });
     if (!existingCollab) {
       throw new HttpException("Collaboration not found", 404);

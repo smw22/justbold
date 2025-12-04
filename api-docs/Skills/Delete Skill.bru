@@ -1,0 +1,24 @@
+meta {
+  name: Delete Skill
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{domain}}/skills/:skillTitle
+  body: none
+  auth: bearer
+}
+
+params:path {
+  skillTitle: 
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

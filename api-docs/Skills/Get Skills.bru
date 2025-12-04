@@ -1,0 +1,20 @@
+meta {
+  name: Get Skills
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{domain}}/skills
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
