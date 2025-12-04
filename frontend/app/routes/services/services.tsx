@@ -59,7 +59,7 @@ export default function Services() {
     }, 300);
 
     return () => clearTimeout(debounce);
-  }, [searchQuery, setSearchParams]);
+  }, [searchQuery, setSearchParams, searchParams.toString()]);
 
   return (
     <div className="flex flex-col gap-4 outer-wrapper">
@@ -75,9 +75,7 @@ export default function Services() {
         />
         {searchQuery && (
           <p className="text-xs text-neutral-grey mt-2">
-            {services.length > 0
-              ? `Found ${services.length} of ${services.length > 0 ? services.length : "no"} results for "${searchQuery}"`
-              : `No results for "${searchQuery}"`}
+            {services.length > 0 ? `Found ${services.length} results for "${searchQuery}"` : `No results for "${searchQuery}"`}
           </p>
         )}
       </div>

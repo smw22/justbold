@@ -2,34 +2,7 @@ import { redirect, useLoaderData, useActionData, useNavigation } from "react-rou
 import AvatarHeader from "../services/components/AvatarHeader";
 import CreateServiceForm from "./components/CreateServiceForm";
 import { apiFetch } from "~/lib/apiFetch";
-
-const categories = [
-  "Recording Studio",
-  "Mixing & Mastering",
-  "Music Production",
-  "Songwriting",
-  "Vocal Coaching",
-  "Guitar Lessons",
-  "Piano Lessons",
-  "Drum Lessons",
-  "Bass Lessons",
-  "Music Theory",
-  "Audio Engineering",
-  "Beat Making",
-  "Session Musician",
-  "Live Performance",
-  "DJ Services",
-  "Album Artwork",
-  "Music Video Production",
-  "Photography",
-  "Concert Promotion",
-  "Music Marketing",
-  "Equipment Rental",
-  "Rehearsal Space",
-  "Sound Design",
-  "Podcast Editing",
-  "Instrument Repair",
-];
+import { categories } from "~/types/services/categories";
 
 export async function clientLoader(): Promise<{}> {
   const userId = "888fe723-82fd-4df5-b39f-ac59ee87a9f1"; // Replace with actual logic to get current user ID

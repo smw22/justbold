@@ -10,7 +10,7 @@ export const ServiceFactory = setSeederFactory(Service, (faker: Faker) => {
   service.media = faker.image.url();
   service.location = faker.address.city();
   service.category = faker.helpers.arrayElement([
-    "Art",
+    "art",
     "recording",
     "rehearsal_space",
     "music_lessons",

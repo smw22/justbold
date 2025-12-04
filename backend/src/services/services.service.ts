@@ -118,13 +118,19 @@ export class ServicesService {
     }
 
     // % wildcard for partial matching (it searches everything that contains the term)
-    const searchTerm = `%${search}%`;
+    // limit length, strip control chars and escape LIKE wildcards (%,_ and backslash)
+    const maxLen = 100;
+    // eslint-disable-next-line no-control-regex
+    const cleaned = search.slice(0, maxLen).replace(/[\x00-\x1f\x7f]/g, ""); // remove control chars
+    const escaped = cleaned.replace(/[\\%_]/g, "\\$&");
+    const searchTerm = `%${escaped}%`;
 
     // Using QueryBuilder (more flexible than find())
     const qb = this.servicesRepository
       .createQueryBuilder("service")
       .leftJoinAndSelect("service.user", "user")
-      .where("service.title LIKE :searchTerm", { searchTerm })
+      // This simple LIKE approach may need optimization for production with many services
+      .where("service.title LIKE :searchTerm ESCAPE '\\'", { searchTerm })
       .orderBy("service.created", "DESC")
       .skip(skip)
       .take(limit);

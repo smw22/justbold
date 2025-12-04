@@ -18,9 +18,9 @@ export default function ServicesCard({ servicesData }: ServicesCardProps) {
         <AvatarHeader imageUrl={servicesData.user.profile_image} imageSize={25} title={servicesData.user.name} />
 
         <span className="text-lightgrey">#{servicesData.category}</span>
-        <div>
+        <button aria-label="Bookmark service" type="button" className="bg-transparent border-none p-0 m-0 cursor-pointer">
           <Icon name="BookmarkEmpty" size={24}></Icon>
-        </div>
+        </button>
       </div>
 
       <Link to={`${servicesData.id}`} className="flex flex-col gap-2">
