@@ -51,7 +51,7 @@ export class SearchService {
         return { services: await this.searchServices(searchTerm, skip, limit) };
 
       case SearchCategory.TAGS:
-        return { tags: await this.searchTags(searchTerm, skip, limit) };
+        return await this.searchTags(searchTerm, skip, limit);
 
       case SearchCategory.ALL:
       default:
@@ -93,11 +93,43 @@ export class SearchService {
   }
 
   private async searchTags(searchTerm: string, skip: number, limit: number) {
-    return this.tagsRepository.find({
+    const tags = await this.tagsRepository.find({
       where: { title: ILike(searchTerm) },
-      take: limit,
-      skip,
+      select: ["id", "title"],
     });
+
+    if (tags.length === 0) {
+      return { tags: [], collaborations: [], posts: [] };
+    }
+
+    const tagIds = tags.map((tag) => tag.id);
+
+    // Find collaborations with these tags
+    const collaborations = await this.collaborationsRepository
+      .createQueryBuilder("collaboration")
+      .leftJoinAndSelect("collaboration.user", "user")
+      .leftJoinAndSelect("collaboration.tags", "tags")
+      .leftJoinAndSelect("collaboration.genres", "genres")
+      .where("tags.id IN (:...tagIds)", { tagIds })
+      .take(limit)
+      .skip(skip)
+      .getMany();
+
+    // Find posts with these tags
+    const posts = await this.postsRepository
+      .createQueryBuilder("post")
+      .leftJoinAndSelect("post.user", "user")
+      .leftJoinAndSelect("post.tags", "tags")
+      .where("tags.id IN (:...tagIds)", { tagIds })
+      .take(limit)
+      .skip(skip)
+      .getMany();
+
+    return {
+      tags,
+      collaborations,
+      posts,
+    };
   }
 
   private async searchPosts(searchTerm: string, skip: number, limit: number) {
