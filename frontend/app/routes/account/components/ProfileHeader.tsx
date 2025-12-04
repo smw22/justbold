@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import ContextMenu from "./ContextMenu";
-import Button from "./Button";
-import Icon from "./icon";
+import ContextMenu from "~/components/ContextMenu";
+import Button from "~/components/Button";
+import Icon from "~/components/icon";
 
 export default function ProfileHeader({
   name,
