@@ -1,0 +1,26 @@
+meta {
+  name: Create Genre
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{domain}}/genres
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "title": "Gamer 1"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

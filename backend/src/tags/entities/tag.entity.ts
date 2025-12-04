@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  ManyToMany,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany } from "typeorm";
 import { Service } from "../../services/entities/service.entity";
 import { Post } from "../../posts/entities/post.entity";
 import { Collaboration } from "../../collaborations/entities/collaboration.entity";
