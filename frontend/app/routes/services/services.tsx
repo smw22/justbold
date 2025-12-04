@@ -26,6 +26,10 @@ export async function clientLoader({ request }: { request: Request }): Promise<{
 
   const result = await response.json();
 
+  if (!result.success || !result.data) {
+    throw new Error(result.message || "Failed to load services");
+  }
+
   return {
     services: result.data.services,
     total: result.data.total,
@@ -53,13 +57,15 @@ export default function Services() {
       }
 
       // Reset to page 1 on new search
-      params.delete("page");
+      if (searchQuery !== initialQuery) {
+        params.delete("page");
+      }
 
       setSearchParams(params);
     }, 300);
 
     return () => clearTimeout(debounce);
-  }, [searchQuery, setSearchParams, searchParams.toString()]);
+  }, [searchQuery, setSearchParams, initialQuery]);
 
   return (
     <div className="flex flex-col gap-4 outer-wrapper">

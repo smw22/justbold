@@ -41,7 +41,7 @@ export default function ServicesDetail() {
       <div className="flex items-center justify-between mb-4">
         <AvatarHeader imageUrl={service.user.profile_image} imageSize={40} title={service.user.name} />
 
-        <span className="text-lightgrey">#{service.tag.title}</span>
+        <span className="text-lightgrey">#{service.category}</span>
         <div>
           <Icon name="BookmarkEmpty" size={24}></Icon>
         </div>

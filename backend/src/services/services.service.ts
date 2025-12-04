@@ -130,7 +130,7 @@ export class ServicesService {
       .createQueryBuilder("service")
       .leftJoinAndSelect("service.user", "user")
       // This simple LIKE approach may need optimization for production with many services
-      .where("service.title LIKE :searchTerm ESCAPE '\\'", { searchTerm })
+      .where("service.title LIKE :searchTerm ESCAPE '\\\\'", { searchTerm })
       .orderBy("service.created", "DESC")
       .skip(skip)
       .take(limit);

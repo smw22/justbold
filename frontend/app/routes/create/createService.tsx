@@ -5,8 +5,7 @@ import { apiFetch } from "~/lib/apiFetch";
 import { categories } from "~/types/services/categories";
 
 export async function clientLoader(): Promise<{}> {
-  // TODO: Replace with actual user ID from authentication context
-  const userId = "888fe723-82fd-4df5-b39f-ac59ee87a9f1";
+  const userId = localStorage.getItem("user_id");
 
   const userResponse = await apiFetch(`/users/${userId}`);
 
@@ -28,7 +27,7 @@ export async function clientAction({ request }: { request: Request }) {
   const price = formData.get("price") as string;
   const location = formData.get("location") as string;
 
-  const user_id = "888fe723-82fd-4df5-b39f-ac59ee87a9f1"; // NOTE: Replace with actual logic to get current user ID when we add auth
+  const user_id = localStorage.getItem("user_id");
 
   if (!title || !content || !category || !price || !location) {
     console.error("Error creating service; Missing fields:", {
