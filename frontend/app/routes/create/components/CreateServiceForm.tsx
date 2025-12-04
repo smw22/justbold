@@ -1,13 +1,12 @@
 import { Form } from "react-router";
 
-export default function CreateServiceForm({ 
-  categories, 
-  isSubmitting 
-}: { 
-  categories: string[]; 
-  isSubmitting: boolean;
-}) {
+export default function CreateServiceForm({ categories, isSubmitting }: { categories: string[]; isSubmitting: boolean }) {
   const inputStyle = "bg-light-grey p-4 rounded-lg border border-neutral-grey w-full";
+  const formatCategory = (category: string) =>
+    category
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
 
   return (
     <Form method="post" className="flex flex-col gap-4">
@@ -34,7 +33,7 @@ export default function CreateServiceForm({
           <option value="">-- Select a category --</option>
           {categories.map((category) => (
             <option key={category} value={category}>
-              {category}
+              {formatCategory(category)}
             </option>
           ))}
         </select>
