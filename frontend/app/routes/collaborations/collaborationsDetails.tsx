@@ -99,11 +99,15 @@ function CollabGenres({ genres }: { genres: { title: string }[] }) {
   );
 }
 
-function CollabSkills() {
+function CollabSkills({ skills }: { skills: { title: string }[] }) {
   return (
     <div className="flex flex-col gap-4">
-      <h3>Skills</h3>
-      <div className="flex items-center gap-2 flex-wrap  bg-red-400 p-8 rounded">Mangler data</div>
+      <h3>Must have skills</h3>
+      <div className="flex items-center gap-2 flex-wrap">
+        {skills.map((skill) => (
+          <Badge key={skill.title} color="header-bg-1" text={skill.title} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -127,7 +131,7 @@ export default function CollaborationDetails() {
       <CollabContent content={collab.content} />
       <CollabChat collabId={collab.id} />
       <CollabGenres genres={collab.genres} />
-      <CollabSkills />
+      <CollabSkills skills={collab.skills} />
     </div>
   );
 }

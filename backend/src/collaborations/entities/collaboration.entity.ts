@@ -11,6 +11,7 @@ import {
 import { User } from "../../users/entities/user.entity";
 import { Genre } from "../../genres/entities/genre.entity";
 import { Tag } from "../../tags/entities/tag.entity";
+import { Skill } from "../../skills/entities/skill.entity";
 
 @Entity()
 export class Collaboration {
@@ -49,4 +50,8 @@ export class Collaboration {
   @ManyToMany(() => Tag, { eager: true })
   @JoinTable({ name: "collaboration_tags" })
   tags: Tag[];
+
+  @ManyToMany(() => Skill, { eager: true })
+  @JoinTable({ name: "collaboration_skills" })
+  skills: Skill[];
 }

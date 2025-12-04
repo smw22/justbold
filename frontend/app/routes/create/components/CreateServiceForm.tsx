@@ -7,7 +7,7 @@ export default function CreateServiceForm({
   categories: string[]; 
   isSubmitting: boolean;
 }) {
-  const inputStyle = "bg-light-grey p-4 rounded-lg border border-neutral-grey";
+  const inputStyle = "bg-light-grey p-4 rounded-lg border border-neutral-grey w-full";
 
   return (
     <Form method="post" className="flex flex-col gap-4">
