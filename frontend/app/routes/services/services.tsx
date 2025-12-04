@@ -36,7 +36,7 @@ export async function clientLoader({ request }: { request: Request }): Promise<{
 }
 
 export default function Services() {
-  const { services, currentPage, totalPages, query: initialQuery } = useLoaderData();
+  const { services, currentPage, totalPages, total, query: initialQuery } = useLoaderData();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(initialQuery || "");
@@ -75,7 +75,9 @@ export default function Services() {
         />
         {searchQuery && (
           <p className="text-xs text-neutral-grey mt-2">
-            {services.length > 0 ? `Found ${services.length} results for "${searchQuery}"` : `No results for "${searchQuery}"`}
+            {total > 0
+              ? `Found ${total} result${total !== 1 ? "s" : ""} for "${searchQuery}"`
+              : `No results for "${searchQuery}"`}
           </p>
         )}
       </div>

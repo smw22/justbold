@@ -5,7 +5,8 @@ import { apiFetch } from "~/lib/apiFetch";
 import { categories } from "~/types/services/categories";
 
 export async function clientLoader(): Promise<{}> {
-  const userId = "888fe723-82fd-4df5-b39f-ac59ee87a9f1"; // Replace with actual logic to get current user ID
+  // TODO: Replace with actual user ID from authentication context
+  const userId = "888fe723-82fd-4df5-b39f-ac59ee87a9f1";
 
   const userResponse = await apiFetch(`/users/${userId}`);
 
