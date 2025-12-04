@@ -1,0 +1,24 @@
+meta {
+  name: Get One Service
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{domain}}/services/:servicesId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  servicesId: {{service_id}}
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

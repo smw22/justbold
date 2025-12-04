@@ -1,6 +1,7 @@
 import type { CommentType } from "./comment";
 import type { ProfileType } from "./profile";
 export interface PostType {
+  id: string;
   user_id: string;
   title: string;
   content: string;

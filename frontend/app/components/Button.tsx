@@ -1,12 +1,7 @@
 import Icon from "./icon";
 
 // Using a type union (recommended for simple cases)
-type ButtonVariant =
-  | "primary"
-  | "primary-glass"
-  | "secondary"
-  | "secondary-glass"
-  | "context-menu";
+type ButtonVariant = "primary" | "primary-glass" | "secondary" | "secondary-glass" | "context-menu";
 
 export default function Button({
   text,
@@ -47,7 +42,7 @@ export default function Button({
     case "secondary":
       return (
         <button
-          className={`bg-transparent text-neutral-grey flex items-center justify-center gap-2 rounded-full px-4 py-2 hover:bg-primary-yellow-hover focus:bg-primary-yellow-semi-transparent cursor-pointer transition-colors duration-400 ease-in-out outline outline-1 outline-neutral-grey -outline-offset-1" ${fullWidth ? "w-full" : "w-fit"} ${className ?? ""}`}
+          className={`bg-transparent text-neutral-grey flex items-center justify-center gap-2 rounded-full px-4 py-2 hover:bg-primary-yellow-hover focus:bg-primary-yellow-semi-transparent cursor-pointer transition-colors duration-400 ease-in-out outline-1 outline-neutral-grey -outline-offset-1" ${fullWidth ? "w-full" : "w-fit"} ${className ?? ""}`}
           onClick={onClick}
         >
           <Icon name={icon ? icon : ""} size={18} />

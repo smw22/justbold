@@ -5,13 +5,17 @@ meta {
 }
 
 patch {
-  url: {{domain}}/api/tags/:tagTitle
+  url: {{domain}}/tags/:tagTitle
   body: json
-  auth: inherit
+  auth: bearer
 }
 
 params:path {
   tagTitle: {{tag_title}}
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
 
 body:json {

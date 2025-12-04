@@ -56,31 +56,14 @@ export default function Step1({ onNext, onSkip, onLogin }: Step1Props) {
           onChange={(e) => setConfirmPassword(e.target.value)}
           name="confirmPassword"
         />
-        <Button
-          text="Continue"
-          variant="primary"
-          onClick={onNext}
-          className="mt-1.5 w-fit self-center"
-        />
+        <Button text="Continue" variant="primary" onClick={onNext} className="mt-1.5 w-fit self-center" />
       </form>
       <p>or</p>
-      <Button
-        text="Sign up with Google"
-        variant="secondary"
-        className="text-bold"
-      />
-      <Button
-        text="Sign up with AppleID"
-        variant="secondary"
-        className="text-bold"
-      />
+      <Button text="Sign up with Google" variant="secondary" className="font-bold" />
+      <Button text="Sign up with AppleID" variant="secondary" className="font-bold" />
       <div>
         <span>Already have an account? </span>
-        <Link
-          to={"/login"}
-          onClick={onLogin}
-          className="cursor-pointer text-[#007AFF]"
-        >
+        <Link to={"/login"} onClick={onLogin} className="cursor-pointer text-[#007AFF]">
           Log In
         </Link>
       </div>

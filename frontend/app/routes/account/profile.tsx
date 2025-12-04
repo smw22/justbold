@@ -4,13 +4,13 @@ import ProfileHeader from "./components/ProfileHeader";
 import Tabs from "~/components/Tabs";
 import About from "./components/About";
 import Posts from "./components/Posts";
+import { apiFetch } from "~/lib/apiFetch";
 
 export async function clientLoader({ params }: { params: { profileId: string } }) {
-  const apiUrl = import.meta.env.VITE_API_URL;
-  const profileResponse = await fetch(`${apiUrl}/users/${params.profileId}`);
-  const postsResponse = await fetch(`${apiUrl}/users/${params.profileId}/posts`);
-  const reviewsResponse = await fetch(`${apiUrl}/users/${params.profileId}/reviews`);
-  const questionsResponse = await fetch(`${apiUrl}/users/${params.profileId}/questions`);
+  const profileResponse = await apiFetch(`/users/${params.profileId}`);
+  const postsResponse = await apiFetch(`/users/${params.profileId}/posts`);
+  const reviewsResponse = await apiFetch(`/users/${params.profileId}/reviews`);
+  const questionsResponse = await apiFetch(`/users/${params.profileId}/questions`);
   if (!profileResponse.ok || !postsResponse.ok || !reviewsResponse.ok || !questionsResponse.ok) {
     throw new Error("Unknown error.");
   }
@@ -79,7 +79,7 @@ export default function Profile() {
 
   return (
     <div className="outer-wrapper">
-      <div className="">
+      <div className="px-4">
         {/* // The profile header component */}
         <ProfileHeader
           name={profile.data.name}
@@ -89,20 +89,15 @@ export default function Profile() {
           image={profile.data.profile_image}
           theme={profile.data.theme}
         />
-        {/* // Tabs component, "About" and "Posts" - the current tab is held as a number in a state. */}
-        <Tabs tabs={["About", "Posts"]} currentTab={tab} setTab={(e) => setTab(e)} />
-        {/* // if tab is 0 we show about - otherwise we show posts. */}
-        {tab === 0 ? (
-          <About
-            profile={profile.data}
-            reviews={reviews.data}
-            questions={questions.data}
-            avg_user_rating={reviews.avg_rating}
-          />
-        ) : (
-          <Posts posts={user_posts.data} />
-        )}
       </div>
+      {/* // Tabs component, "About" and "Posts" - the current tab is held as a number in a state. */}
+      <Tabs tabs={["About", "Posts"]} currentTab={tab} setTab={(e) => setTab(e)} />
+      {/* // if tab is 0 we show about - otherwise we show posts. */}
+      {tab === 0 ? (
+        <About profile={profile.data} reviews={reviews.data} questions={questions.data} avg_user_rating={reviews.avg_rating} />
+      ) : (
+        <Posts posts={user_posts.data} />
+      )}
     </div>
   );
 }

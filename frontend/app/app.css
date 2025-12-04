@@ -29,6 +29,7 @@
   --color-light-grey: oklch(0.97 0 0);
   --color-neutral-grey: oklch(0.4 0 0);
   --color-melting-glacier: oklch(0.94 0 0);
+  --color-tab-bar: oklch(0.1 0 0 / 0.7);
 
   /* Accent colors */
   --color-maroon: oklch(0.3 0.12 25);
@@ -57,6 +58,24 @@
   --fw-normal: 400;
 
   --aspect-post: 4 / 3;
+
+  --text-xxl: 24px;
+  --text-xxl--line-height: 24px;
+
+  --text-xl: 20px;
+  --text-xl--line-height: 30px;
+
+  --text-lg: 18px;
+  --text-lg--line-height: 19px;
+
+  --text-md: 16px;
+  --text-md--line-height: normal;
+
+  --text-sm: 14px;
+  --text-sm--line-height: 135%;
+
+  --text-xs: 12px;
+  --text-xs--line-height: 100%;
 }
 
 html,
@@ -76,6 +95,13 @@ body {
   margin-inline: auto;
 }
 
+body > div.bg-white header {
+  background-color: var(--color-white);
+}
+body > div.bg-light-grey header {
+  background-color: var(--color-light-grey);
+}
+
 /* Heading defaults */
 h1 {
   font-family: var(--font-sans);
@@ -90,7 +116,6 @@ h2 {
   color: var(--black-text);
   font-size: 20px;
   line-height: 30px;
-  margin: 0;
 }
 h3 {
   font-family: var(--font-sans);
@@ -121,55 +146,12 @@ h6 {
   line-height: 100%;
 }
 
-/* Utility text-size classes */
-.text-xxl {
-  font-size: 24px;
-  line-height: 24px;
-}
-.text-xl {
-  font-size: 20px;
-  line-height: 30px;
-}
-.text-lg {
-  font-size: 18px;
-  line-height: 19px;
-}
-.text-md {
-  font-size: 16px;
-  line-height: normal;
-}
-.text-sm {
-  font-size: 14px;
-  line-height: 135%;
-}
-.text-xs {
-  font-size: 12px;
-  line-height: 100%;
-}
-
 /* Utility color classes */
-.text-black {
-  color: var(--black-text);
-}
-.text-white {
-  color: var(--white-text);
-}
-.text-grey {
-  color: var(--grey-text);
-}
 .text-lightgrey {
   color: var(--lightgrey-text);
 }
 .text-darkgrey {
   color: var(--darkgrey-text);
-}
-.text-bold {
-  color: var(--bold-text);
-}
-
-/* Normal font-weight utility */
-.font-normal {
-  font-weight: var(--fw-normal);
 }
 
 .glass-button {
@@ -311,3 +293,61 @@ input[type="number"] {
     height: 4px;
   }
 }
+
+/* LIQUID GLASS EFFECT FOR TAB BAR --------------------------------- */
+.glass {
+  position: relative;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2px) saturate(180%);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 8px 32px rgba(31, 38, 135, 0.2),
+    inset 0 4px 20px rgba(255, 255, 255, 0.3);
+}
+
+.glass::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2rem;
+  backdrop-filter: blur(1px);
+  box-shadow:
+    inset -10px -8px 0px -11px rgba(255, 255, 255, 1),
+    inset 0px -9px 0px -8px rgba(255, 255, 255, 1);
+  opacity: 0.6;
+  z-index: -1;
+  filter: blur(1px) drop-shadow(10px 4px 6px black) brightness(115%);
+  pointer-events: none;
+}
+
+.glass-bar {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px) saturate(180%);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 8px 32px rgba(31, 38, 135, 0.2),
+    inset 0 4px 20px rgba(255, 255, 255, 0.3);
+}
+/* 
+.glass-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 200rem;
+  backdrop-filter: blur(1px);
+  box-shadow:
+    inset -10px -8px 0px -11px rgba(255, 255, 255, 1),
+    inset 0px -9px 0px -8px rgba(255, 255, 255, 1);
+  opacity: 0.6;
+  z-index: -1;
+  filter: blur(1px) drop-shadow(10px 4px 6px black) brightness(115%);
+  pointer-events: none;
+} */

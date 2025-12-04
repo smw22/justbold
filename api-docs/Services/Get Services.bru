@@ -1,0 +1,28 @@
+meta {
+  name: Get Services
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{domain}}/services
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~genre: Gospel
+  ~page: 1
+  ~limit: 10
+  ~role: 
+  ~orderby: 
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

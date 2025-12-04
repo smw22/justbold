@@ -1,7 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, JoinTable, ManyToMany, OneToMany } from "typeorm";
 import { User } from "../../users/entities/user.entity";
 import { Tag } from "../../tags/entities/tag.entity";
-import { Like } from "../../likes/entities/like.entity";
 import { Comment } from "../../comments/entities/comment.entity";
 
 @Entity()
@@ -28,9 +27,6 @@ export class Post {
   })
   @JoinColumn({ name: "user_id" })
   user: User;
-
-  @OneToMany(() => Like, (like) => like.post, { eager: true })
-  likes: Like[];
 
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
