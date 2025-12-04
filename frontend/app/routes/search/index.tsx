@@ -44,7 +44,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="flex flex-col gap-3 py-2 px-2.5 max-w-4xl m-auto">
+    <div className="flex flex-col gap-3 pt-2 pb-16 px-2.5 max-w-4xl m-auto">
       <div className="flex justify-between gap-1.5 items-center">
         <Input
           variant="search"
