@@ -21,7 +21,7 @@ export default [
 
     // Account
     route("profile/:profileId", "routes/account/profile.tsx"),
-    route("profile/:profileId/edit", "routes/account/profileEdit.tsx"),
+    route("profile/edit", "routes/account/profileEdit.tsx"),
 
     // Notifications
     route("notifications", "routes/notifications/notifications.tsx"),
