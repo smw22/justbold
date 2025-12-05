@@ -9,9 +9,8 @@ export const ServiceFactory = setSeederFactory(Service, (faker: Faker) => {
   service.price = parseFloat(faker.commerce.price(10, 500, 2));
   service.media = faker.image.url();
   service.location = faker.address.city();
-
   service.category = faker.helpers.arrayElement([
-    "Art",
+    "art",
     "recording",
     "rehearsal_space",
     "music_lessons",
@@ -30,8 +29,6 @@ export const ServiceFactory = setSeederFactory(Service, (faker: Faker) => {
     "voice_over",
     "music_composition",
   ]);
-
-  // user and tag will be set in the seeder
   service.created = faker.date.recent();
   service.updated = faker.date.recent();
   return service;

@@ -7,8 +7,10 @@ export default [
     // Create
     route("create", "routes/create/createLayout.tsx", [
       index("routes/create/create.tsx"),
-      route("service", "routes/create/createService.tsx"), //This should be made with a parent route later (Outlet)
-      route("collaboration", "routes/create/createCollaboration.tsx"), //This should be made with a parent route later (Outlet)
+      route("service", "routes/create/createService.tsx"),
+      route("collaboration", "routes/create/createCollaboration.tsx"),
+      route("post", "routes/create/createPost.tsx"),
+      route("story", "routes/create/createStory.tsx"),
     ]),
 
     // Collaborations
@@ -34,7 +36,7 @@ export default [
   ]),
 
   // Chat
-  route("chat", "routes/chat/chatLayout.tsx", [
+  route("chats", "routes/chat/chatLayout.tsx", [
     index("routes/chat/threads.tsx"),
     route("new", "routes/chat/chatNew.tsx"),
     route(":threadId", "routes/chat/chat.tsx"),

@@ -1,6 +1,6 @@
 import Icon from "~/components/icon";
 import { Link } from "react-router";
-import AvatarHeader from "./AvatarHeader";
+import AvatarHeader from "../../../components/AvatarHeader";
 import type { Service } from "~/types/services/servicesProps";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -12,19 +12,21 @@ type ServicesCardProps = {
 };
 
 export default function ServicesCard({ servicesData }: ServicesCardProps) {
+  const formatCategory = (category: string) =>
+    category
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
   return (
     <div className="flex flex-col gap-4 p-4 m-auto w-[90%] border border-gray-300 rounded-3xl shadow-lg">
       <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-        <AvatarHeader
-          imageUrl={servicesData.user.profile_image}
-          imageSize={25}
-          title={servicesData.user.name}
-        />
+        <AvatarHeader imageUrl={servicesData.user.profile_image} imageSize={25} title={servicesData.user.name} color="black" />
 
-        <span className="text-lightgrey">#{servicesData.tag.title}</span>
-        <div>
+        <span className="text-lightgrey">#{formatCategory(servicesData.category)}</span>
+        <button aria-label="Bookmark service" type="button" className="bg-transparent border-none p-0 m-0 cursor-pointer">
           <Icon name="BookmarkEmpty" size={24}></Icon>
-        </div>
+        </button>
       </div>
 
       <Link to={`${servicesData.id}`} className="flex flex-col gap-2">
@@ -38,13 +40,7 @@ export default function ServicesCard({ servicesData }: ServicesCardProps) {
             size={24}
             className="absolute top-4 right-4 bg-neutral-grey rounded-md text-white p-1"
           /> */}
-          {servicesData.media && (
-            <img
-              src={servicesData.media}
-              alt="service image"
-              className="w-full rounded-2xl"
-            />
-          )}
+          {servicesData.media && <img src={servicesData.media} alt="service image" className="w-full rounded-2xl" />}
         </div>
         <p className="line-clamp-3">{servicesData.content}</p>
         <div className="flex justify-between mt-2">

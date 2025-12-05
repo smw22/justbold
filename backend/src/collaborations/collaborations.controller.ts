@@ -7,19 +7,23 @@ import {
   Param,
   Delete,
   Query, // <-- add Query import
+  Req,
+  UseGuards,
 } from "@nestjs/common";
 import { CollaborationsService } from "./collaborations.service";
 import { CreateCollaborationDto } from "./dto/create-collaboration.dto";
 import { UpdateCollaborationDto } from "./dto/update-collaboration.dto";
+import { AuthGuard } from "../auth/auth.guard";
 
 @Controller("collaborations")
 export class CollaborationsController {
   constructor(private readonly collaborationsService: CollaborationsService) {}
 
   @Post()
-  async create(@Body() createCollaborationDto: CreateCollaborationDto) {
+  async create(@Body() createCollaborationDto: CreateCollaborationDto, @Req() req) {
     try {
-      const data = await this.collaborationsService.create(createCollaborationDto);
+      const userId = req.user.id;
+      const data = await this.collaborationsService.create(createCollaborationDto, userId);
       return {
         success: true,
         data,

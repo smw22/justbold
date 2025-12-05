@@ -11,6 +11,7 @@ export default function ProfileHeader({
   post_count,
   image,
   theme,
+  currentUsersProfile,
 }: {
   name: string;
   bio: string;
@@ -18,6 +19,7 @@ export default function ProfileHeader({
   post_count: number;
   image: string;
   theme: string;
+  currentUsersProfile: boolean;
 }) {
   const [showContextMenu, setShowContextMenu] = useState(false);
   return (
@@ -30,9 +32,43 @@ export default function ProfileHeader({
           <Icon name="More" size={24} className="invert" />
         </button>
         <ContextMenu show={showContextMenu} setShow={(e) => setShowContextMenu(e)}>
-          <Link to="/profile/edit">
-            <Button text="Edit profile" icon="EditPencil" variant="context-menu" fullWidth={true} />
-          </Link>
+          {!currentUsersProfile ? (
+            <>
+              <Button
+                text="Hide posts from this user"
+                icon="EyeEmpty"
+                variant="context-menu"
+                fullWidth={true}
+                onClick={() => alert("Indsæt funktionalitet")}
+              />
+              <div className="bg-white h-px mx-2"></div>
+              <Button
+                text="Report post"
+                icon="ChatBubbleWarning"
+                variant="context-menu"
+                fullWidth={true}
+                onClick={() => alert("Indsæt funktionalitet")}
+              />
+            </>
+          ) : (
+            <>
+              <Button
+                text="Saved"
+                icon="BookmarkEmpty"
+                variant="context-menu"
+                fullWidth={true}
+                onClick={() => alert("Indsæt funktionalitet")}
+              />
+              <div className="bg-white h-px mx-2"></div>
+              <Button
+                text="Archived"
+                icon="Unlock"
+                variant="context-menu"
+                fullWidth={true}
+                onClick={() => alert("Indsæt funktionalitet")}
+              />
+            </>
+          )}
         </ContextMenu>
       </div>
       <section className="flex justify-center gap-1 items-center">
@@ -55,8 +91,19 @@ export default function ProfileHeader({
         <p className="text-xs">{bio}</p>
       </section>
       <section className="flex flex-row gap-4 w-full mt-1">
-        <Button variant="primary-glass" text="Connect" icon="AddCircle" fullWidth={true} />
-        <Button variant="primary-glass" text="Message" fullWidth={true} />
+        {currentUsersProfile ? (
+          <>
+            <Link to={"/profile/edit"} className="w-full">
+              <Button variant="primary-glass" text="Edit profile" fullWidth={true} />
+            </Link>
+            <Button variant="primary-glass" text="Share profile" fullWidth={true} />
+          </>
+        ) : (
+          <>
+            <Button variant="primary-glass" text="Connect" icon="AddCircle" fullWidth={true} />
+            <Button variant="primary-glass" text="Message" fullWidth={true} />
+          </>
+        )}
       </section>
     </article>
   );
