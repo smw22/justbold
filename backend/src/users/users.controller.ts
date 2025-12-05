@@ -45,8 +45,21 @@ export class UsersController {
   }
 
   @Patch(":id")
-  update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  async update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
+    try {
+      const data = await this.usersService.update(id, updateUserDto);
+      updateUserDto;
+      return {
+        success: true,
+        data,
+        message: "Post updated successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 
   @Delete(":id")

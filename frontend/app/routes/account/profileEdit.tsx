@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLoaderData, Form } from "react-router";
+import { useLoaderData, useActionData, useNavigation, Form } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import SoMeInstagram from "../../assets/icons/SoMeInstagram.svg";
 import SoMeTwitter from "../../assets/icons/SoMeTwitter.svg";
@@ -52,19 +52,122 @@ export async function clientLoader() {
   };
 }
 
-export async function clientAction() {
-  alert("Sut min røv");
+export async function clientAction({ request }: { request: Request }) {
+  const currentUser = localStorage.getItem("user_id");
+  const apiUrl = import.meta.env.VITE_API_URL;
+  // Extract form data
+  const formData = await request.formData();
+
+  const name = formData.get("name")?.toString();
+  const bio = formData.get("bio")?.toString();
+  const about = formData.get("about")?.toString();
+  const looking_for = formData.get("looking_for")?.toString();
+  const genres = formData.get("genres")?.toString();
+  const theme = formData.get("theme")?.toString();
+  const instagram = formData.get("instagram")?.toString();
+  const twitter = formData.get("twitter")?.toString();
+  const youtube = formData.get("youtube")?.toString();
+  const tiktok = formData.get("tiktok")?.toString();
+  const facebook = formData.get("facebook")?.toString();
+  const spotify_embed_link = formData.get("spotify_embed_link")?.toString();
+  const videos = formData.get("videos")?.toString();
+
+  // Validate question content
+
+  if (!name || !name.trim()) {
+    return { error: "Name cannot be empty" };
+  }
+
+  if (!bio || !bio.trim()) {
+    return { error: "Bio cannot be empty" };
+  }
+
+  if (!about || !about.trim()) {
+    return { error: "About cannot be empty" };
+  }
+
+  console.log(`/users/${currentUser}`);
+
+  try {
+    const response = await apiFetch(`/users/${currentUser}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name.trim(),
+        bio: bio.trim(),
+        about: about.trim(),
+        looking_for: looking_for
+          ? looking_for
+              .split(",")
+              .map((item) => item.trim())
+              .filter(Boolean)
+          : [],
+        genres: genres
+          ? genres
+              .split(",")
+              .map((item) => item.trim())
+              .filter(Boolean)
+          : [],
+        theme: theme?.trim(),
+        instagram: instagram?.trim(),
+        twitter: twitter?.trim(),
+        youtube: youtube?.trim(),
+        tiktok: tiktok?.trim(),
+        facebook: facebook?.trim(),
+        spotify_embed_link: spotify_embed_link?.trim(),
+        videos: videos
+          ? videos
+              .split(",")
+              .map((item) => item.trim())
+              .filter(Boolean)
+          : [],
+      }),
+    });
+
+    // Check for validation errors (400)
+    if (response.status === 400) {
+      const error = await response.json();
+      return { error: error.error || "Invalid profile data" };
+    }
+
+    // Check for other errors
+    if (!response.ok) {
+      return { error: `Failed to submit profile edit request: ${response.status}` };
+    }
+
+    return { success: true };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : String(error) };
+  }
 }
 
 export default function ProfileEdit() {
   const { profile, questions, genres } = useLoaderData();
+  const actionData = useActionData();
+  const navigation = useNavigation();
+
   const [userGenres, setUserGenres] = useState(profile.data.genres);
   const [userLookingFor, setUserLookingFor] = useState(profile.data.looking_for);
   const [userVideos, setUserVideos] = useState(profile.data.videos);
 
+  const isSubmitting = navigation.state === "submitting";
+
   return (
     <article className="outer-wrapper">
       <Form method="post">
+        {/* Display success message */}
+        {actionData?.success && (
+          <div className="m-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+            Profile updated successfully!
+          </div>
+        )}
+
+        {/* Display error message */}
+        {actionData?.error && (
+          <div className="m-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">{actionData.error}</div>
+        )}
         <section className="flex flex-col items-center justify-center gap-4">
           <img
             src="https://loremflickr.com/640/480?lock=702965218279424"
@@ -289,6 +392,7 @@ export default function ProfileEdit() {
               <p className="text-xs text-neutral-500">Input your Spotify artist link to display your music.</p>
               <Input
                 variant="onboarding"
+                name="spotify_embed_link"
                 placeholder="Spotify artist link"
                 className="flex-1"
                 defaultValue={`${profile.data.spotify_embed_link}`}
