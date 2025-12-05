@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Collaborations from "../collaborations/collaborations";
+import Button from "~/components/Button";
 
 dayjs.extend(relativeTime);
 
@@ -76,8 +77,8 @@ export default function CollaborationsSlider({ collaborations }: CollaborationsS
           ))}
         </Swiper>
         <div className="px-4 mt-4 flex itenms-center">
-          <Link to="/collaborations" className="bg-primary-yellow px-4 py-2 rounded-full flex items-center justify-center">
-            See more collabs
+          <Link to="/collaborations" className="">
+            <Button variant="primary" icon="false" text="See all collaborations" />
           </Link>
         </div>
       </div>
