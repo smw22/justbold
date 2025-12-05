@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, JoinTable, ManyToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, JoinTable, ManyToMany, OneToMany } from "typeorm";
 import { User } from "../../users/entities/user.entity";
 import { Tag } from "../../tags/entities/tag.entity";
+import { Comment } from "../../comments/entities/comment.entity";
 
 @Entity()
 export class Post {
@@ -23,10 +24,12 @@ export class Post {
   // Foreign key to User entity
   @ManyToOne(() => User, (user) => user.posts, {
     onDelete: "CASCADE",
-    eager: true,
   })
   @JoinColumn({ name: "user_id" })
   user: User;
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment[];
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   created: Date;

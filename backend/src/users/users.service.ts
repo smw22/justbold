@@ -6,8 +6,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "./entities/user.entity";
 import { Post } from "../posts/entities/post.entity";
-import { Review } from "src/reviews/entities/review.entity";
-import { Question } from "src/questions/entities/question.entity";
+import { Review } from "../reviews/entities/review.entity";
+import { Question } from "../questions/entities/question.entity";
+import { Like } from "../likes/entities/like.entity";
 
 @Injectable()
 export class UsersService {
@@ -21,7 +22,9 @@ export class UsersService {
     @InjectRepository(Review)
     private readonly reviewsRepository: Repository<Review>,
     @InjectRepository(Question)
-    private readonly questionsRepository: Repository<Question>
+    private readonly questionsRepository: Repository<Question>,
+    @InjectRepository(Like)
+    private readonly likesRepository: Repository<Like>
   ) {}
 
   create(createUserDto: CreateUserDto) {
@@ -44,6 +47,10 @@ export class UsersService {
     return userData;
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    return this.usersRepository.findOne({ where: { email } });
+  }
+
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
@@ -53,7 +60,56 @@ export class UsersService {
   }
 
   async findUserPosts(id: string) {
-    return await this.postsRepository.findAndCount({ where: { user: { id } } });
+    const posts = await this.postsRepository.find({
+      where: { user: { id } },
+      relations: ["user", "tags", "comments", "comments.user"], // Remove likes from relations
+    });
+
+    const transformedPosts = await Promise.all(
+      posts.map(async (post) => {
+        const likes = await this.likesRepository.find({
+          where: { type: "post", object_id: post.id },
+          relations: ["user"],
+        });
+        return {
+          ...post,
+          user: post.user
+            ? {
+                id: post.user.id,
+                name: post.user.name,
+                profile_image: post.user.profile_image,
+              }
+            : null,
+          likes: likes.map((like) => ({
+            user: like.user
+              ? {
+                  id: like.user.id,
+                  name: like.user.name,
+                  profile_image: like.user.profile_image,
+                }
+              : null,
+            type: like.type,
+          })),
+          comments: (Array.isArray(post.comments) ? post.comments : []).map((comment) => ({
+            id: comment.id,
+            content: comment.content,
+            created: comment.created,
+            user: comment.user
+              ? {
+                  id: comment.user.id,
+                  name: comment.user.name,
+                  profile_image: comment.user.profile_image,
+                }
+              : null,
+          })),
+        };
+      })
+    );
+
+    return {
+      data: transformedPosts,
+      total_posts: transformedPosts.length,
+    };
   }
 
   async findUserReviews(id: string) {
@@ -67,12 +123,8 @@ export class UsersService {
     // "findAndCount()" is one of the built-in methods in TypeORM.
     // the function returns an array with exactly 2 values - data and count.
     const [data, count] = await this.reviewsRepository.findAndCount({
-      // user is one of the column names that was defined inside review.entity.ts.
-      // You know, like this:
-      //   @Column()
-      //   user: User;
-      where: { user: { id } },
-      relations: ["sender", "service"], // Add relations here
+      where: { object_id: id, type: "user" },
+      relations: ["sender"], // Only include existing relations
     });
 
     if (count === 0) {

@@ -33,6 +33,10 @@ import { CommentsModule } from "./comments/comments.module";
 import { Comment } from "./comments/entities/comment.entity";
 import { LikesModule } from "./likes/likes.module";
 import { Like } from "./likes/entities/like.entity";
+import { SearchModule } from "./search/search.module";
+import { AuthModule } from "./auth/auth.module";
+import { SkillsModule } from "./skills/skills.module";
+import { Skill } from "./skills/entities/skill.entity";
 
 @Module({
   imports: [
@@ -60,6 +64,7 @@ import { Like } from "./likes/entities/like.entity";
         Question,
         Comment,
         Like,
+        Skill,
       ],
       synchronize: false,
     }),
@@ -78,6 +83,9 @@ import { Like } from "./likes/entities/like.entity";
     QuestionsModule,
     CommentsModule,
     LikesModule,
+    SearchModule,
+    AuthModule,
+    SkillsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

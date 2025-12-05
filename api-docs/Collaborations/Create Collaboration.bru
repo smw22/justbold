@@ -5,20 +5,26 @@ meta {
 }
 
 post {
-  url: {{domain}}/api/collaborations
+  url: {{domain}}/collaborations
   body: json
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
 
 body:json {
   {
-    "title": "Collaboration title",
-    "content": "This is the collaboration content",
-    "media": "http://localhost:3000/image",
-    "genre_ids": [],
-    "paid": "",
-    "tag_ids": "",
-    "user_id": "1"
+    "media": "https://picsum.photos/seed/1cmd7Okx/640/480",
+    "title": "This is a title 2",
+    "content": "This is some content",
+    "role": "Violin",
+    "genreIds": ["0bdcb411-9b79-4241-91af-40430fcfa832", "233e7c7a-9fab-45f0-b054-e0bffa3d9307", "434f0815-a919-4808-b2ad-deceda422902"],
+    "paid": true, // or false (optional)
+    "location": "Home",
+    "tagIds": ["01a210ec-d424-4f57-8b72-6be9c7b08264", "044276da-0acf-4049-a3d1-dda0c772e770", "077c12ac-c58c-44f9-b0b1-a42a1ad042ed"],
+    "skillIds": ["1c176552-c21b-42e2-8331-c534813e9f3b", "232a5fe1-c21d-48d1-a16e-d509b7ea3cfe"]
   }
 }
 

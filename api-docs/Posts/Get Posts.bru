@@ -5,14 +5,18 @@ meta {
 }
 
 get {
-  url: {{domain}}/api/posts?page=1&limit=10
+  url: {{domain}}/posts?page=1&limit=100like
   body: none
-  auth: inherit
+  auth: bearer
 }
 
 params:query {
   page: 1
-  limit: 10
+  limit: 100like
+}
+
+auth:bearer {
+  token: {{access_token}}
 }
 
 settings {

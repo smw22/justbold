@@ -1,6 +1,16 @@
 import Icon from "./icon";
 
-export default function SheetView({ show, onClose, title, children }: { show: boolean; onClose: () => void; title: string; children: any }) {
+export default function SheetView({
+  show,
+  onClose,
+  title,
+  children,
+}: {
+  show: boolean;
+  onClose: () => void;
+  title: string;
+  children: any;
+}) {
   return (
     <>
       <div
@@ -20,7 +30,7 @@ export default function SheetView({ show, onClose, title, children }: { show: bo
               <Icon name="Close" size="48" />
             </button>
           </section>
-          <section className="overflow-scroll max-h-70 pb-8">{children}</section>
+          <section className="overflow-scroll max-h-70 pb-8 gap-4 flex flex-col">{children}</section>
         </div>
       </article>
     </>

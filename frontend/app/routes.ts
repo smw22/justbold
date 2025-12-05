@@ -5,12 +5,18 @@ export default [
     index("routes/home/home.tsx"),
 
     // Create
-    route("create", "routes/create/create.tsx"),
-    route("create/service", "routes/create/createService.tsx"), //This should be made with a parent route later (Outlet)
+    route("create", "routes/create/createLayout.tsx", [
+      index("routes/create/create.tsx"),
+      route("service", "routes/create/createService.tsx"), //This should be made with a parent route later (Outlet)
+      route("collaboration", "routes/create/createCollaboration.tsx"), //This should be made with a parent route later (Outlet)
+    ]),
 
     // Collaborations
     route("collaborations", "routes/collaborations/collaborations.tsx"),
     route("collaborations/:collaborationId", "routes/collaborations/collaborationsDetails.tsx"),
+
+    // Posts
+    route("posts/:postId", "routes/post/postDetail.tsx"),
 
     // Services
     route("services", "routes/services/services.tsx"),
@@ -18,7 +24,10 @@ export default [
 
     // Account
     route("profile/:profileId", "routes/account/profile.tsx"),
-    route("profile/:profileId/edit", "routes/account/profileEdit.tsx"),
+    route("profile/edit", "routes/account/profileEdit.tsx"),
+
+    // Notifications
+    route("notifications", "routes/notifications/notifications.tsx"),
 
     // Favorites
     route("favorites", "routes/favorites/favorites.tsx"),
@@ -36,4 +45,5 @@ export default [
   route("register", "routes/auth/register.tsx"),
   route("onboarding", "routes/onboarding/index.tsx"),
   route("onboarding/steps", "routes/onboarding/steps.tsx"),
+  route("log-out", "routes/auth/logOut.tsx"),
 ] as unknown as RouteConfig[];

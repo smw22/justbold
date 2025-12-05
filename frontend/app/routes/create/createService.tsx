@@ -1,11 +1,13 @@
 import { redirect, useLoaderData, useActionData, useNavigation } from "react-router";
 import AvatarHeader from "../../components/AvatarHeader";
 import CreateServiceForm from "./components/CreateServiceForm";
+import { apiFetch } from "~/lib/apiFetch";
+import { categories } from "~/types/services/categories";
 
 export async function clientLoader(): Promise<{}> {
-  const userId = "9ec7b46e-3538-47eb-9067-c2fad0ddf97f"; // Replace with actual logic to get current user ID
+  const userId = localStorage.getItem("user_id");
 
-  const userResponse = await fetch(`${import.meta.env.VITE_API_URL}/users/${userId}`);
+  const userResponse = await apiFetch(`/users/${userId}`);
 
   if (!userResponse.ok) {
     throw new Error(`Failed to load user: ${userResponse.status}`);
@@ -13,37 +15,29 @@ export async function clientLoader(): Promise<{}> {
 
   const user = await userResponse.json();
 
-  const tagResponse = await fetch(`${import.meta.env.VITE_API_URL}/tags`);
-
-  if (!tagResponse.ok) {
-    throw new Error(`Failed to load tags: ${tagResponse.status}`);
-  }
-
-  const tags = await tagResponse.json();
-
-  return { user: user.data, tags: tags.data };
+  return { user: user.data };
 }
 
 export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();
   const title = formData.get("title") as string;
   const media = formData.get("media") as string;
-  const tag_id = formData.get("tag_id") as string;
+  const category = formData.get("category") as string;
   const content = formData.get("content") as string;
   const price = formData.get("price") as string;
   const location = formData.get("location") as string;
 
-  const user_id = "9ec7b46e-3538-47eb-9067-c2fad0ddf97f"; // NOTE: Replace with actual logic to get current user ID when we add auth
+  const user_id = localStorage.getItem("user_id");
 
-  if (!title || !content || !tag_id || !price || !location) {
+  if (!title || !content || !category || !price || !location) {
     console.error("Error creating service; Missing fields:", {
       title,
       content,
-      tag_id,
+      category,
       price,
       location,
     });
-    return "All fields are required, make sure to fill: title, media, tag, content, price and location";
+    return "All fields are required, make sure to fill: title, media, category, content, price and location";
   }
 
   if (title.length > 100) {
@@ -72,19 +66,19 @@ export async function clientAction({ request }: { request: Request }) {
   }
 
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/services`, {
+    const response = await apiFetch(`/services`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        tag_id,
         user_id,
         title,
         media: media || undefined,
         content,
         price: Number(price),
         location,
+        category,
       }),
     });
 
@@ -109,7 +103,7 @@ export async function clientAction({ request }: { request: Request }) {
 }
 
 export default function CreateService() {
-  const { user, tags } = useLoaderData();
+  const { user } = useLoaderData();
   const actionData = useActionData();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
@@ -117,7 +111,7 @@ export default function CreateService() {
   return (
     <div className="flex flex-col gap-4 p-4">
       <AvatarHeader imageUrl={user.profile_image} imageSize={40} title={user.name} color="black" />
-      <CreateServiceForm tags={tags} isSubmitting={isSubmitting} />
+      <CreateServiceForm categories={categories} isSubmitting={isSubmitting} />
       {actionData?.error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
           <strong>Error:</strong> {actionData.error}

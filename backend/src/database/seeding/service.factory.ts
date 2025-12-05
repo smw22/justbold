@@ -9,7 +9,26 @@ export const ServiceFactory = setSeederFactory(Service, (faker: Faker) => {
   service.price = parseFloat(faker.commerce.price(10, 500, 2));
   service.media = faker.image.url();
   service.location = faker.address.city();
-  // user and tag will be set in the seeder
+  service.category = faker.helpers.arrayElement([
+    "art",
+    "recording",
+    "rehearsal_space",
+    "music_lessons",
+    "instrument_rental",
+    "mixing",
+    "mastering",
+    "songwriting",
+    "music_production",
+    "dj_services",
+    "band_booking",
+    "music_promotion",
+    "sheet_music",
+    "music_arrangement",
+    "studio_musician",
+    "audio_editing",
+    "voice_over",
+    "music_composition",
+  ]);
   service.created = faker.date.recent();
   service.updated = faker.date.recent();
   return service;

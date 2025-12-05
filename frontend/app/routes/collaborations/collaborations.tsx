@@ -2,11 +2,10 @@ import { useLoaderData } from "react-router";
 
 import CollaborationsFeed from "./components/CollaborationsFeed";
 import CollaborationsFilter from "./components/CollaborationsFilter";
+import { apiFetch } from "~/lib/apiFetch";
 
 export async function clientLoader(): Promise<{}> {
-  const collabResponse = await fetch(
-    `${import.meta.env.VITE_API_URL}/collaborations`
-  );
+  const collabResponse = await apiFetch(`/collaborations`);
 
   if (!collabResponse.ok) {
     throw new Error(`Failed to fetch collaborations: ${collabResponse.status}`);
