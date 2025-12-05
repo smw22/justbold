@@ -25,7 +25,7 @@ export class Collaboration {
   @Column({ nullable: true })
   media: string;
 
-  @Column()
+  @Column({ charset: "utf8mb4" })
   title: string;
 
   @Column({ charset: "utf8mb4" })
