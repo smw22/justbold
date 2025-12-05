@@ -5,6 +5,21 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { apiFetch } from "~/lib/apiFetch";
 
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = ({ matches }) => {
+  const routeData = matches.find((match: any) => match.id === "routes/collaborations/collaborationsDetails")?.loaderData as any;
+  const collabTitle = routeData?.collaboration?.data?.title ?? "Collaboration";
+
+  return [
+    { title: `${collabTitle} | LineUp` },
+    {
+      property: "og:title",
+      content: `${collabTitle} | LineUp`,
+    },
+  ];
+};
+
 dayjs.extend(relativeTime);
 
 export async function clientLoader({ params }: { params: { collaborationId: string } }): Promise<{}> {

@@ -3,7 +3,17 @@ import { redirect, useActionData, useNavigation, useLoaderData, useOutletContext
 import { apiFetch } from "~/lib/apiFetch";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Create Collaboration" }];
+  return [
+    { title: "Create collaboration | LineUp" },
+    {
+      property: "og:title",
+      content: "Create collaboration | LineUp",
+    },
+    // {
+    //   name: "description",
+    //   content: "This app is the best",
+    // },
+  ];
 };
 
 export async function clientLoader(): Promise<{}> {

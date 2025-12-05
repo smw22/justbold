@@ -7,6 +7,21 @@ import { useState } from "react";
 import SheetView from "~/components/SheetView";
 import type { ReviewType } from "~/types/review";
 import { apiFetch } from "~/lib/apiFetch";
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = ({ matches }) => {
+  const routeData = matches.find((match: any) => match.id === "routes/services/servicesDetail")?.loaderData as any;
+  const serviceTitle = routeData?.service?.title ?? "Service";
+  const userName = routeData?.service?.user?.name ?? "User";
+
+  return [
+    { title: `${serviceTitle}: A service provided by ${userName} | LineUp` },
+    {
+      property: "og:title",
+      content: `${serviceTitle}: A service provided by ${userName} | LineUp`,
+    },
+  ];
+};
 
 export async function clientLoader({ params }: { params: { serviceId: string } }): Promise<{}> {
   const servicesResponse = await apiFetch(`/services/${params.serviceId}`);
