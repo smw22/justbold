@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useSearchParams } from "react-router";
 import ProfileHeader from "./components/ProfileHeader";
 import Tabs from "~/components/Tabs";
 import About from "./components/About";
@@ -76,8 +76,18 @@ export async function clientAction({ request, params }: { request: Request; para
 
 export default function Profile() {
   // Access the profile from the loader
-  const { profile, user_posts, reviews, questions, currentUsersProfile } = useLoaderData();
-  const [tab, setTab] = useState(0);
+  const { profile, user_posts, reviews, questions } = useLoaderData();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [tab, setTab] = useState(searchParams.get("show") === "posts" ? 1 : 0);
+
+  const handleTabChange = (newTab: number) => {
+    setTab(newTab);
+    if (newTab === 1) {
+      setSearchParams({ show: "posts" });
+    } else {
+      setSearchParams({ show: "about" });
+    }
+  };
 
   return (
     <div className="outer-wrapper">
@@ -94,7 +104,7 @@ export default function Profile() {
         />
       </div>
       {/* // Tabs component, "About" and "Posts" - the current tab is held as a number in a state. */}
-      <Tabs tabs={["About", "Posts"]} currentTab={tab} setTab={(e) => setTab(e)} />
+      <Tabs tabs={["About", "Posts"]} currentTab={tab} setTab={handleTabChange} />
       {/* // if tab is 0 we show about - otherwise we show posts. */}
       {tab === 0 ? (
         <About profile={profile.data} reviews={reviews.data} questions={questions.data} avg_user_rating={reviews.avg_rating} />

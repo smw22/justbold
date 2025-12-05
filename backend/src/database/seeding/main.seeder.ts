@@ -20,7 +20,8 @@ export class MainSeeder implements Seeder {
     const users = await userFactory.saveMany(9);
     // Create an admin user
     const adminUser = await userFactory.make({
-      name: "Admin User",
+      id: "c895b35e-d47b-4ee4-a844-4bb2aabb4714",
+      name: "Awesome User",
       email: "test@user.com",
       password: await bcrypt.hash("admin", 10),
     });
@@ -136,8 +137,7 @@ export class MainSeeder implements Seeder {
         .fill("")
         .map(async () => {
           const user = faker.helpers.arrayElement(users);
-          const tag = faker.helpers.arrayElement(tags);
-          return serviceFactory.make({ user, tag });
+          return serviceFactory.make({ user });
         })
     );
     await dataSource.getRepository(Service).save(services);

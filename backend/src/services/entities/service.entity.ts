@@ -6,12 +6,9 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToMany,
   Index,
 } from "typeorm";
 import { User } from "../../users/entities/user.entity";
-import { Tag } from "../../tags/entities/tag.entity";
-
 @Entity()
 @Index(["user", "created"]) // Composite index for queries
 export class Service {
@@ -23,11 +20,6 @@ export class Service {
   @JoinColumn({ name: "user_id" })
   @Index() // Add index for faster lookups
   user: User;
-
-  @ManyToOne(() => Tag, { eager: true, nullable: false })
-  @JoinColumn({ name: "tag_id" })
-  @Index() // Index for filtering by tag
-  tag: Tag;
 
   @Column({ type: "varchar", length: 500, nullable: true })
   media: string;
@@ -50,7 +42,7 @@ export class Service {
   @Column({ type: "varchar", length: 255 })
   location: string;
 
-  @Column("text")
+  @Column({ type: "varchar", length: 100 })
   category: string;
 
   @CreateDateColumn()
