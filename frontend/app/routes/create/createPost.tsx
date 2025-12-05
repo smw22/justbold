@@ -74,11 +74,11 @@ export default function CreatePost() {
         </select>
         <Button
           variant="primary"
-          icon="plus"
+          icon="Plus"
           type="submit"
-          text={isSubmitting ? "Creating..." : "+ Create"}
+          text={isSubmitting ? "Posting..." : "Post "}
           disabled={isSubmitting}
-          className={`bg-primary-yellow text-black w-fit py-2 px-4 rounded-lg ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+          className={`self-end ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
         />
       </Form>
       {actionData?.error && (

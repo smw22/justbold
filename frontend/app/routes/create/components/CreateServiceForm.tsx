@@ -32,11 +32,11 @@ export default function CreateServiceForm({ categories, isSubmitting }: { catego
       <Input type="text" name="location" id="location" placeholder="Location" required />
       <Button
         variant="primary"
-        icon="plus"
+        icon="Plus"
         type="submit"
-        text={isSubmitting ? "Creating..." : "+ Create"}
+        text={isSubmitting ? "Posting..." : "Post "}
         disabled={isSubmitting}
-        className={`bg-primary-yellow text-black w-fit py-2 px-4 rounded-lg ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+        className={`self-end ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
       />
     </Form>
   );
