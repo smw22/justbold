@@ -3,6 +3,7 @@ import Badge from "~/components/Badge";
 import Icon from "~/components/icon";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import Button from "~/components/Button";
 
 dayjs.extend(relativeTime);
 
@@ -89,12 +90,8 @@ function CollabCardActions({ collabId }: { collabId: string }) {
       <Link className="text-gray-600 font-bold text-sm" to={`/collaborations/${collabId}`}>
         Read more
       </Link>
-      <Link
-        className="text-sm flex items-center justify-center gap-1 bg-primary-yellow rounded-full px-4 py-2 border border-black/10"
-        to={`/collaborations/${collabId}`}
-      >
-        <Icon name="ChatBubble" size={16} />
-        Start chat
+      <Link to={`/collaborations/${collabId}`}>
+        <Button variant="primary" text="See all collaborations" icon="ChatBubble" />
       </Link>
     </div>
   );

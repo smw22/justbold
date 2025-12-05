@@ -26,7 +26,7 @@ export class Comment {
   @OneToMany(() => Comment, (comment) => comment.parent)
   replies: Comment[];
 
-  @Column("text")
+  @Column({ charset: "utf8mb4" })
   content: string;
 
   @CreateDateColumn()
