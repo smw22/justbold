@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import ContextMenu from "~/components/ContextMenu";
 import Button from "~/components/Button";
-import Icon from "~/components/icon";
 import Input from "~/components/Input";
 
 export default function EditArray({
@@ -19,7 +17,6 @@ export default function EditArray({
   onChange: (e: string[]) => void;
 }) {
   const [text, setText] = useState("");
-  const [showContextMenu, setShowContextMenu] = useState(false);
 
   const handleAdd = () => {
     // First we make sure the input is long enough and that the string doesn't already exist in the array.
@@ -44,7 +41,7 @@ export default function EditArray({
             onChange={(e) => setText(e.target.value)}
             className="flex-1 border border-neutral-200 rounded-lg p-2"
           >
-            <option value="" selected disabled>
+            <option value="" disabled>
               {placeholder}
             </option>
             {selectOptions.map((opt) => (
@@ -74,7 +71,7 @@ export default function EditArray({
           array.map((str, index) =>
             editableText ? (
               <div key={index} className="flex items-center gap-2">
-                <Input value={str} variant="onboarding" className="flex-1" />
+                <Input defaultValue={str} variant="onboarding" className="flex-1" />
                 <Button icon="Trash" variant="secondary-glass" text="" onClick={() => handleDelete(index)} />
               </div>
             ) : (

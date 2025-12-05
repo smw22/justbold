@@ -1,23 +1,27 @@
 import { PartialType } from "@nestjs/mapped-types";
 import { CreateUserDto } from "./create-user.dto";
-import { IsString, IsOptional, IsEmail, IsNumber, IsArray } from "class-validator";
+import { IsString, IsEmail, IsNumber, IsArray, IsOptional } from "class-validator";
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {
+export class UpdateUserDto {
+  @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
+  @IsOptional()
   @IsEmail()
-  @IsString()
-  email: string;
+  email?: string;
 
+  @IsOptional()
   @IsString()
-  password: string;
+  password?: string;
 
+  @IsOptional()
   @IsString()
-  phone: string;
+  phone?: string;
 
+  @IsOptional()
   @IsNumber()
-  year_of_birth: number;
+  year_of_birth?: number;
 
   @IsOptional()
   @IsString()
@@ -27,35 +31,37 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsString()
   about?: string;
 
+  @IsOptional()
   @IsString()
-  theme: string;
+  location?: string;
 
   @IsOptional()
   @IsString()
-  instagram?: string;
+  theme?: string;
 
   @IsOptional()
   @IsString()
-  twitter?: string;
+  instagram?: string | null;
 
   @IsOptional()
   @IsString()
-  facebook?: string;
+  twitter?: string | null;
 
   @IsOptional()
   @IsString()
-  youtube?: string;
+  facebook?: string | null;
 
   @IsOptional()
   @IsString()
-  tiktok?: string;
+  youtube?: string | null;
 
   @IsOptional()
   @IsString()
-  spotify_embed_link?: string;
+  tiktok?: string | null;
 
+  @IsOptional()
   @IsString()
-  location: string;
+  spotify_embed_link?: string | null;
 
   @IsOptional()
   @IsArray()
@@ -63,19 +69,21 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
   @IsOptional()
   @IsArray()
-  connections?: string[];
+  looking_for?: string[];
 
   @IsOptional()
-  @IsArray()
-  looking_for?: string[];
+  @IsString()
+  subscription?: string;
+
+  @IsOptional()
+  @IsString()
+  user_type?: string;
 
   @IsOptional()
   @IsArray()
   genres?: string[];
 
+  @IsOptional()
   @IsString()
-  subscription: string;
-
-  @IsString()
-  user_type: string;
+  profile_image?: string;
 }

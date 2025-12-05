@@ -59,7 +59,7 @@ export async function clientAction({ request, params }: { request: Request; para
   }
 
   try {
-    const response = await fetch(`${apiUrl}/questions`, {
+    const response = await apiFetch(`/questions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
