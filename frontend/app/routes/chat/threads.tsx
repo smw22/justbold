@@ -1,3 +1,14 @@
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Chat | LineUp" },
+    {
+      property: "og:title",
+      content: "Chat | LineUp",
+    },
+  ];
+};
 import { useState } from "react";
 import Tabs from "~/components/Tabs";
 import ThreadCard from "./components/ThreadCard";

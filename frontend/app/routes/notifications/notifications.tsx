@@ -1,5 +1,20 @@
 import Notification from "~/components/Notification";
 import type { NotificationType } from "~/types/notification";
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Notifications | LineUp" },
+    {
+      property: "og:title",
+      content: "Notifications | LineUp",
+    },
+    // {
+    //   name: "description",
+    //   content: "This app is the best",
+    // },
+  ];
+};
 
 export default function Notifications() {
   const mockData: NotificationType[] = [

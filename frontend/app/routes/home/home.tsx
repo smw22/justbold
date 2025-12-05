@@ -3,6 +3,21 @@ import { useLoaderData } from "react-router";
 import CollaborationsSlider from "./CollaborationsSlider";
 import PostsFeed from "./PostsFeed";
 import { apiFetch } from "~/lib/apiFetch";
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Home | LineUp" },
+    {
+      property: "og:title",
+      content: "Home | LineUp",
+    },
+    // {
+    //   name: "description",
+    //   content: "This app is the best",
+    // },
+  ];
+};
 
 const stories = [
   { id: 1, userName: "Alice", imageUrl: "https://unsplash.it/640/425?1" },

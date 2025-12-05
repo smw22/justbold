@@ -3,10 +3,10 @@ import type { MetaFunction } from "react-router";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Create" },
+    { title: "Create | LineUp" },
     {
       property: "og:title",
-      content: "Create",
+      content: "Create | LineUp",
     },
   ];
 };
