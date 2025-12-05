@@ -1,5 +1,5 @@
 import { Outlet, useLoaderData } from "react-router";
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import AvatarHeader from "../services/components/AvatarHeader";
 
@@ -37,13 +37,31 @@ export default function Create() {
   const { user, tags, genres } = useLoaderData();
   return (
     <div className="outer-wrapper px-4 flex flex-col gap-4">
-      <div className="flex items-center gap-4">
-        <Link to="/create/service" className="bg-primary-yellow underline">
+      <div className="flex items-center justify-center gap-4">
+        <NavLink
+          to="/create/service"
+          className={({ isActive }) => ` px-2 py-1 rounded-full ${isActive ? "bg-primary-yellow font-bold text-black" : ""}`}
+        >
           Service
-        </Link>
-        <Link to="/create/collaboration" className="bg-primary-yellow underline">
+        </NavLink>
+        <NavLink
+          to="/create/collaboration"
+          className={({ isActive }) => `px-2 py-1 rounded-full ${isActive ? "bg-primary-yellow font-bold text-black" : ""}`}
+        >
           Collaboration
-        </Link>
+        </NavLink>
+        <NavLink
+          to="/create/post"
+          className={({ isActive }) => `px-2 py-1 rounded-full ${isActive ? "bg-primary-yellow font-bold text-black" : ""}`}
+        >
+          Post
+        </NavLink>
+        <NavLink
+          to="/create/story"
+          className={({ isActive }) => `px-2 py-1 rounded-full ${isActive ? "bg-primary-yellow font-bold text-black" : ""}`}
+        >
+          Story
+        </NavLink>
       </div>
       <div className="flex flex-col gap-4">
         <AvatarHeader imageUrl={user.profile_image} imageSize={40} title={user.name} />
