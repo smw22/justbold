@@ -94,6 +94,7 @@ export default function ForYou({ query }: ForYouProps) {
                 </div>
                 <div className="h-px bg-black/15 mx-9 my-2"></div>
                 <h4>{collab.title}</h4>
+                <img src={collab.media} alt={collab.title} className="rounded-3xl h-[222px] w-[333px] object-cover" />
                 <p className="text-md text-(--lightgrey-text)">{collab.content}</p>
                 <div className="flex justify-between text-xs">
                   <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
