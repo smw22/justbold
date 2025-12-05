@@ -31,7 +31,7 @@ export default function Button({
         <button
           type={type}
           disabled={disabled}
-          className={`bg-primary-yellow text-black flex items-center justify-center gap-2 rounded-full px-4 py-2 hover:bg-primary-yellow-hover focus:bg-primary-yellow-pressed cursor-pointer transition-colors duration-400 ease-in-out ${fullWidth ? "w-full" : "w-fit"} ${disabledStyles} ${className ?? ""}`}
+          className={`text-sm bg-primary-yellow text-black flex items-center justify-center gap-2 rounded-full px-4 py-2 hover:bg-primary-yellow-hover focus:bg-primary-yellow-pressed cursor-pointer transition-colors duration-400 ease-in-out ${fullWidth ? "w-full" : "w-fit"} ${disabledStyles} ${className ?? ""}`}
           onClick={onClick}
         >
           <Icon name={icon ? icon : ""} size={18} />
@@ -55,7 +55,7 @@ export default function Button({
         <button
           type={type}
           disabled={disabled}
-          className={`bg-transparent text-neutral-grey flex items-center justify-center gap-2 rounded-full px-4 py-2 hover:bg-primary-yellow-hover focus:bg-primary-yellow-semi-transparent cursor-pointer transition-colors duration-400 ease-in-out outline outline-1 outline-neutral-grey -outline-offset-1 ${fullWidth ? "w-full" : "w-fit"} ${disabledStyles} ${className ?? ""}`}
+          className={`text-sm bg-transparent text-neutral-grey flex items-center justify-center gap-2 rounded-full px-4 py-2 hover:bg-primary-yellow-hover focus:bg-primary-yellow-semi-transparent cursor-pointer transition-colors duration-400 ease-in-out outline outline-1 outline-neutral-grey -outline-offset-1 ${fullWidth ? "w-full" : "w-fit"} ${disabledStyles} ${className ?? ""}`}
           onClick={onClick}
         >
           <Icon name={icon ? icon : ""} size={18} />
