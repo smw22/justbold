@@ -24,8 +24,8 @@ export default function EditArray({
   const handleAdd = () => {
     // First we make sure the input is long enough and that the string doesn't already exist in the array.
     if (text && text.length > 2 && !array.some((item) => item.toLowerCase() === text.toLowerCase())) {
-      onChange([...array, text]);
-      console.log("Jeg affyres!");
+      // we append text to array, and we strip out all commas, so we don't get a problem with parsing as array.
+      onChange([...array, text.replaceAll(",", "")]);
       setText("");
     }
   };
@@ -59,7 +59,7 @@ export default function EditArray({
         <div className="flex gap-4 w-full">
           <Input
             variant="onboarding"
-            placeholder=""
+            placeholder={placeholder}
             value={text}
             onChange={(e) => setText(e.target.value)}
             className="flex-1"
