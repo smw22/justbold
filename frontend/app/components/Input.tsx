@@ -5,33 +5,41 @@ type InputVariant = "onboarding" | "other";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: string;
-  variant: InputVariant;
+  variant?: InputVariant;
   className?: string;
+  textarea?: boolean;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(({ icon, variant, className = "", ...rest }, ref) => {
+const Input = React.forwardRef<
+  HTMLInputElement | HTMLTextAreaElement,
+  InputProps & React.TextareaHTMLAttributes<HTMLTextAreaElement>
+>(({ icon, variant, className = "", textarea, ...rest }, ref) => {
+  if (textarea) {
+    return (
+      <textarea
+        ref={ref as React.Ref<HTMLTextAreaElement>}
+        className={`p-2.5 bg-light-grey outline-black/30 focus:outline-primary-yellow rounded-lg outline-1 ${className}`}
+        {...rest}
+      />
+    );
+  }
   switch (variant) {
     case "onboarding":
       return (
         <input
-          ref={ref}
+          ref={ref as React.Ref<HTMLInputElement>}
           className={`bg-transparent p-2.5 text-center rounded-lg border border-black/20 focus:outline-1 ${className}`}
           {...rest}
         />
       );
-    case "other":
-      return (
-        <div className="relative">
-          <input ref={ref} className={`bg-lightgrey pr-10 ${className}`} {...rest} />
-          {icon && (
-            <div className="absolute right-2 top-1/2 -translate-y-1/2">
-              <Icon name={icon} size={24} />
-            </div>
-          )}
-        </div>
-      );
     default:
-      return null;
+      return (
+        <input
+          ref={ref as React.Ref<HTMLInputElement>}
+          className={`p-2.5 bg-light-grey outline-black/30 focus:outline-primary-yellow rounded-lg outline-1 ${className}`}
+          {...rest}
+        />
+      );
   }
 });
 

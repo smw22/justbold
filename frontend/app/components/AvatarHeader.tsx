@@ -13,7 +13,7 @@ export default function AvatarHeader({ imageSize, imageUrl, title, color, classN
         <img
           src={imageUrl}
           alt="user avatar"
-          className="w-full h-full object-cover rounded-full border"
+          className="w-full h-full object-cover rounded-full"
           style={{ borderColor: color }}
         />
       </div>
