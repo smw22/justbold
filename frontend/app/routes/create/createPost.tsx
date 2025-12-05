@@ -15,10 +15,6 @@ import { apiFetch } from "~/lib/apiFetch";
 import Input from "~/components/Input";
 import Button from "~/components/Button";
 
-export const meta: MetaFunction = () => {
-  return [{ title: "Create Post" }];
-};
-
 export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();
   const title = formData.get("title") as string;
