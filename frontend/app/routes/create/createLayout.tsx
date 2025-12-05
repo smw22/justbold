@@ -1,7 +1,7 @@
 import { Outlet, useLoaderData } from "react-router";
 import { NavLink } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
-import AvatarHeader from "../services/components/AvatarHeader";
+import AvatarHeader from "../../components/AvatarHeader";
 
 export async function clientLoader(): Promise<{}> {
   const userId = localStorage.getItem("user_id");
@@ -64,7 +64,7 @@ export default function Create() {
         </NavLink>
       </div>
       <div className="flex flex-col gap-4">
-        <AvatarHeader imageUrl={user.profile_image} imageSize={40} title={user.name} />
+        <AvatarHeader imageUrl={user.profile_image} imageSize={40} title={user.name} color="black" />
         <Outlet context={{ tags, genres }} />
       </div>
     </div>
