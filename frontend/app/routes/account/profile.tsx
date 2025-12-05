@@ -76,7 +76,7 @@ export async function clientAction({ request, params }: { request: Request; para
 
 export default function Profile() {
   // Access the profile from the loader
-  const { profile, user_posts, reviews, questions } = useLoaderData();
+  const { profile, user_posts, reviews, questions, currentUsersProfile } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   const [tab, setTab] = useState(searchParams.get("show") === "posts" ? 1 : 0);
 
