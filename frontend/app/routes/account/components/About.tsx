@@ -43,7 +43,7 @@ export default function About({
   };
 
   return (
-    <article className="bg-white p-4 flex flex-col gap-4">
+    <article className="bg-white p-4 flex flex-col gap-4 rounded-bl-3xl rounded-br-3xl">
       <section>
         <h5 className="font-normal text-gray-400! text-sm">About me</h5>
         <p className="text-sm mx-4 my-3 max-w-md">{profile.about}</p>
