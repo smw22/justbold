@@ -51,8 +51,13 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { email } });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    const existingPost = await this.usersRepository.findOneBy({ id });
+    if (!existingPost) {
+      throw new HttpException("Post not found", 404);
+    }
+    const userData = this.usersRepository.merge(existingPost, updateUserDto);
+    return await this.usersRepository.save(userData);
   }
 
   remove(id: number) {

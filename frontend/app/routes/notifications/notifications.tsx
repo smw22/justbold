@@ -67,7 +67,7 @@ export default function Notifications() {
           {mockData
             .filter((x) => x.object_type === "connection")
             .map((notification) => (
-              <Notification notification={notification} />
+              <Notification notification={notification} key={notification.id} />
             ))}
         </section>
         <section className="flex flex-col gap-2">
@@ -75,7 +75,7 @@ export default function Notifications() {
           {mockData
             .filter((x) => x.object_type === "collaboration")
             .map((notification) => (
-              <Notification notification={notification} />
+              <Notification notification={notification} key={notification.id} />
             ))}
         </section>
         <section className="flex flex-col gap-2">
@@ -83,7 +83,7 @@ export default function Notifications() {
           {mockData
             .filter((x) => x.object_type.includes("post"))
             .map((notification) => (
-              <Notification notification={notification} />
+              <Notification notification={notification} key={notification.id} />
             ))}
         </section>
       </article>
