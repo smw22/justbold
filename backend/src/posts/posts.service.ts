@@ -22,8 +22,15 @@ export class PostsService {
     private readonly commentsRepository: Repository<Comment>
   ) {}
 
-  async create(CreatePostDto: CreatePostDto) {
-    const postData = await this.postsRepository.create(CreatePostDto);
+  async create(CreatePostDto: CreatePostDto, userId: string) {
+    const tags = CreatePostDto.tagIds ? await this.tagsRepository.findByIds(CreatePostDto.tagIds) : [];
+
+    const postData = this.postsRepository.create({
+      ...CreatePostDto,
+      user: { id: userId },
+      tags,
+    });
+
     return this.postsRepository.save(postData);
   }
 

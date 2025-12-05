@@ -1,11 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  ManyToOne,
-  JoinColumn,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { User } from "../../users/entities/user.entity";
 import { Thread } from "../../threads/entities/thread.entity";
 
@@ -23,7 +16,7 @@ export class Message {
   @JoinColumn({ name: "thread_id" })
   thread: Thread;
 
-  @Column("text")
+  @Column({ charset: "utf8mb4" })
   content: string;
 
   @CreateDateColumn()
