@@ -20,7 +20,7 @@ export default function People({ query }: PeopleProps) {
       setLoading(true);
       setError(null);
       try {
-        const searchParams = query ? `query=${encodeURIComponent(query)}&category=people` : "limit=10&category=people";
+        const searchParams = query ? `query=${encodeURIComponent(query)}&category=people` : "category=people";
         const response = await apiFetch(`/search?${searchParams}`);
         if (!response.ok) throw new Error("Search failed");
         const json = await response.json();

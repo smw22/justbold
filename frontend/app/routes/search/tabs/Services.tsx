@@ -20,7 +20,7 @@ export default function Services({ query }: ServicesProps) {
       setLoading(true);
       setError(null);
       try {
-        const searchParams = query ? `query=${encodeURIComponent(query)}&category=all` : "limit=10&category=services";
+        const searchParams = query ? `query=${encodeURIComponent(query)}&category=services` : "category=services";
         const response = await apiFetch(`/search?${searchParams}`);
         if (!response.ok) throw new Error("Search failed");
         const json = await response.json();

@@ -24,11 +24,16 @@ export class SearchService {
   ) {}
 
   async search(searchQueryDto: SearchQueryDto) {
-    const { query, category = SearchCategory.ALL, page = 1, limit = 10 } = searchQueryDto;
+    const { query, category = SearchCategory.ALL, page = 1, limit = 8 } = searchQueryDto;
 
     // If no search query, return recent content
     if (!query || query.trim() === "") {
-      return this.getRecentResults(limit);
+      // For all categories, divide by 4. For specific categories, return 8 results
+      if (category === SearchCategory.ALL) {
+        return this.getRecentResults(limit);
+      } else {
+        return this.getRecentResultsByCategory(category, 8);
+      }
     }
 
     const searchTerm = `%${query}%`;
@@ -186,5 +191,51 @@ export class SearchService {
       services,
       posts,
     };
+  }
+
+  private async getRecentResultsByCategory(category: SearchCategory, limit: number) {
+    switch (category) {
+      case SearchCategory.PEOPLE:
+        return {
+          people: await this.usersRepository.find({
+            order: { created: "DESC" },
+            take: limit,
+            select: ["id", "name", "profile_image", "location"],
+          }),
+        };
+
+      case SearchCategory.COLLABORATIONS:
+        return {
+          collaborations: await this.collaborationsRepository.find({
+            order: { created: "DESC" },
+            take: limit,
+            relations: ["user", "tags", "genres"],
+          }),
+        };
+
+      case SearchCategory.SERVICES:
+        return {
+          services: await this.servicesRepository.find({
+            order: { created: "DESC" },
+            take: limit,
+            relations: ["user"],
+          }),
+        };
+
+      case SearchCategory.TAGS:
+        return {
+          tags: [],
+          posts: await this.postsRepository
+            .createQueryBuilder("post")
+            .leftJoinAndSelect("post.user", "user")
+            .leftJoinAndSelect("post.tags", "tags")
+            .orderBy("post.created", "DESC")
+            .take(limit)
+            .getMany(),
+        };
+
+      default:
+        return {};
+    }
   }
 }

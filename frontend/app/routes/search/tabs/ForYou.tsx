@@ -21,7 +21,7 @@ export default function ForYou({ query }: ForYouProps) {
       setLoading(true);
       setError(null);
       try {
-        const searchParams = query ? `query=${encodeURIComponent(query)}&category=all` : "limit=10"; // When no query, limit total results to 10 (distributed evenly)
+        const searchParams = query ? `query=${encodeURIComponent(query)}&category=all` : "&category=all"; // When no query, limit total results to 10 (distributed evenly)
         const response = await apiFetch(`/search?${searchParams}`);
         if (!response.ok) throw new Error("Search failed");
         const json = await response.json();

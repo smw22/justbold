@@ -19,7 +19,9 @@ export default function Collaborations({ query }: CollaborationsProps) {
       setLoading(true);
       setError(null);
       try {
-        const searchParams = query ? `query=${encodeURIComponent(query)}&category=all` : "limit=10&category=collaborations";
+        const searchParams = query
+          ? `query=${encodeURIComponent(query)}&category=collaborations`
+          : "category=collaborations";
         const response = await apiFetch(`/search?${searchParams}`);
         if (!response.ok) throw new Error("Search failed");
         const json = await response.json();
