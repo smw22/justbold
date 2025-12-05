@@ -1,0 +1,24 @@
+meta {
+  name: Get One Skill
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{domain}}/skills/:skillTitle
+  body: none
+  auth: bearer
+}
+
+params:path {
+  skillTitle: 
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

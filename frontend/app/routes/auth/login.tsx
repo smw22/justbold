@@ -75,9 +75,9 @@ export default function Login({ onNext, onLogin }: LoginProps) {
           />
 
           {isSubmitting ? (
-            <Button text="Logging in..." variant="primary" className="mt-1.5 w-fit self-center" />
+            <Button text="Logging in..." variant="primary" className="mt-1.5 w-fit self-center" type="submit" />
           ) : (
-            <Button text="Log in" variant="primary" className="mt-1.5 w-fit self-center" />
+            <Button text="Log in" variant="primary" className="mt-1.5 w-fit self-center" type="submit" />
           )}
 
           {actionData?.error && (
