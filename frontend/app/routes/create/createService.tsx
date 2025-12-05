@@ -1,5 +1,4 @@
 import { redirect, useLoaderData, useActionData, useNavigation } from "react-router";
-import AvatarHeader from "../../components/AvatarHeader";
 import CreateServiceForm from "./components/CreateServiceForm";
 import { apiFetch } from "~/lib/apiFetch";
 import { categories } from "~/types/services/categories";
@@ -109,8 +108,7 @@ export default function CreateService() {
   const isSubmitting = navigation.state === "submitting";
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <AvatarHeader imageUrl={user.profile_image} imageSize={40} title={user.name} color="black" />
+    <div className="flex flex-col gap-4">
       <CreateServiceForm categories={categories} isSubmitting={isSubmitting} />
       {actionData?.error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">

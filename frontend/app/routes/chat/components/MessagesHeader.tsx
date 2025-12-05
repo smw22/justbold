@@ -6,7 +6,7 @@ export default function Threadheader() {
   const navigate = useNavigate();
 
   return (
-    <header className="outer-wrapper bg-header-bg-3">
+    <header className="outer-wrapper bg-header-bg-3!">
       <nav className="flex justify-between items-center px-4 py-6">
         <button onClick={() => navigate(-1)} aria-label="Go back">
           <Icon name="NavArrowLeft" color="white" size={20} />

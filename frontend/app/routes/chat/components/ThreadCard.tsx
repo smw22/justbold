@@ -1,6 +1,6 @@
 export default function ThreadCard() {
   return (
-    <div className="flex items-center p-4 border-b border-gray-300 hover:bg-gray-100 cursor-pointer gap-4">
+    <div className="flex items-center p-6 border-b border-gray-300 hover:bg-gray-100 cursor-pointer gap-4">
       <div className="flex items-center gap-4 flex-1">
         <div className="w-[60px] h-[60px]">
           <img src="https://avatar.iran.liara.run/public" alt="Thread Avatar" className="w-full" />

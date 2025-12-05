@@ -9,10 +9,10 @@ export default function ChatLayout() {
   const isThreadPage = location.pathname === "/chats";
 
   return (
-    <div>
+    <>
       {isThreadPage ? <Threadheader /> : <MessagesHeader />}
       <Outlet />
       {isThreadPage ? <Footer /> : <ChatFooter />}
-    </div>
+    </>
   );
 }
