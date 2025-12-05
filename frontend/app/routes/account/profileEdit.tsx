@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLoaderData, useActionData, useNavigation, Form } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import SoMeInstagram from "../../assets/icons/SoMeInstagram.svg";
@@ -151,8 +151,6 @@ export default function ProfileEdit() {
   const [userGenres, setUserGenres] = useState(profile.data.genres);
   const [userLookingFor, setUserLookingFor] = useState(profile.data.looking_for);
   const [userVideos, setUserVideos] = useState(profile.data.videos);
-
-  const isSubmitting = navigation.state === "submitting";
 
   return (
     <article className="outer-wrapper">
@@ -329,6 +327,7 @@ export default function ProfileEdit() {
               <p className="text-xs text-neutral-500">Leave a field empty to hide from your profile.</p>
               <div className="flex w-full gap-2">
                 <Input
+                  name="instagram"
                   variant="onboarding"
                   placeholder="Instagram link"
                   className="flex-1"
@@ -338,6 +337,7 @@ export default function ProfileEdit() {
               </div>
               <div className="flex w-full gap-2">
                 <Input
+                  name="twitter"
                   variant="onboarding"
                   placeholder="Twitter link"
                   className="flex-1"
@@ -347,6 +347,7 @@ export default function ProfileEdit() {
               </div>
               <div className="flex w-full gap-2">
                 <Input
+                  name="youtube"
                   variant="onboarding"
                   placeholder="YouTube link"
                   className="flex-1"
@@ -356,6 +357,7 @@ export default function ProfileEdit() {
               </div>
               <div className="flex w-full gap-2">
                 <Input
+                  name="tiktok"
                   variant="onboarding"
                   placeholder="TikTok link"
                   className="flex-1"
@@ -365,6 +367,7 @@ export default function ProfileEdit() {
               </div>
               <div className="flex w-full gap-2">
                 <Input
+                  name="facebook"
                   variant="onboarding"
                   placeholder="Facebook link"
                   className="flex-1"
@@ -419,7 +422,7 @@ export default function ProfileEdit() {
           <div className="p-4 flex flex-col gap-4">
             <p className="py-2 w-20 min-w-20">Questions</p>
             {questions.data.map((q: QuestionType) => (
-              <div className="mx-4">
+              <div className="mx-4" key={q.id}>
                 <p className="font-bold">{q.question}</p>
                 <input type="text" placeholder="Write your answer." className="flex-1 p-2 border-b border-b-gray-200 w-full" />
               </div>

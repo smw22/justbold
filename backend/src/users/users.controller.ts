@@ -52,7 +52,7 @@ export class UsersController {
       return {
         success: true,
         data,
-        message: "Post updated successfully",
+        message: "User updated successfully",
       };
     } catch (error) {
       return {

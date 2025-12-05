@@ -51,16 +51,20 @@ export default function About({
       <section>
         <h5 className="font-normal text-gray-400! text-sm">What I am looking for</h5>
         <div className="flex flex-row gap-1 mx-4 my-3">
-          {profile.looking_for.map((str) => (
-            <p className={`inline-flex text-white bg-${profile.theme} capitalize px-3 py-1 rounded-full`}>{str}</p>
+          {profile.looking_for.map((str, index) => (
+            <p key={index} className={`inline-flex text-white bg-${profile.theme} capitalize px-3 py-1 rounded-full`}>
+              {str}
+            </p>
           ))}
         </div>
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Genres</h5>
         <div className="flex flex-row gap-1 mx-4 my-3">
-          {profile.genres.map((str) => (
-            <p className={`inline-flex text-white bg-${profile.theme} capitalize px-3 py-1 rounded-full`}>{str}</p>
+          {profile.genres.map((str, index) => (
+            <p key={index} className={`inline-flex text-white bg-${profile.theme} capitalize px-3 py-1 rounded-full`}>
+              {str}
+            </p>
           ))}
         </div>
       </section>
@@ -83,7 +87,7 @@ export default function About({
             </button>
             <SheetView show={showAllReviews} onClose={() => setShowAllReviews(false)} title="All reviews">
               {reviews.map((review) => (
-                <div className="flex flex-col gap-8 items-start my-2">
+                <div className="flex flex-col gap-8 items-start my-2" key={review.id}>
                   <div className="flex flex-col gap-2 items-start">
                     <ReviewStars rating={review.rating} />
                     <p>"{review.content}"</p>
@@ -180,8 +184,8 @@ export default function About({
         <h5 className="font-normal text-gray-400! text-sm">Videos</h5>
         {profile.videos && profile.videos.length !== 0 ? (
           <div className="m-4 flex flex-col md:grid md:grid-cols-2 gap-4">
-            {profile.videos?.map((video) => (
-              <div className="aspect-video w-full">
+            {profile.videos?.map((video, index) => (
+              <div className="aspect-video w-full" key={index}>
                 <iframe
                   className="w-full h-full"
                   style={{ borderRadius: 12 }}
@@ -229,7 +233,7 @@ export default function About({
             questions
               .filter((x) => x.answer)
               .map((question) => (
-                <div>
+                <div key={question.id}>
                   <p>
                     <b>{question.question}</b>
                   </p>
