@@ -11,7 +11,7 @@ export class Post {
   @Column()
   title: string;
 
-  @Column("text")
+  @Column({ charset: "utf8mb4" })
   content: string;
 
   @ManyToMany(() => Tag, { eager: true })
