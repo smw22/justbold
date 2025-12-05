@@ -98,7 +98,7 @@ export class SearchService {
   private async searchServices(searchTerm: string, skip: number, limit: number) {
     return this.servicesRepository.find({
       where: [{ title: ILike(searchTerm) }, { location: ILike(searchTerm) }],
-      relations: ["user", "tag"],
+      relations: ["user"],
       take: limit,
       skip,
     });
@@ -171,7 +171,7 @@ export class SearchService {
       this.servicesRepository.find({
         order: { created: "DESC" },
         take: limitPerCategory,
-        relations: ["user", "tag"],
+        relations: ["user"],
       }),
       this.postsRepository.find({
         order: { created: "DESC" },
