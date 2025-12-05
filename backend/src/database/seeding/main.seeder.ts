@@ -12,6 +12,8 @@ import { Collaboration } from "../../collaborations/entities/collaboration.entit
 import { Service } from "../../services/entities/service.entity";
 import { Review } from "../../reviews/entities/review.entity";
 import { Skill } from "../../skills/entities/skill.entity";
+import { Thread } from "../../threads/entities/thread.entity";
+import { Message } from "../../messages/entities/message.entity";
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
@@ -172,5 +174,36 @@ export class MainSeeder implements Seeder {
     );
     await dataSource.getRepository(Review).save(serviceReviews);
     await dataSource.getRepository(Review).save(userReviews);
+
+    // Seed threads
+    const threadFactory = factoryManager.get(Thread);
+    const threads = await Promise.all(
+      Array(50)
+        .fill("")
+        .map(async () => {
+          const thread = await threadFactory.make();
+          // Assign 2-4 random users as participants
+          const threadUsers = faker.helpers.arrayElements(users, {
+            min: 2,
+            max: 4,
+          });
+          thread.users = threadUsers;
+          return thread;
+        })
+    );
+    await dataSource.getRepository(Thread).save(threads);
+
+    //Seed messages linked to threads and users
+    const messageFactory = factoryManager.get(Message);
+    const messages = await Promise.all(
+      Array(200)
+        .fill("")
+        .map(async () => {
+          const user = faker.helpers.arrayElement(users);
+          const thread = faker.helpers.arrayElement(threads);
+          return messageFactory.make({ user, thread });
+        })
+    );
+    await dataSource.getRepository(Message).save(messages);
   }
 }

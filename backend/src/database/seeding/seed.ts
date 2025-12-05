@@ -12,6 +12,8 @@ import { CollaborationFactory } from "./collaboration.factory";
 import { ServiceFactory } from "./service.factory";
 import { ReviewFactory } from "./reviews.factory";
 import { SkillFactory } from "./skill.factory";
+import { ThreadFactory } from "./thread.factory";
+import { MessageFactory } from "./message.factory";
 
 const options: DataSourceOptions & SeederOptions = {
   ...AppDataSource.options,
@@ -24,6 +26,8 @@ const options: DataSourceOptions & SeederOptions = {
     ServiceFactory,
     ReviewFactory,
     SkillFactory,
+    ThreadFactory,
+    MessageFactory,
   ],
   seeds: [MainSeeder],
 };
