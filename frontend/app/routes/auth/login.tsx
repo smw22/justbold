@@ -3,6 +3,22 @@ import Button from "~/components/Button";
 import Input from "~/components/Input";
 import { apiFetch } from "~/lib/apiFetch";
 
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Login | LineUp" },
+    {
+      property: "og:title",
+      content: "Login | LineUp",
+    },
+    // {
+    //   name: "description",
+    //   content: "This app is the best",
+    // },
+  ];
+};
+
 interface LoginProps {
   onNext: () => void;
   onLogin: () => void;

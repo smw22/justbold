@@ -2,6 +2,21 @@ import { redirect, useLoaderData, useActionData, useNavigation } from "react-rou
 import CreateServiceForm from "./components/CreateServiceForm";
 import { apiFetch } from "~/lib/apiFetch";
 import { categories } from "~/types/services/categories";
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Create service | LineUp" },
+    {
+      property: "og:title",
+      content: "Create service | LineUp",
+    },
+    // {
+    //   name: "description",
+    //   content: "This app is the best",
+    // },
+  ];
+};
 
 export async function clientLoader(): Promise<{}> {
   const userId = localStorage.getItem("user_id");

@@ -4,6 +4,22 @@ import CollaborationsFeed from "./components/CollaborationsFeed";
 import CollaborationsFilter from "./components/CollaborationsFilter";
 import { apiFetch } from "~/lib/apiFetch";
 
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Collaborations | LineUp" },
+    {
+      property: "og:title",
+      content: "Collaborations | LineUp",
+    },
+    // {
+    //   name: "description",
+    //   content: "This app is the best",
+    // },
+  ];
+};
+
 export async function clientLoader(): Promise<{}> {
   const collabResponse = await apiFetch(`/collaborations`);
 

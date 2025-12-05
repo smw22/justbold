@@ -1,12 +1,19 @@
 import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Create post | LineUp" },
+    {
+      property: "og:title",
+      content: "Create post | LineUp",
+    },
+  ];
+};
+
 import { redirect, useActionData, useNavigation, useOutletContext, Form } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import Input from "~/components/Input";
 import Button from "~/components/Button";
-
-export const meta: MetaFunction = () => {
-  return [{ title: "Create Post" }];
-};
 
 export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();

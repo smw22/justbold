@@ -7,6 +7,22 @@ import Button from "~/components/Button";
 import Input from "~/components/Input";
 import { apiFetch } from "~/lib/apiFetch";
 
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Services | LineUp" },
+    {
+      property: "og:title",
+      content: "Services | LineUp",
+    },
+    // {
+    //   name: "description",
+    //   content: "This app is the best",
+    // },
+  ];
+};
+
 export async function clientLoader({ request }: { request: Request }): Promise<{}> {
   const url = new URL(request.url);
   const page = url.searchParams.get("page") || "1";
