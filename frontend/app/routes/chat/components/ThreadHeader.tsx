@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import Icon from "~/components/icon";
 
-export default function Threadheader() {
+export default function ThreadHeader() {
   return (
     <header className="outer-wrapper bg-header-bg-3!">
       <nav className="flex justify-between items-center px-4 py-8 -translate-y-2">

@@ -17,6 +17,9 @@ const messages: Message[] = [
 export default function Chat() {
   return (
     <main className="outer-wrapper min-h-screen bg-white text-darkgrey px-5 py-6">
+      <div className="flex m-auto mb-4">
+        <p className="text-xs m-auto">Thu, 22 Jun</p>
+      </div>
       <div className="flex flex-col space-y-3">
         {messages.slice(0, 7).map((message) => (
           <Bubble key={message.id} message={message} />

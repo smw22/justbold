@@ -1,8 +1,8 @@
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import Icon from "~/components/icon";
 import AvatarHeader from "~/components/AvatarHeader";
 
-export default function Threadheader() {
+export default function MessagesHeader() {
   const navigate = useNavigate();
 
   return (
