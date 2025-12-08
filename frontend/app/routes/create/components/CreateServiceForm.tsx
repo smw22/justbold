@@ -17,7 +17,7 @@ export default function CreateServiceForm({ categories, isSubmitting }: { catego
       <select
         name="category"
         id="category"
-        className="bg-light-grey p-2.5 rounded-lg border border-neutral-grey w-full"
+        className="p-2.5 bg-light-grey outline-black/30 focus:outline-primary-yellow rounded-lg outline-1"
         required
       >
         <option value="">Select a category</option>

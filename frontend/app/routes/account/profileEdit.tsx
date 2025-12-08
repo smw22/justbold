@@ -7,7 +7,7 @@ import SoMeFacebook from "../../assets/icons/SoMeFacebook.svg";
 import SoMeYouTube from "../../assets/icons/SoMeYouTube.svg";
 import SoMeTikTok from "../../assets/icons/SoMeTikTok.svg";
 import type { QuestionType } from "~/types/question";
-import EditArray from "./components/EditArray";
+import EditArray from "../../components/EditArray";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
 import type { MetaFunction } from "react-router";
@@ -217,7 +217,7 @@ export default function ProfileEdit() {
               placeholder="Write what you're looking for..."
               onChange={(e: string[]) => setUserLookingFor(e)}
             />
-            <input value={userLookingFor.toString()} name="looking_for" className="hidden" />
+            <input value={userLookingFor.toString()} name="looking_for" type="hidden" />
           </div>
           <div className="p-4 flex gap-4">
             <p className="py-2 w-20 min-w-20">Genres</p>
@@ -228,7 +228,7 @@ export default function ProfileEdit() {
               placeholder="Pick genre..."
               onChange={(e: string[]) => setUserGenres(e)}
             />
-            <input value={userGenres.toString()} name="genres" className="hidden" />
+            <input value={userGenres.toString()} name="genres" type="hidden" />
           </div>
           <div className="p-4 flex gap-4">
             <p className="py-2 w-20 min-w-20">Theme</p>
