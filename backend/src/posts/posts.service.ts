@@ -34,7 +34,7 @@ export class PostsService {
     return this.postsRepository.save(postData);
   }
 
-  async findAll(page = 1, limit = 10): Promise<{ data: any[]; total: number }> {
+  async findAll(page = 1, limit = 10, userId?: string): Promise<{ data: any[]; total: number }> {
     const [data, total] = await this.postsRepository.findAndCount({
       skip: (page - 1) * limit,
       take: limit,
@@ -46,6 +46,18 @@ export class PostsService {
     for (const post of data) {
       // Fetch likes for this post
       const likes = await this.likesRepository.find({ where: { type: "post", object_id: post.id }, relations: ["user"] });
+      // Check if current user has liked the post
+      let likedByCurrentUser = false;
+      if (userId) {
+        likedByCurrentUser = !!(await this.likesRepository.findOne({
+          where: {
+            type: "post",
+            object_id: post.id,
+            user: { id: userId },
+          },
+          relations: ["user"],
+        }));
+      }
       const { user, comments = [], ...rest } = post as any;
       transformedData.push({
         ...rest,
@@ -78,6 +90,7 @@ export class PostsService {
               }
             : null,
         })),
+        likedByCurrentUser,
       });
     }
 
