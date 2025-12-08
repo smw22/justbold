@@ -1,0 +1,29 @@
+meta {
+  name: Create Comment
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{domain}}/comments
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "title": "Post title",
+    "content": "This is the post content",
+    "media": "https://picsum.photos/seed/1cmd7Okx/640/480",
+    "tagIds": ["01a210ec-d424-4f57-8b72-6be9c7b08264", "044276da-0acf-4049-a3d1-dda0c772e770", "077c12ac-c58c-44f9-b0b1-a42a1ad042ed"]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
