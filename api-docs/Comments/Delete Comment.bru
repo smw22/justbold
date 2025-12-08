@@ -1,18 +1,17 @@
 meta {
-  name: Get Posts
+  name: Delete Comment
   type: http
-  seq: 1
+  seq: 5
 }
 
-get {
-  url: {{domain}}/posts?page=1&limit=100
+delete {
+  url: {{domain}}/comments/:commentId
   body: none
   auth: bearer
 }
 
-params:query {
-  page: 1
-  limit: 100
+params:path {
+  commentId: {{comment_id}}
 }
 
 auth:bearer {
