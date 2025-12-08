@@ -9,22 +9,41 @@ import { apiFetch } from "~/lib/apiFetch";
 
 export default function Post({ post, clickable = true }: { post: PostType; clickable?: boolean }) {
   const [showContextMenu, setShowContextMenu] = useState(false);
-  const [likes, setLikes] = useState(post.likes.length);
+  const [likes, setLikes] = useState(post.totalLikes);
+  const [likedByUser, setLikedByUser] = useState(post.likedByCurrentUser);
 
   const handleLike = async () => {
-    const currentUser = localStorage.getItem("user_id");
     try {
-      const response = await fetch("/api/likes", {
+      const response = await apiFetch(`/posts/${post.id}/likes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          objectId: post.id,
-          userId: currentUser,
-        }),
       });
       if (response.ok) {
-        // const data = await response.json();
-        // setLikes(data.likeCount); // Use the value from the backend
+        const data = await response.json();
+        console.log(data);
+
+        setLikes(data.totalLikes);
+        setLikedByUser(true);
+      } else {
+        alert("Failed to like post.");
+      }
+    } catch {
+      alert("Error liking post.");
+    }
+  };
+
+  const handleUnlike = async () => {
+    try {
+      const response = await apiFetch(`/posts/${post.id}/likes`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+
+        setLikes(data.totalLikes);
+        setLikedByUser(false);
       } else {
         alert("Failed to like post.");
       }
@@ -113,11 +132,11 @@ export default function Post({ post, clickable = true }: { post: PostType; click
         <div className="flex items-center gap-1">
           <button
             className="cursor-pointer hover:bg-gray-100 w-8 h-8 flex justify-center items-center rounded-full transition-colors duration-200 ease-in-out"
-            onClick={() => alert("Tilføj funktionalitet")}
+            onClick={likedByUser ? () => handleUnlike() : () => handleLike()}
           >
-            <Icon name="Heart" size={24} className="text-neutral-grey" />
+            <Icon name={likedByUser ? "HeartFilled" : "Heart"} size={24} className="text-neutral-grey" />
           </button>
-          <p className="text-sm text-neutral-grey">{post.likes.length}</p>
+          <p className="text-sm text-neutral-grey">{likes}</p>
         </div>
         <div className="flex items-center gap-1">
           {clickable ? (

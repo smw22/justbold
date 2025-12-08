@@ -9,6 +9,8 @@ export interface PostType {
   media: string;
   created: Date;
   likes: ProfileType[];
+  likedByCurrentUser: boolean;
+  totalLikes: number;
   comments: CommentType[];
   user: ProfileType;
 }
