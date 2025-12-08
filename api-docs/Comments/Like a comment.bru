@@ -1,0 +1,24 @@
+meta {
+  name: Like a comment
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{domain}}/comments/:commentId/likes
+  body: none
+  auth: bearer
+}
+
+params:path {
+  commentId: {{comment_id}}
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,24 @@
+meta {
+  name: Remove a Like
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{domain}}/comments/:commentId/likes
+  body: none
+  auth: bearer
+}
+
+params:path {
+  commentId: {{comment_id}}
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
