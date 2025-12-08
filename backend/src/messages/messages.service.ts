@@ -35,6 +35,8 @@ export class MessagesService {
   }
 
   async findOne(threadId: string) {
+    // Get the latest message in the thread
+    // (not used for now as the threads endpoint already fetches messages)
     const message = await this.messagesRepository
       .createQueryBuilder("message")
       .innerJoin("message.thread", "thread")

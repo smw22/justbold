@@ -16,17 +16,23 @@ export class ThreadsService {
     return "This action adds a new thread";
   }
 
+  // Fetch threads for a specific user (logged in user), and include only the latest message per thread
   async findAll(userId: string): Promise<Thread[]> {
     const threads = await this.threadsRepository
       .createQueryBuilder("thread")
       .innerJoin("thread.users", "user")
       .leftJoinAndSelect("thread.messages", "message")
+      .leftJoinAndSelect("message.user", "messageUser")
       .where("user.id = :userId", { userId })
       .orderBy("thread.created", "DESC")
-      .addOrderBy("message.created", "ASC")
+      .addOrderBy("message.created", "DESC")
       .getMany();
 
-    return threads;
+    // Keep only the latest message per thread (no overfetching unused data)
+    return threads.map((thread) => ({
+      ...thread,
+      messages: thread.messages.slice(0, 1),
+    }));
   }
 
   findOne(id: number) {
