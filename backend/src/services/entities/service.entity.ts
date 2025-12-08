@@ -24,11 +24,11 @@ export class Service {
   @Column({ type: "varchar", length: 500, nullable: true })
   media: string;
 
-  @Column({ type: "varchar", length: 100 })
+  @Column({ type: "varchar", length: 100, charset: "utf8mb4" })
   @Index() // Index for search functionality
   title: string;
 
-  @Column({ type: "text" })
+  @Column({ charset: "utf8mb4" })
   content: string;
 
   @Column({

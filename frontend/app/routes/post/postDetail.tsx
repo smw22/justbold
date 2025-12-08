@@ -4,6 +4,20 @@ import { Link, useLoaderData } from "react-router";
 import Post from "~/components/Post";
 import type { CommentType } from "~/types/comment";
 import { apiFetch } from "~/lib/apiFetch";
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = ({ matches }) => {
+  const routeData = matches.find((match: any) => match.id === "routes/post/postDetail")?.loaderData as any;
+  const postAuthor = routeData?.post?.user?.name ?? "Post";
+
+  return [
+    { title: `Post by ${postAuthor} | LineUp` },
+    {
+      property: "og:title",
+      content: `Post by ${postAuthor} | LineUp`,
+    },
+  ];
+};
 
 export async function clientLoader({ params }: { params: { postId: string } }): Promise<{}> {
   const response = await apiFetch(`/posts/${params.postId}`);

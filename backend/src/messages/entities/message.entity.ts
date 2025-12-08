@@ -16,7 +16,7 @@ export class Message {
   @JoinColumn({ name: "thread_id" })
   thread: Thread;
 
-  @Column("text")
+  @Column({ charset: "utf8mb4" })
   content: string;
 
   @CreateDateColumn()

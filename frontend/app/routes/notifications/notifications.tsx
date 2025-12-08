@@ -1,5 +1,20 @@
 import Notification from "~/components/Notification";
 import type { NotificationType } from "~/types/notification";
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Notifications | LineUp" },
+    {
+      property: "og:title",
+      content: "Notifications | LineUp",
+    },
+    // {
+    //   name: "description",
+    //   content: "This app is the best",
+    // },
+  ];
+};
 
 export default function Notifications() {
   const mockData: NotificationType[] = [
@@ -52,7 +67,7 @@ export default function Notifications() {
           {mockData
             .filter((x) => x.object_type === "connection")
             .map((notification) => (
-              <Notification notification={notification} />
+              <Notification notification={notification} key={notification.id} />
             ))}
         </section>
         <section className="flex flex-col gap-2">
@@ -60,7 +75,7 @@ export default function Notifications() {
           {mockData
             .filter((x) => x.object_type === "collaboration")
             .map((notification) => (
-              <Notification notification={notification} />
+              <Notification notification={notification} key={notification.id} />
             ))}
         </section>
         <section className="flex flex-col gap-2">
@@ -68,7 +83,7 @@ export default function Notifications() {
           {mockData
             .filter((x) => x.object_type.includes("post"))
             .map((notification) => (
-              <Notification notification={notification} />
+              <Notification notification={notification} key={notification.id} />
             ))}
         </section>
       </article>

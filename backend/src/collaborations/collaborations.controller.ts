@@ -19,7 +19,6 @@ import { AuthGuard } from "../auth/auth.guard";
 export class CollaborationsController {
   constructor(private readonly collaborationsService: CollaborationsService) {}
 
-  @UseGuards(AuthGuard)
   @Post()
   async create(@Body() createCollaborationDto: CreateCollaborationDto, @Req() req) {
     try {

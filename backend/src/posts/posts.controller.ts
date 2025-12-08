@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query, // <-- add Query import
+  Req,
 } from "@nestjs/common";
 import { PostsService } from "./posts.service";
 import { CreatePostDto } from "./dto/create-post.dto";
@@ -17,9 +18,10 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  async create(@Body() createPostDto: CreatePostDto) {
+  async create(@Body() createPostDto: CreatePostDto, @Req() req) {
     try {
-      const data = await this.postsService.create(createPostDto);
+      const userId = req.user.id;
+      const data = await this.postsService.create(createPostDto, userId);
       return {
         success: true,
         data,
@@ -34,10 +36,7 @@ export class PostsController {
   }
 
   @Get()
-  async findAll(
-    @Query("page") page: string = "1",
-    @Query("limit") limit: string = "10"
-  ) {
+  async findAll(@Query("page") page: string = "1", @Query("limit") limit: string = "10") {
     try {
       const pageNum = parseInt(page, 10) || 1;
       const limitNum = parseInt(limit, 10) || 10;
