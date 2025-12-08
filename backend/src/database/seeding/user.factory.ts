@@ -21,7 +21,6 @@ export const UserFactory = setSeederFactory(User, (faker: Faker) => {
     "header-bg-6",
     "header-bg-7",
   ]);
-  user.connections = [];
   user.instagram = "https://www.instagram.com/" + faker.internet.userName();
   user.twitter = "https://www.twitter.com/" + faker.internet.userName();
   user.facebook = "https://www.facebook.com/" + faker.internet.userName();
