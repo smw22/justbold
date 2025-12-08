@@ -72,6 +72,7 @@ export class PostsService {
           }
           return {
             id: comment.id,
+            parentId: comment.parent ? comment.parent.id : null,
             content: comment.content,
             created: comment.created,
             user: comment.user
@@ -138,6 +139,7 @@ export class PostsService {
     }
     const totalLikes = likes.length;
     // Fetch likes for each comment
+    console.log(postData.comments);
     const commentsWithLikes = await Promise.all(
       (postData.comments || []).map(async (comment: Comment) => {
         const commentLikes = await this.likesRepository.find({
@@ -150,6 +152,7 @@ export class PostsService {
         }
         return {
           id: comment.id,
+          parentId: comment.parent ? comment.parent.id : null,
           content: comment.content,
           created: comment.created,
           user: comment.user
@@ -255,5 +258,20 @@ export class PostsService {
       throw new HttpException("Like not found", 404);
     }
     await this.likesRepository.remove(existingLike);
+  }
+
+  async addComment(postId: string, userId: string, content: string, parentId?: string): Promise<Comment> {
+    const post = await this.postsRepository.findOneBy({ id: postId });
+    if (!post) {
+      throw new HttpException("Post not found", 404);
+    }
+    const commentData = this.commentsRepository.create({
+      content,
+      post: { id: postId },
+      user: { id: userId },
+      parent: parentId ? { id: parentId } : undefined,
+    });
+    console.log(commentData);
+    return this.commentsRepository.save(commentData);
   }
 }

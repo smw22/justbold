@@ -17,14 +17,8 @@ export class Comment {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  // Parent comment (null for top-level comments)
-  @ManyToOne(() => Comment, (comment) => comment.replies, { nullable: true })
-  @JoinColumn({ name: "parent_id" })
-  parent: Comment | null;
-
-  // Child comments (replies to this comment)
-  @OneToMany(() => Comment, (comment) => comment.parent)
-  replies: Comment[];
+  @Column({ name: "parent_id" })
+  parent_id: string | null;
 
   @Column({ charset: "utf8mb4" })
   content: string;
