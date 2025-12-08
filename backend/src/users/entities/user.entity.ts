@@ -1,5 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Post } from "../../posts/entities/post.entity";
+import { Connection } from "../../connections/entities/connection.entity";
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")
@@ -73,4 +75,10 @@ export class User {
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
+
+  @OneToMany(() => Connection, (conn) => conn.requester)
+  connections_sent: Connection[];
+
+  @OneToMany(() => Connection, (conn) => conn.addressee)
+  connections_received: Connection[];
 }
