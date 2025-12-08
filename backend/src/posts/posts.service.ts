@@ -84,16 +84,28 @@ export class PostsService {
     return { data: transformedData, total };
   }
 
-  async findOne(id: string): Promise<any> {
+  async findOne(id: string, userId?: string): Promise<any> {
     const postData = await this.postsRepository.findOne({
       where: { id },
-      relations: ["tags", "user", "comments", "comments.user"], // Remove likes and likes.user
+      relations: ["tags", "user", "comments", "comments.user"],
     });
     if (!postData) {
       throw new HttpException("Post not found", 404);
     }
     // Fetch likes for this post
     const likes = await this.likesRepository.find({ where: { type: "post", object_id: postData.id }, relations: ["user"] });
+    // Check if current user has liked the post
+    let likedByCurrentUser = false;
+    if (userId) {
+      likedByCurrentUser = !!(await this.likesRepository.findOne({
+        where: {
+          type: "post",
+          object_id: postData.id,
+          user: { id: userId },
+        },
+        relations: ["user"],
+      }));
+    }
     // Fetch likes for each comment
     const commentsWithLikes = await Promise.all(
       (postData.comments || []).map(async (comment: Comment) => {
@@ -146,6 +158,7 @@ export class PostsService {
         type: like.type,
       })),
       comments: commentsWithLikes,
+      likedByCurrentUser,
     };
   }
 
@@ -164,5 +177,45 @@ export class PostsService {
       throw new HttpException("Post not found", 404);
     }
     return await this.postsRepository.remove(existingPost);
+  }
+
+  async getLikes(postId: string): Promise<Like[]> {
+    return this.likesRepository.find({ where: { type: "post", object_id: postId }, relations: ["user"] });
+  }
+
+  async addLike(postId: string, userId: string): Promise<Like> {
+    // Check if like already exists
+    const existingLike = await this.likesRepository.findOne({
+      where: {
+        type: "post",
+        object_id: postId,
+        user: { id: userId },
+      },
+      relations: ["user"],
+    });
+    if (existingLike) {
+      throw new HttpException("User has already liked this post", 400);
+    }
+    const likeData = this.likesRepository.create({
+      type: "post",
+      object_id: postId,
+      user: { id: userId },
+    });
+    return this.likesRepository.save(likeData);
+  }
+
+  async removeLike(postId: string, userId: string): Promise<void> {
+    const existingLike = await this.likesRepository.findOne({
+      where: {
+        type: "post",
+        object_id: postId,
+        user: { id: userId },
+      },
+      relations: ["user"],
+    });
+    if (!existingLike) {
+      throw new HttpException("Like not found", 404);
+    }
+    await this.likesRepository.remove(existingLike);
   }
 }

@@ -107,4 +107,57 @@ export class PostsController {
       };
     }
   }
+
+  @Get(":id/likes")
+  async getLikes(@Param("id") id: string) {
+    try {
+      const data = await this.postsService.getLikes(id);
+      return {
+        success: true,
+        data,
+        message: "Post likes retrieved successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
+
+  @Post(":id/likes")
+  async addLike(@Param("id") id: string, @Req() req) {
+    try {
+      const userId = req.user.id;
+      const data = await this.postsService.addLike(id, userId);
+      return {
+        success: true,
+        data,
+        message: "Like added successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
+
+  @Delete(":id/likes")
+  async removeLike(@Param("id") id: string, @Req() req) {
+    try {
+      const userId = req.user.id;
+      const data = await this.postsService.removeLike(id, userId);
+      return {
+        success: true,
+        data,
+        message: "Like removed successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
 }

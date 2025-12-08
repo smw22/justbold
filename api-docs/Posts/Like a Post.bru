@@ -1,0 +1,24 @@
+meta {
+  name: Like a Post
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{domain}}/posts/:postId/likes
+  body: none
+  auth: bearer
+}
+
+params:path {
+  postId: {{post_id}}
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
