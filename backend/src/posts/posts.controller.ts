@@ -36,11 +36,12 @@ export class PostsController {
   }
 
   @Get()
-  async findAll(@Query("page") page: string = "1", @Query("limit") limit: string = "10") {
+  async findAll(@Query("page") page: string = "1", @Query("limit") limit: string = "10", @Req() req) {
     try {
+      const userId = req.user?.id;
       const pageNum = parseInt(page, 10) || 1;
       const limitNum = parseInt(limit, 10) || 10;
-      const { data } = await this.postsService.findAll(pageNum, limitNum);
+      const { data } = await this.postsService.findAll(pageNum, limitNum, userId);
       return {
         success: true,
         data,
@@ -55,9 +56,10 @@ export class PostsController {
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: string) {
+  async findOne(@Param("id") id: string, @Req() req) {
     try {
-      const data = await this.postsService.findOne(id);
+      const userId = req.user?.id;
+      const data = await this.postsService.findOne(id, userId);
       return {
         success: true,
         data,
@@ -114,6 +116,7 @@ export class PostsController {
       const data = await this.postsService.getLikes(id);
       return {
         success: true,
+        totalLiks: data.length,
         data,
         message: "Post likes retrieved successfully",
       };
