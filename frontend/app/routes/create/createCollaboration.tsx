@@ -1,7 +1,9 @@
 import type { MetaFunction } from "react-router";
 import { redirect, useActionData, useNavigation, useLoaderData, useOutletContext, Form } from "react-router";
+import { useState } from "react";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
+import EditArray from "~/components/EditArray";
 import { apiFetch } from "~/lib/apiFetch";
 
 export const meta: MetaFunction = () => {
@@ -99,50 +101,53 @@ export default function CreateCollaboration() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
+  // Add state for selected genres and skills
+  const [formGenres, setFormGenres] = useState<Array<{ id: string; title: string }>>([]);
+  const [formSkills, setFormSkills] = useState<Array<{ id: string; title: string }>>([]);
+  const [formTags, setFormTags] = useState<Array<{ id: string; title: string }>>([]);
+
   return (
     <div className="flex flex-col gap-4">
       <Form method="post" className="flex flex-col gap-4" encType="multipart/form-data">
         <Input type="text" name="title" id="title" placeholder="Title *" required />
         <Input type="url" name="media" id="media" placeholder="Media (Image/Video) *" accept="image/*,video/*" required />
         <Input textarea name="content" id="content" placeholder="Write your description here..." required />
-        <select
-          name="tagIds"
-          id="tagIds"
-          className="bg-light-grey p-4 rounded-lg border border-neutral-grey w-full"
-          required
-          multiple
-        >
-          {tags.map((tag: { id: string; title: string }) => (
-            <option key={tag.id} value={tag.id}>
-              {tag.title.charAt(0).toUpperCase() + tag.title.slice(1)}
-            </option>
-          ))}
-        </select>
-        <select
-          name="genreIds"
-          id="genreIds"
-          className="bg-light-grey p-4 rounded-lg border border-neutral-grey w-full"
-          required
-          multiple
-        >
-          {genres.map((genre: { id: string; title: string }) => (
-            <option key={genre.id} value={genre.id}>
-              {genre.title.charAt(0).toUpperCase() + genre.title.slice(1)}
-            </option>
-          ))}
-        </select>
-        <select
-          name="skillIds"
-          id="skillIds"
-          className="bg-light-grey p-4 rounded-lg border border-neutral-grey w-full"
-          multiple
-        >
-          {skills.map((skill: { id: string; title: string }) => (
-            <option key={skill.id} value={skill.id}>
-              {skill.title.charAt(0).toUpperCase() + skill.title.slice(1)}
-            </option>
-          ))}
-        </select>
+        <EditArray
+          array={formTags.map((tag) => tag.title)}
+          editableText={false}
+          selectOptions={tags.map((tag: { id: string; title: string }) => tag.title)}
+          placeholder="Pick tag..."
+          onChange={(selectedTitles: string[]) => setFormTags(tags.filter((tag) => selectedTitles.includes(tag.title)))}
+        />
+        {formTags.map((tag) => (
+          <input key={tag.id} type="hidden" name="tagIds" value={tag.id} />
+        ))}
+        {/* Replace genreIds select with EditArray */}
+        <EditArray
+          array={formGenres.map((genre: { id: string; title: string }) => genre.title)}
+          editableText={false}
+          selectOptions={genres.map((genre: { id: string; title: string }) => genre.title)}
+          placeholder="Pick genre..."
+          onChange={(selectedTitles: string[]) =>
+            setFormGenres(genres.filter((genre: { id: string; title: string }) => selectedTitles.includes(genre.title)))
+          }
+        />
+        {formGenres.map((genre: { id: string; title: string }) => (
+          <input key={genre.id} type="hidden" name="genreIds" value={genre.id} />
+        ))}
+        {/* Replace skillIds select with EditArray */}
+        <EditArray
+          array={formSkills.map((skill: { id: string; title: string }) => skill.title)}
+          editableText={false}
+          selectOptions={skills.map((skill: { id: string; title: string }) => skill.title)}
+          placeholder="Pick skill..."
+          onChange={(selectedTitles: string[]) =>
+            setFormSkills(skills.filter((skill: { id: string; title: string }) => selectedTitles.includes(skill.title)))
+          }
+        />
+        {formSkills.map((skill: { id: string; title: string }) => (
+          <input key={skill.id} type="hidden" name="skillIds" value={skill.id} />
+        ))}
         <Input type="text" name="role" id="role" placeholder="Role * (e.g. Violin)" required />
         <div className="flex items-center gap-2">
           <Input type="checkbox" name="paid" id="paid" /> Paid

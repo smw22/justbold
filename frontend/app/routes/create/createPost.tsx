@@ -1,5 +1,5 @@
 import type { MetaFunction } from "react-router";
-
+import { useState } from "react";
 export const meta: MetaFunction = () => {
   return [
     { title: "Create post | LineUp" },
@@ -14,6 +14,7 @@ import { redirect, useActionData, useNavigation, useOutletContext, Form } from "
 import { apiFetch } from "~/lib/apiFetch";
 import Input from "~/components/Input";
 import Button from "~/components/Button";
+import EditArray from "~/components/EditArray";
 
 export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();
@@ -64,7 +65,8 @@ export default function CreatePost() {
   const actionData = useActionData();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
-  const inputStyle = "bg-light-grey p-4 rounded-lg border border-neutral-grey w-full";
+
+  const [formTags, setFormTags] = useState([]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -72,13 +74,16 @@ export default function CreatePost() {
         <Input type="text" name="title" id="title" placeholder="Title" required />
         <Input type="url" name="media" id="media" placeholder="Media" />
         <Input textarea name="content" id="content" placeholder="Description" required />
-        <select name="tagIds" id="tagIds" className={inputStyle} required multiple>
-          {tags.map((tag: { id: string; title: string }) => (
-            <option key={tag.id} value={tag.id}>
-              {tag.title.charAt(0).toUpperCase() + tag.title.slice(1)}
-            </option>
-          ))}
-        </select>
+        <EditArray
+          array={formTags.map((tag) => tag.title)}
+          editableText={false}
+          selectOptions={tags.map((tag: { id: string; title: string }) => tag.title)}
+          placeholder="Pick tag..."
+          onChange={(selectedTitles: string[]) => setFormTags(tags.filter((tag) => selectedTitles.includes(tag.title)))}
+        />
+        {formTags.map((tag) => (
+          <input key={tag.id} type="hidden" name="tagIds" value={tag.id} />
+        ))}
         <Button
           variant="primary"
           icon="Plus"
