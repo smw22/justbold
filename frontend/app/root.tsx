@@ -73,9 +73,10 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
 export function HydrateFallback() {
   return (
-    <div className="w-screen h-screen flex flex-col justify-center items-center">
+    <div className="w-screen h-screen flex flex-col justify-center items-center gap-3">
+      <img src="/icon192.png" className="w-16 h-16 rounded-2xl move-up z-1" />
+      <Logo className="fade-in-down z-0" />
       <div className="loader" />
-      <Logo />
     </div>
   );
 }
