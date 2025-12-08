@@ -177,13 +177,14 @@ export class MainSeeder implements Seeder {
 
     // Seed threads
     const threadFactory = factoryManager.get(Thread);
+    const allUsers = [...users, adminUser]; // Include admin user
     const threads = await Promise.all(
       Array(50)
         .fill("")
         .map(async () => {
           const thread = await threadFactory.make();
           // Assign 2-4 random users as participants
-          const threadUsers = faker.helpers.arrayElements(users, {
+          const threadUsers = faker.helpers.arrayElements(allUsers, {
             min: 2,
             max: 4,
           });
@@ -199,7 +200,7 @@ export class MainSeeder implements Seeder {
       Array(200)
         .fill("")
         .map(async () => {
-          const user = faker.helpers.arrayElement(users);
+          const user = faker.helpers.arrayElement(allUsers);
           const thread = faker.helpers.arrayElement(threads);
           return messageFactory.make({ user, thread });
         })
