@@ -1,46 +1,64 @@
 import { useState } from "react";
 import Tabs from "~/components/Tabs";
 import ThreadCard from "./components/ThreadCard";
-import { Link, useLoaderData } from "react-router";
+import { useLoaderData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Thread } from "~/types/threads";
+import type { Message } from "~/types/messages";
 
-export async function clientLoader(): Promise<{ threads: Thread[] }> {
+export async function clientLoader(): Promise<{ threads: Thread[]; message: Message }> {
   const userId = localStorage.getItem("user_id");
 
   if (!userId) {
     throw new Error("User not authenticated");
   }
 
-  const response = await apiFetch(`/threads?userId=${userId}`);
+  const threadResponse = await apiFetch(`/threads?userId=${userId}`);
 
-  if (!response.ok) {
-    throw new Error(`Failed to load threads: ${response.status}`);
+  if (!threadResponse.ok) {
+    throw new Error(`Failed to load threads: ${threadResponse.status}`);
   }
 
-  const result = await response.json();
+  const threadResult = await threadResponse.json();
 
-  if (!result.success || !result.data) {
-    throw new Error(result.message || "Failed to load threads");
+  if (!threadResult.success || !threadResult.data) {
+    throw new Error(threadResult.message || "Failed to load threads");
+  }
+
+  const threadId = threadResult.data[0]?.id;
+
+  if (!threadId) {
+    throw new Error("No threads found for user");
+  }
+
+  const messageResponse = await apiFetch(`/messages/${threadId}`);
+
+  if (!messageResponse.ok) {
+    throw new Error(`Failed to load message: ${messageResponse.status}`);
+  }
+
+  const messageResult = await messageResponse.json();
+
+  if (!messageResult.success || !messageResult.data) {
+    throw new Error(messageResult.message || "Failed to load messages");
   }
 
   return {
-    threads: result.data,
+    threads: threadResult.data,
+    message: messageResult.data,
   };
 }
 
 export default function Threads() {
-  const { threads } = useLoaderData();
+  const { threads, message } = useLoaderData();
 
   const [tab, setTab] = useState(0);
 
   return (
     <main>
       <Tabs tabs={["Chats", "Groups"]} currentTab={tab} setTab={(e) => setTab(e)} />
-      {Array.from({ length: 5 }).map((_, index) => (
-        <Link to={`/chats/${index}`} key={index}>
-          <ThreadCard />
-        </Link>
+      {threads.map((thread: Thread) => (
+        <ThreadCard key={thread.id} threadData={thread} messagesData={message} />
       ))}
 
       {threads.length === 0 ? (

@@ -1,19 +1,49 @@
-import { Injectable } from '@nestjs/common';
-import { CreateMessageDto } from './dto/create-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
+import { Injectable } from "@nestjs/common";
+import { CreateMessageDto } from "./dto/create-message.dto";
+import { UpdateMessageDto } from "./dto/update-message.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Message } from "./entities/message.entity";
 
 @Injectable()
 export class MessagesService {
+  constructor(
+    @InjectRepository(Message)
+    private readonly messagesRepository: Repository<Message>
+  ) {}
   create(createMessageDto: CreateMessageDto) {
-    return 'This action adds a new message';
+    return "This action adds a new message";
   }
 
-  findAll() {
-    return `This action returns all messages`;
+  async findAll(threadId: string, userId: string) {
+    const messages = await this.messagesRepository
+      .createQueryBuilder("message")
+      .innerJoin("message.thread", "thread")
+      .leftJoinAndSelect("message.user", "user")
+      .where("thread.id = :threadId", { threadId })
+      .orderBy("message.created", "ASC")
+      .getMany();
+
+    // Separate messages in application layer
+    const senderMessages = messages.filter((msg) => msg.user.id === userId);
+    const receiverMessages = messages.filter((msg) => msg.user.id !== userId);
+
+    return {
+      senderMessages,
+      receiverMessages,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} message`;
+  async findOne(threadId: string) {
+    const message = await this.messagesRepository
+      .createQueryBuilder("message")
+      .innerJoin("message.thread", "thread")
+      .leftJoinAndSelect("message.user", "user")
+      .where("thread.id = :threadId", { threadId })
+      .orderBy("message.created", "DESC")
+      .getOne();
+
+    return message;
   }
 
   update(id: number, updateMessageDto: UpdateMessageDto) {
