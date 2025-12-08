@@ -1,13 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { PostType } from "~/types/post";
 import { Link } from "react-router";
 import Icon from "./icon";
 import ContextMenu from "./ContextMenu";
 import Button from "./Button";
 import CardMedia from "./CardMedia";
+import { apiFetch } from "~/lib/apiFetch";
 
 export default function Post({ post, clickable = true }: { post: PostType; clickable?: boolean }) {
   const [showContextMenu, setShowContextMenu] = useState(false);
+  const [likes, setLikes] = useState(post.likes.length);
+
+  const handleLike = async () => {
+    const currentUser = localStorage.getItem("user_id");
+    try {
+      const response = await fetch("/api/likes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          objectId: post.id,
+          userId: currentUser,
+        }),
+      });
+      if (response.ok) {
+        // const data = await response.json();
+        // setLikes(data.likeCount); // Use the value from the backend
+      } else {
+        alert("Failed to like post.");
+      }
+    } catch {
+      alert("Error liking post.");
+    }
+  };
 
   return (
     <div className="bg-white flex flex-col gap-4 w-full items-start overflow-hidden p-4 md:p-8">
