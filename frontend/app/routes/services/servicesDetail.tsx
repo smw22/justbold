@@ -2,11 +2,26 @@ import Button from "~/components/Button";
 import Icon from "~/components/icon";
 import ReviewStars from "./components/ReviewStars";
 import { Link, useLoaderData } from "react-router";
-import AvatarHeader from "./components/AvatarHeader";
+import AvatarHeader from "../../components/AvatarHeader";
 import { useState } from "react";
 import SheetView from "~/components/SheetView";
 import type { ReviewType } from "~/types/review";
 import { apiFetch } from "~/lib/apiFetch";
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = ({ matches }) => {
+  const routeData = matches.find((match: any) => match.id === "routes/services/servicesDetail")?.loaderData as any;
+  const serviceTitle = routeData?.service?.title ?? "Service";
+  const userName = routeData?.service?.user?.name ?? "User";
+
+  return [
+    { title: `${serviceTitle}: A service provided by ${userName} | LineUp` },
+    {
+      property: "og:title",
+      content: `${serviceTitle}: A service provided by ${userName} | LineUp`,
+    },
+  ];
+};
 
 export async function clientLoader({ params }: { params: { serviceId: string } }): Promise<{}> {
   const servicesResponse = await apiFetch(`/services/${params.serviceId}`);
@@ -39,7 +54,7 @@ export default function ServicesDetail() {
   return (
     <div className=" p-4 outer-wrapper">
       <div className="flex items-center justify-between mb-4">
-        <AvatarHeader imageUrl={service.user.profile_image} imageSize={40} title={service.user.name} />
+        <AvatarHeader imageUrl={service.user.profile_image} imageSize={40} title={service.user.name} color="black" />
 
         <span className="text-lightgrey">#{service.category}</span>
         <div>

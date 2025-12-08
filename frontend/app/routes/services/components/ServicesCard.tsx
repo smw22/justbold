@@ -1,6 +1,6 @@
 import Icon from "~/components/icon";
 import { Link } from "react-router";
-import AvatarHeader from "./AvatarHeader";
+import AvatarHeader from "../../../components/AvatarHeader";
 import type { Service } from "~/types/services/servicesProps";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -21,7 +21,7 @@ export default function ServicesCard({ servicesData }: ServicesCardProps) {
   return (
     <div className="flex flex-col gap-4 p-4 m-auto w-[90%] border border-gray-300 rounded-3xl shadow-lg">
       <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-        <AvatarHeader imageUrl={servicesData.user.profile_image} imageSize={25} title={servicesData.user.name} />
+        <AvatarHeader imageUrl={servicesData.user.profile_image} imageSize={25} title={servicesData.user.name} color="black" />
 
         <span className="text-lightgrey">#{formatCategory(servicesData.category)}</span>
         <button aria-label="Bookmark service" type="button" className="bg-transparent border-none p-0 m-0 cursor-pointer">

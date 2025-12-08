@@ -125,7 +125,7 @@ export default function Footer() {
               }}
             >
               <NavLink
-                to="/chat"
+                to="/chats"
                 className={({ isActive, isPending }) => (isPending ? passiveClass : isActive ? activeClass : passiveClass)}
               >
                 <Icon name="ChatLines" size={24} /> Chats

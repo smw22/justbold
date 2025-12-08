@@ -9,7 +9,7 @@ export class Review {
   @Column("int")
   rating: number;
 
-  @Column("text")
+  @Column({ charset: "utf8mb4" })
   content: string;
 
   @Column()

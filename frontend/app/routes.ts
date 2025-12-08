@@ -36,16 +36,19 @@ export default [
   ]),
 
   // Chat
-  route("chat", "routes/chat/chatLayout.tsx", [
+  route("chats", "routes/chat/chatLayout.tsx", [
     index("routes/chat/threads.tsx"),
     route("new", "routes/chat/chatNew.tsx"),
     route(":threadId", "routes/chat/chat.tsx"),
   ]),
 
-  // Login / Signup
+  // Login / Signup / Onboarding
   route("login", "routes/auth/login.tsx"),
   route("register", "routes/auth/register.tsx"),
   route("onboarding", "routes/onboarding/index.tsx"),
   route("onboarding/steps", "routes/onboarding/steps.tsx"),
   route("log-out", "routes/auth/logOut.tsx"),
+
+  // Search
+  route("search", "./routes/search/index.tsx"),
 ] as unknown as RouteConfig[];
