@@ -1,10 +1,20 @@
 import type { MetaFunction } from "react-router";
+import { useState } from "react";
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Create post | LineUp" },
+    {
+      property: "og:title",
+      content: "Create post | LineUp",
+    },
+  ];
+};
+
 import { redirect, useActionData, useNavigation, useOutletContext, Form } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
-
-export const meta: MetaFunction = () => {
-  return [{ title: "Create Post" }];
-};
+import Input from "~/components/Input";
+import Button from "~/components/Button";
+import EditArray from "~/components/EditArray";
 
 export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();
@@ -55,42 +65,33 @@ export default function CreatePost() {
   const actionData = useActionData();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
-  const inputStyle = "bg-light-grey p-4 rounded-lg border border-neutral-grey w-full";
+
+  const [formTags, setFormTags] = useState([]);
 
   return (
     <div className="flex flex-col gap-4">
       <Form method="post" className="flex flex-col gap-4">
-        <p className="flex flex-col gap-2">
-          <label htmlFor="title">Title *</label>
-          <input type="text" name="title" id="title" placeholder="Post Title" className={inputStyle} required />
-        </p>
-        <p className="flex flex-col gap-2">
-          <label htmlFor="media">Media (URL)</label>
-          <input type="url" name="media" id="media" placeholder="https://example.com/image.jpg" className={inputStyle} />
-        </p>
-        <p className="flex flex-col gap-2">
-          <label htmlFor="content">Content *</label>
-          <textarea name="content" id="content" placeholder="Write your post content here..." className={inputStyle} required />
-        </p>
-        <p className="flex flex-col gap-2">
-          <label htmlFor="tagIds">Choose tag(s) *</label>
-          <select name="tagIds" id="tagIds" className={inputStyle} required multiple>
-            {tags.map((tag: { id: string; title: string }) => (
-              <option key={tag.id} value={tag.id}>
-                {tag.title.charAt(0).toUpperCase() + tag.title.slice(1)}
-              </option>
-            ))}
-          </select>
-        </p>
-        <button
+        <Input type="text" name="title" id="title" placeholder="Title" required />
+        <Input type="url" name="media" id="media" placeholder="Media" />
+        <Input textarea name="content" id="content" placeholder="Description" required />
+        <EditArray
+          array={formTags.map((tag) => tag.title)}
+          editableText={false}
+          selectOptions={tags.map((tag: { id: string; title: string }) => tag.title)}
+          placeholder="Pick tag..."
+          onChange={(selectedTitles: string[]) => setFormTags(tags.filter((tag) => selectedTitles.includes(tag.title)))}
+        />
+        {formTags.map((tag) => (
+          <input key={tag.id} type="hidden" name="tagIds" value={tag.id} />
+        ))}
+        <Button
+          variant="primary"
+          icon="Plus"
           type="submit"
+          text={isSubmitting ? "Posting..." : "Post "}
           disabled={isSubmitting}
-          className={`bg-primary-yellow text-black w-fit py-2 px-4 rounded-lg ${
-            isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-        >
-          {isSubmitting ? "Creating..." : "+ Create"}
-        </button>
+          className={`self-end ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+        />
       </Form>
       {actionData?.error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">

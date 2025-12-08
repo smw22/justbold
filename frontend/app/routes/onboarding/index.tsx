@@ -8,6 +8,22 @@ import "swiper/css/pagination";
 import Button from "~/components/Button";
 import ArrowRight from "~/assets/icons/ArrowRight";
 
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Sign up | LineUp" },
+    {
+      property: "og:title",
+      content: "Sign up | LineUp",
+    },
+    // {
+    //   name: "description",
+    //   content: "This app is the best",
+    // },
+  ];
+};
+
 function CustomNavigation() {
   const swiper = useSwiper();
   return (
@@ -48,47 +64,26 @@ export default function Onboarding() {
           <CustomNavigation />
           <SwiperSlide>
             <div className="flex flex-col items-center gap-2 p-6">
-              <img
-                src="/images/iphone-15.png"
-                alt="iPhone 15"
-                className="h-[201px] max-w-[200px]] object-contain"
-              />
-              <h2 className="max-w-[280px] text-center">
-                Make connections with musicians
-              </h2>
+              <img src="/images/iphone-15.png" alt="iPhone 15" className="h-[201px] max-w-[200px]] object-contain" />
+              <h2 className="max-w-[280px] text-center">Make connections with musicians</h2>
             </div>
           </SwiperSlide>
 
           <SwiperSlide>
             <div className="flex flex-col items-center gap-4 p-6">
-              <img
-                src="/images/iphone-12-pro.png"
-                alt="iPhone 12 Pro"
-                className="h-[201px] max-w-[221px]] object-contain"
-              />
+              <img src="/images/iphone-12-pro.png" alt="iPhone 12 Pro" className="h-[201px] max-w-[221px]] object-contain" />
               <h2 className="max-w-[280px] text-center">Post requests</h2>
             </div>
           </SwiperSlide>
 
           <SwiperSlide>
             <div className="flex flex-col items-center gap-4 p-6">
-              <img
-                src="/images/iphone-15-pro.png"
-                alt="iPhone 15 Pro"
-                className="h-[201px] max-w-[268px]] object-contain"
-              />
-              <h2 className="max-w-[280px] text-center">
-                Find the right service for you
-              </h2>
+              <img src="/images/iphone-15-pro.png" alt="iPhone 15 Pro" className="h-[201px] max-w-[268px]] object-contain" />
+              <h2 className="max-w-[280px] text-center">Find the right service for you</h2>
             </div>
           </SwiperSlide>
         </Swiper>
-        <Button
-          text={"Get started!"}
-          variant={"primary"}
-          className="z-1 my-14"
-          onClick={() => navigate("/onboarding/steps")}
-        />
+        <Button text={"Get started!"} variant={"primary"} className="z-1 my-14" onClick={() => navigate("/onboarding/steps")} />
       </div>
     </>
   );

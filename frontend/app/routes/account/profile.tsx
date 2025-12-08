@@ -5,6 +5,19 @@ import Tabs from "~/components/Tabs";
 import About from "./components/About";
 import Posts from "./components/Posts";
 import { apiFetch } from "~/lib/apiFetch";
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = ({ matches }: { matches: any }) => {
+  const routeData = matches.find((match: any) => match.id === "routes/account/profile")?.data as any;
+  const profileName = routeData?.profile?.data?.name ?? "Profile";
+  return [
+    { title: `${profileName} | LineUp` },
+    {
+      property: "og:title",
+      content: `${profileName} | LineUp`,
+    },
+  ];
+};
 
 export async function clientLoader({ params }: { params: { profileId: string } }) {
   const profileResponse = await apiFetch(`/users/${params.profileId}`);
@@ -46,7 +59,7 @@ export async function clientAction({ request, params }: { request: Request; para
   }
 
   try {
-    const response = await fetch(`${apiUrl}/questions`, {
+    const response = await apiFetch(`/questions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
