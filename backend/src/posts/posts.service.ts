@@ -39,7 +39,7 @@ export class PostsService {
       skip: (page - 1) * limit,
       take: limit,
       order: { created: "DESC" },
-      relations: ["tags", "user", "comments", "comments.user"],
+      relations: ["tags", "user", "comments", "comments.user", "comments.parent"],
     });
 
     const transformedData: any[] = [];
@@ -118,7 +118,7 @@ export class PostsService {
   async findOne(id: string, userId?: string): Promise<any> {
     const postData = await this.postsRepository.findOne({
       where: { id },
-      relations: ["tags", "user", "comments", "comments.user"],
+      relations: ["tags", "user", "comments", "comments.user", "comments.parent"],
     });
     if (!postData) {
       throw new HttpException("Post not found", 404);
@@ -139,7 +139,7 @@ export class PostsService {
     }
     const totalLikes = likes.length;
     // Fetch likes for each comment
-    console.log(postData.comments);
+
     const commentsWithLikes = await Promise.all(
       (postData.comments || []).map(async (comment: Comment) => {
         const commentLikes = await this.likesRepository.find({
@@ -271,7 +271,6 @@ export class PostsService {
       user: { id: userId },
       parent: parentId ? { id: parentId } : undefined,
     });
-    console.log(commentData);
     return this.commentsRepository.save(commentData);
   }
 }

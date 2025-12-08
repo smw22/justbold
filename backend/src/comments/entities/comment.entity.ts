@@ -17,8 +17,12 @@ export class Comment {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @Column({ name: "parent_id" })
-  parent_id: string | null;
+  @ManyToOne(() => Comment, { nullable: true })
+  @JoinColumn({ name: "parent_id" })
+  parent: Comment | null;
+
+  @OneToMany(() => Comment, (comment) => comment.parent)
+  children: Comment[];
 
   @Column({ charset: "utf8mb4" })
   content: string;
