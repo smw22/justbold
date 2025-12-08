@@ -133,8 +133,11 @@ export class PostsController {
     try {
       const userId = req.user.id;
       const data = await this.postsService.addLike(id, userId);
+      // Fetch updated total likes
+      const likes = await this.postsService.getLikes(id);
       return {
         success: true,
+        totalLikes: likes.length,
         data,
         message: "Like added successfully",
       };

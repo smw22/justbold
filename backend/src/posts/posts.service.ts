@@ -58,7 +58,34 @@ export class PostsService {
           relations: ["user"],
         }));
       }
+      const totalLikes = likes.length;
       const { user, comments = [], ...rest } = post as any;
+      const commentsWithLikes = await Promise.all(
+        comments.map(async (comment: any) => {
+          const commentLikes = await this.likesRepository.find({
+            where: { type: "comment", object_id: comment.id },
+            relations: ["user"],
+          });
+          let commentLikedByCurrentUser = false;
+          if (userId) {
+            commentLikedByCurrentUser = !!commentLikes.find((like) => like.user?.id === userId);
+          }
+          return {
+            id: comment.id,
+            content: comment.content,
+            created: comment.created,
+            user: comment.user
+              ? {
+                  id: comment.user.id,
+                  name: comment.user.name,
+                  profile_image: comment.user.profile_image,
+                }
+              : null,
+            likeCount: commentLikes.length,
+            likedByCurrentUser: commentLikedByCurrentUser,
+          };
+        })
+      );
       transformedData.push({
         ...rest,
         user: user
@@ -78,18 +105,8 @@ export class PostsService {
             : null,
           type: like.type,
         })),
-        comments: comments.map((comment: any) => ({
-          id: comment.id,
-          content: comment.content,
-          created: comment.created,
-          user: comment.user
-            ? {
-                id: comment.user.id,
-                name: comment.user.name,
-                profile_image: comment.user.profile_image,
-              }
-            : null,
-        })),
+        comments: commentsWithLikes,
+        totalLikes,
         likedByCurrentUser,
       });
     }
@@ -119,6 +136,7 @@ export class PostsService {
         relations: ["user"],
       }));
     }
+    const totalLikes = likes.length;
     // Fetch likes for each comment
     const commentsWithLikes = await Promise.all(
       (postData.comments || []).map(async (comment: Comment) => {
@@ -126,6 +144,10 @@ export class PostsService {
           where: { type: "comment", object_id: comment.id },
           relations: ["user"],
         });
+        let commentLikedByCurrentUser = false;
+        if (userId) {
+          commentLikedByCurrentUser = !!commentLikes.find((like) => like.user?.id === userId);
+        }
         return {
           id: comment.id,
           content: comment.content,
@@ -137,6 +159,8 @@ export class PostsService {
                 profile_image: comment.user.profile_image,
               }
             : null,
+          likeCount: commentLikes.length,
+          likedByCurrentUser: commentLikedByCurrentUser,
           likes: commentLikes.map((like) => ({
             id: like.id,
             user: like.user
@@ -171,6 +195,7 @@ export class PostsService {
         type: like.type,
       })),
       comments: commentsWithLikes,
+      totalLikes,
       likedByCurrentUser,
     };
   }
