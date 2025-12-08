@@ -9,22 +9,16 @@ import { apiFetch } from "~/lib/apiFetch";
 
 export default function Post({ post, clickable = true }: { post: PostType; clickable?: boolean }) {
   const [showContextMenu, setShowContextMenu] = useState(false);
-  const [likes, setLikes] = useState(post.likes.length);
+  const [likes, setLikes] = useState(post.totalLikes);
 
   const handleLike = async () => {
-    const currentUser = localStorage.getItem("user_id");
     try {
-      const response = await fetch("/api/likes", {
+      const response = await apiFetch("posts/${post.id}/likes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          objectId: post.id,
-          userId: currentUser,
-        }),
       });
       if (response.ok) {
-        // const data = await response.json();
-        // setLikes(data.likeCount); // Use the value from the backend
+        setLikes(response.totalLikes); // Optimistically update like count
       } else {
         alert("Failed to like post.");
       }
@@ -115,9 +109,9 @@ export default function Post({ post, clickable = true }: { post: PostType; click
             className="cursor-pointer hover:bg-gray-100 w-8 h-8 flex justify-center items-center rounded-full transition-colors duration-200 ease-in-out"
             onClick={() => alert("Tilføj funktionalitet")}
           >
-            <Icon name="Heart" size={24} className="text-neutral-grey" />
+            <Icon name={post.likedByCurrentUser ? "Heart" : "HeartFilled"} size={24} className="text-neutral-grey" />
           </button>
-          <p className="text-sm text-neutral-grey">{post.likes.length}</p>
+          <p className="text-sm text-neutral-grey">{post.totalLikes}</p>
         </div>
         <div className="flex items-center gap-1">
           {clickable ? (
