@@ -72,7 +72,7 @@ export default function Post({ post, clickable = true }: { post: PostType; click
       </div>
       {clickable ? (
         // if the post is clickable. and therefore can take the user to the details page of the post.
-        <Link to={`/posts/${post.id}`} className="gap-4 flex flex-col">
+        <Link to={`/posts/${post.id}`} className="gap-4 flex flex-col w-full">
           <h2 className="px-2">{post.title}</h2>
           <CardMedia variant="image" url={post.media} />
           <p className="text-sm px-2">{post.content}</p>
