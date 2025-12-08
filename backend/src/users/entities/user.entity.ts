@@ -32,9 +32,6 @@ export class User {
   @Column({ default: "header-bg-1" })
   theme: string;
 
-  @Column("simple-array")
-  connections: string[];
-
   @Column({ type: "varchar", nullable: true, default: null })
   instagram: string | null;
 
