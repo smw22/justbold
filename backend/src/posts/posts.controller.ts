@@ -12,6 +12,7 @@ import {
 import { PostsService } from "./posts.service";
 import { CreatePostDto } from "./dto/create-post.dto";
 import { UpdatePostDto } from "./dto/update-post.dto";
+import { LikesController } from "src/likes/likes.controller";
 
 @Controller("posts")
 export class PostsController {
@@ -154,8 +155,10 @@ export class PostsController {
     try {
       const userId = req.user.id;
       const data = await this.postsService.removeLike(id, userId);
+      const likes = await this.postsService.getLikes(id);
       return {
         success: true,
+        totalLikes: likes.length,
         data,
         message: "Like removed successfully",
       };
