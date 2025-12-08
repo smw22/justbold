@@ -169,4 +169,29 @@ export class PostsController {
       };
     }
   }
+
+  @Post(":id/comments")
+  async addComment(
+    @Param("id") id: string,
+    @Body("content") content: string,
+    @Body("parentId") parentId: string | undefined,
+    @Req() req
+  ) {
+    try {
+      const userId = req.user.id;
+      const data = await this.postsService.addComment(id, userId, content, parentId);
+      const comments = await this.postsService.findOne(id, userId);
+      return {
+        success: true,
+        totalComments: comments.comments ? comments.comments.length : 0,
+        data,
+        message: "Comment added successfully",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
 }

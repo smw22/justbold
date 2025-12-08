@@ -39,7 +39,7 @@ export class PostsService {
       skip: (page - 1) * limit,
       take: limit,
       order: { created: "DESC" },
-      relations: ["tags", "user", "comments", "comments.user"],
+      relations: ["tags", "user", "comments", "comments.user", "comments.parent"],
     });
 
     const transformedData: any[] = [];
@@ -72,6 +72,7 @@ export class PostsService {
           }
           return {
             id: comment.id,
+            parentId: comment.parent ? comment.parent.id : null,
             content: comment.content,
             created: comment.created,
             user: comment.user
@@ -117,7 +118,7 @@ export class PostsService {
   async findOne(id: string, userId?: string): Promise<any> {
     const postData = await this.postsRepository.findOne({
       where: { id },
-      relations: ["tags", "user", "comments", "comments.user"],
+      relations: ["tags", "user", "comments", "comments.user", "comments.parent"],
     });
     if (!postData) {
       throw new HttpException("Post not found", 404);
@@ -138,6 +139,7 @@ export class PostsService {
     }
     const totalLikes = likes.length;
     // Fetch likes for each comment
+
     const commentsWithLikes = await Promise.all(
       (postData.comments || []).map(async (comment: Comment) => {
         const commentLikes = await this.likesRepository.find({
@@ -150,6 +152,7 @@ export class PostsService {
         }
         return {
           id: comment.id,
+          parentId: comment.parent ? comment.parent.id : null,
           content: comment.content,
           created: comment.created,
           user: comment.user
@@ -255,5 +258,19 @@ export class PostsService {
       throw new HttpException("Like not found", 404);
     }
     await this.likesRepository.remove(existingLike);
+  }
+
+  async addComment(postId: string, userId: string, content: string, parentId?: string): Promise<Comment> {
+    const post = await this.postsRepository.findOneBy({ id: postId });
+    if (!post) {
+      throw new HttpException("Post not found", 404);
+    }
+    const commentData = this.commentsRepository.create({
+      content,
+      post: { id: postId },
+      user: { id: userId },
+      parent: parentId ? { id: parentId } : undefined,
+    });
+    return this.commentsRepository.save(commentData);
   }
 }
