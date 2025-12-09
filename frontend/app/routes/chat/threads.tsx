@@ -62,11 +62,11 @@ function GroupThreadsList() {
   return (
     <>
       {groupThreads.length === 0 ? (
-        <div className="mt-8 text-center text-gray-500">No threads available. Start a new chat to connect with others!</div>
+        <div className="mt-8 text-center text-gray-500">No groups available. Start a new group to connect with others!</div>
       ) : (
         groupThreads.map((thread: Thread) => {
           const latestMessage = thread.messages[thread.messages.length - 1];
-          return <ThreadCard key={thread.id} threadData={thread} messageData={latestMessage} />;
+          return <ThreadCard key={thread.id} threadData={thread} messageData={latestMessage} isGroup />;
         })
       )}
     </>

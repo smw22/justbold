@@ -1,7 +1,7 @@
 import type { Message } from "./messages";
 
 export interface Thread {
-  id: number;
+  id: string;
   created: string;
   messages: Message[];
 }
