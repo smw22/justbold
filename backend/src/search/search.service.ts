@@ -23,8 +23,13 @@ export class SearchService {
     private readonly postsRepository: Repository<Post>
   ) {}
 
+  private calculateLimitPerCategory(limit: number): number {
+    return Math.floor(limit / 4);
+  }
+
   async search(searchQueryDto: SearchQueryDto, currentUserId: string) {
     const { query, category = SearchCategory.ALL, page = 1, limit = 8 } = searchQueryDto;
+    const limitPerCategory = this.calculateLimitPerCategory(limit);
 
     // If no search query, return recent content
     if (!query || query.trim() === "") {
@@ -54,9 +59,9 @@ export class SearchService {
 
       case SearchCategory.ALL:
       default:
-        const collabByTitle = await this.searchCollaborations(searchTerm, 0, 5);
-        const postsByTitle = await this.searchPosts(searchTerm, 0, 5);
-        const tagResults = await this.searchTags(searchTerm, 0, 5);
+        const collabByTitle = await this.searchCollaborations(searchTerm, 0, limitPerCategory);
+        const postsByTitle = await this.searchPosts(searchTerm, 0, limitPerCategory);
+        const tagResults = await this.searchTags(searchTerm, 0, limitPerCategory);
 
         // Merge collaborations and posts from both title search and tag search
         const allCollaborations = [
@@ -65,17 +70,17 @@ export class SearchService {
             (tagCollab: any) => !collabByTitle.some((titleCollab: any) => titleCollab.id === tagCollab.id)
             // Only add tag results that aren't already in title results (by checking ID)
           ),
-        ].slice(0, 5);
+        ].slice(0, limitPerCategory);
 
         const allPosts = [
           ...postsByTitle,
           ...tagResults.posts.filter((tagPost: any) => !postsByTitle.some((titlePost: any) => titlePost.id === tagPost.id)),
-        ].slice(0, 5);
+        ].slice(0, limitPerCategory);
 
         return {
-          people: await this.searchPeople(searchTerm, 0, 5, currentUserId),
+          people: await this.searchPeople(searchTerm, 0, limitPerCategory, currentUserId),
           collaborations: allCollaborations,
-          services: await this.searchServices(searchTerm, 0, 5),
+          services: await this.searchServices(searchTerm, 0, limitPerCategory),
           tags: tagResults.tags,
           posts: allPosts,
         };
@@ -163,8 +168,7 @@ export class SearchService {
   }
 
   private async getRecentResults(limit: number, currentUserId: string) {
-    // Divide limit evenly among 4 categories
-    const limitPerCategory = Math.floor(limit / 4);
+    const limitPerCategory = this.calculateLimitPerCategory(limit);
 
     const [people, collaborations, services, posts] = await Promise.all([
       this.usersRepository.find({
