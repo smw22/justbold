@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import Button from "~/components/Button";
 import { apiFetch } from "~/lib/apiFetch";
-
-dayjs.extend(relativeTime);
 
 interface PeopleProps {
   query: string;

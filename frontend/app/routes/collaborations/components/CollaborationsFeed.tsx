@@ -1,11 +1,8 @@
 import { Link } from "react-router";
 import Badge from "~/components/Badge";
 import Icon from "~/components/icon";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import Button from "~/components/Button";
-
-dayjs.extend(relativeTime);
+import fromNowDate from "~/lib/fromNowDate";
 
 type Collaboration = {
   id: string;
@@ -18,7 +15,7 @@ type Collaboration = {
   content: string;
   tags: string[];
   location: string;
-  created: string;
+  created: Date;
   role: string;
 };
 
@@ -53,7 +50,7 @@ function CollabCardTitle({ title }: { title: string }) {
   return <h3 className="text-lg font-bold leading-tight text-gray-900">{title}</h3>;
 }
 
-function CollabCardMeta({ location, created, tags }: { location: string; created: string; tags: string[] }) {
+function CollabCardMeta({ location, created, tags }: { location: string; created: Date; tags: string[] }) {
   return (
     <div className="flex items-center justify-between flex-wrap gap-2">
       <div className="flex items-center gap-2 flex-wrap">
@@ -64,7 +61,7 @@ function CollabCardMeta({ location, created, tags }: { location: string; created
       <div className="text-xs text-gray-400">
         <span>{location}</span>
         <span> - </span>
-        <span>{dayjs(created).fromNow()}</span>
+        <span>{fromNowDate({ date: created })}</span>
       </div>
     </div>
   );

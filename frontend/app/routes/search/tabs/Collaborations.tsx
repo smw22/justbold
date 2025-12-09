@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { apiFetch } from "~/lib/apiFetch";
-
-dayjs.extend(relativeTime);
+import fromNowDate from "~/lib/fromNowDate";
 
 interface CollaborationsProps {
   query: string;
@@ -19,9 +16,7 @@ export default function Collaborations({ query }: CollaborationsProps) {
       setLoading(true);
       setError(null);
       try {
-        const searchParams = query
-          ? `query=${encodeURIComponent(query)}&category=collaborations`
-          : "category=collaborations";
+        const searchParams = query ? `query=${encodeURIComponent(query)}&category=collaborations` : "category=collaborations";
         const response = await apiFetch(`/search?${searchParams}`);
         if (!response.ok) throw new Error("Search failed");
         const json = await response.json();
@@ -71,7 +66,7 @@ export default function Collaborations({ query }: CollaborationsProps) {
                   <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
                   <div className="text-(--lightgrey-text)">
                     <p>
-                      {collab.location} - {dayjs(collab.created).fromNow()}
+                      {collab.location} - {fromNowDate({ date: collab.created })}
                     </p>
                   </div>
                 </div>

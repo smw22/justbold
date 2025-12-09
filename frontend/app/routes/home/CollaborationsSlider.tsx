@@ -1,12 +1,9 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Link } from "react-router";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import Collaborations from "../collaborations/collaborations";
 import Button from "~/components/Button";
-
-dayjs.extend(relativeTime);
+import fromNowDate from "~/lib/fromNowDate";
 
 type Collaboration = {
   id: string;
@@ -16,9 +13,14 @@ type Collaboration = {
   };
   title: string;
   content: string;
-  tags: string[];
+  tags: [
+    {
+      id: string;
+      title: string;
+    },
+  ];
   location: string;
-  created: string;
+  created: Date;
 };
 
 type CollaborationsSliderProps = {
@@ -69,7 +71,7 @@ export default function CollaborationsSlider({ collaborations }: CollaborationsS
                   <div className="text-xs text-gray-400">
                     <span>{collab.location}</span>
                     <span> - </span>
-                    <span>{dayjs(collab.created).fromNow()}</span>
+                    <span>{fromNowDate({ date: collab.created })}</span>
                   </div>
                 </div>
               </div>

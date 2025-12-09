@@ -1,12 +1,11 @@
 import { useLoaderData, Link } from "react-router";
 import Badge from "~/components/Badge";
 import Icon from "~/components/icon";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { apiFetch } from "~/lib/apiFetch";
 import Button from "~/components/Button";
 
 import type { MetaFunction } from "react-router";
+import fromNowDate from "~/lib/fromNowDate";
 
 export const meta: MetaFunction = ({ matches }) => {
   const routeData = matches.find((match: any) => match.id === "routes/collaborations/collaborationsDetails")?.loaderData as any;
@@ -20,8 +19,6 @@ export const meta: MetaFunction = ({ matches }) => {
     },
   ];
 };
-
-dayjs.extend(relativeTime);
 
 export async function clientLoader({ params }: { params: { collaborationId: string } }): Promise<{}> {
   const collabResponse = await apiFetch(`/collaborations/${params.collaborationId}`);
@@ -44,7 +41,7 @@ function CollabHeader({
   userName: string;
   userImage: string;
   role: string;
-  created: string;
+  created: Date;
 }) {
   return (
     <div className="flex items-center justify-between">
@@ -56,7 +53,7 @@ function CollabHeader({
         <span className="text-gray-400">looking for a</span>
         <span className="text-gray-400">#{role}</span>
       </div>
-      <span className="text-gray-400">{dayjs(created).fromNow()}</span>
+      <span className="text-gray-400">{fromNowDate({ date: created })}</span>
     </div>
   );
 }
