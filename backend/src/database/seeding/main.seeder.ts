@@ -226,7 +226,8 @@ export class MainSeeder implements Seeder {
     for (let i = 0; i < numReplies; i++) {
       const reply = comments[comments.length - 1 - i];
       // Only assign parent from earlier comments to avoid circular refs
-      const possibleParents = comments.slice(0, comments.length - 1 - i);
+      // Filter possible parents to those with the same post id
+      const possibleParents = comments.slice(0, comments.length - 1 - i).filter((parent) => parent.post.id === reply.post.id);
       if (possibleParents.length > 0) {
         const parent = faker.helpers.arrayElement(possibleParents);
         reply.parent = parent;
