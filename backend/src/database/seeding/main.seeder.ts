@@ -211,26 +211,44 @@ export class MainSeeder implements Seeder {
     // Seed comments
     const commentFactory = factoryManager.get(Comment);
     const postEntities = await dataSource.getRepository(Post).find();
-    const comments = await Promise.all(
-      Array(200)
-        .fill("")
-        .map(async () => {
-          const user = faker.helpers.arrayElement(users);
-          const post = faker.helpers.arrayElement(postEntities);
-          return commentFactory.make({ user, post });
-        })
-    );
-    await dataSource.getRepository(Comment).save(comments);
+    const comments: Comment[] = [];
 
-    // Seed likes for posts
+    // First, create all comments without parentId
+    for (let i = 0; i < 500; i++) {
+      const user = faker.helpers.arrayElement(users);
+      const post = faker.helpers.arrayElement(postEntities);
+      const comment = await commentFactory.make({ user, post });
+      comments.push(comment);
+    }
+
+    // Now, assign some comments as replies (with parentId)
+    const numReplies = Math.floor(comments.length * 0.5); // 30% replies
+    for (let i = 0; i < numReplies; i++) {
+      const reply = comments[comments.length - 1 - i];
+      // Only assign parent from earlier comments to avoid circular refs
+      const possibleParents = comments.slice(0, comments.length - 1 - i);
+      if (possibleParents.length > 0) {
+        const parent = faker.helpers.arrayElement(possibleParents);
+        reply.parent = parent;
+      }
+    }
+
+    await dataSource.getRepository(Comment).save(comments);
+    // Seed likes for posts and comments
     const likeFactory = factoryManager.get(Like);
     const likes = await Promise.all(
-      Array(300)
+      Array(1000)
         .fill("")
         .map(async () => {
           const user = faker.helpers.arrayElement(users);
-          const post = faker.helpers.arrayElement(postEntities);
-          return likeFactory.make({ user, post });
+          const likeType = faker.helpers.arrayElement(["post", "comment"]);
+          if (likeType === "post") {
+            const post = faker.helpers.arrayElement(postEntities);
+            return likeFactory.make({ user, object_id: post.id, type: "post" });
+          } else {
+            const comment = faker.helpers.arrayElement(comments);
+            return likeFactory.make({ user, object_id: comment.id, type: "comment" });
+          }
         })
     );
     await dataSource.getRepository(Like).save(likes);
