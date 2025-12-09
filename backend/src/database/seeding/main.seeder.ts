@@ -12,6 +12,8 @@ import { Collaboration } from "../../collaborations/entities/collaboration.entit
 import { Service } from "../../services/entities/service.entity";
 import { Review } from "../../reviews/entities/review.entity";
 import { Skill } from "../../skills/entities/skill.entity";
+import { Comment } from "../../comments/entities/comment.entity";
+import { Like } from "../../likes/entities/like.entity";
 
 export class MainSeeder implements Seeder {
   public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
@@ -172,5 +174,32 @@ export class MainSeeder implements Seeder {
     );
     await dataSource.getRepository(Review).save(serviceReviews);
     await dataSource.getRepository(Review).save(userReviews);
+
+    // Seed comments
+    const commentFactory = factoryManager.get(Comment);
+    const postEntities = await dataSource.getRepository(Post).find();
+    const comments = await Promise.all(
+      Array(200)
+        .fill("")
+        .map(async () => {
+          const user = faker.helpers.arrayElement(users);
+          const post = faker.helpers.arrayElement(postEntities);
+          return commentFactory.make({ user, post });
+        })
+    );
+    await dataSource.getRepository("Comment").save(comments);
+
+    // Seed likes for posts
+    const likeFactory = factoryManager.get(Like);
+    const likes = await Promise.all(
+      Array(300)
+        .fill("")
+        .map(async () => {
+          const user = faker.helpers.arrayElement(users);
+          const post = faker.helpers.arrayElement(postEntities);
+          return likeFactory.make({ user, post });
+        })
+    );
+    await dataSource.getRepository("Like").save(likes);
   }
 }
