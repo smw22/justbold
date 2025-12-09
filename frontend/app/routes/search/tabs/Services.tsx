@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import Icon from "~/components/icon";
 import { apiFetch } from "~/lib/apiFetch";
-
-dayjs.extend(relativeTime);
+import fromNowDate from "~/lib/fromNowDate";
 
 interface ServicesProps {
   query: string;
@@ -76,7 +73,7 @@ export default function Services({ query }: ServicesProps) {
                   <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
                   <div className="text-(--lightgrey-text)">
                     <p>
-                      {service.location} - {dayjs(service.created).fromNow()}
+                      {service.location} - {fromNowDate({ date: service.created })}
                     </p>
                   </div>
                 </div>
