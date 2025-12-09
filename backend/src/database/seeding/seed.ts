@@ -14,6 +14,8 @@ import { ReviewFactory } from "./reviews.factory";
 import { SkillFactory } from "./skill.factory";
 import { CommentFactory } from "./comment.factory";
 import { LikeFactory } from "./like.factory";
+import { ThreadFactory } from "./thread.factory";
+import { MessageFactory } from "./message.factory";
 
 const options: DataSourceOptions & SeederOptions = {
   ...AppDataSource.options,
@@ -28,6 +30,8 @@ const options: DataSourceOptions & SeederOptions = {
     SkillFactory,
     CommentFactory,
     LikeFactory,
+    ThreadFactory,
+    MessageFactory,
   ],
   seeds: [MainSeeder],
 };
