@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "./icon";
 
-type InputVariant = "onboarding" | "search";
+type InputVariant = "onboarding" | "search" | "comment";
 
 type InputProps = {
   icon?: string;
@@ -39,6 +39,14 @@ const Input = React.forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProp
           <input
             ref={ref as React.Ref<HTMLInputElement>}
             className={`bg-transparent p-2.5 text-center rounded-lg border border-black/20 focus:outline-1 ${className}`}
+            {...rest}
+          />
+        );
+      case "comment":
+        return (
+          <input
+            ref={ref as React.Ref<HTMLInputElement>}
+            className={`bg-transparent p-2.5 text-left rounded-lg outline-none ${className}`}
             {...rest}
           />
         );
