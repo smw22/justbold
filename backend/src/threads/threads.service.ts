@@ -17,7 +17,7 @@ export class ThreadsService {
   }
 
   // Fetch threads for a specific user (logged in user), and include only the latest message per thread
-  async findAll(userId: string): Promise<Thread[]> {
+  async findAllSingularChats(userId: string): Promise<Thread[]> {
     const threads = await this.threadsRepository
       .createQueryBuilder("thread")
       .innerJoin("thread.messages", "message")
@@ -26,9 +26,28 @@ export class ThreadsService {
       .leftJoinAndSelect("allMessages.user", "allMessageUsers")
       .where("messageUser.id = :userId", { userId })
       // Ensure the thread includes only two participants (1:1 chats)
-      // TODO - extend for group chats in this endpoint or in a new one
       .groupBy("thread.id")
       .having("COUNT(DISTINCT allMessageUsers.id) = :userCount", { userCount: 2 })
+      .orderBy("thread.created", "DESC")
+      .addOrderBy("allMessages.created", "DESC")
+      .getMany();
+
+    // Keep only the latest message per thread (no overfetching unused data)
+    return threads.map((thread) => ({
+      ...thread,
+      messages: thread.messages.slice(0, 1),
+    }));
+  }
+
+  async findAllGroupChats(userId: string): Promise<Thread[]> {
+    const threads = await this.threadsRepository
+      .createQueryBuilder("thread")
+      .innerJoin("thread.messages", "message")
+      .innerJoin("message.user", "messageUser")
+      .leftJoinAndSelect("thread.messages", "allMessages")
+      .leftJoinAndSelect("allMessages.user", "allMessageUsers")
+      .where("messageUser.id = :userId", { userId })
+      // Ensure the thread includes more than two participants (group chats)
       .orderBy("thread.created", "DESC")
       .addOrderBy("allMessages.created", "DESC")
       .getMany();

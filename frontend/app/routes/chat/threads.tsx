@@ -5,7 +5,7 @@ import { useLoaderData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Thread } from "~/types/threads";
 
-export async function clientLoader(): Promise<{ threads: Thread[] }> {
+export async function clientLoader(): Promise<{ threads: Thread[]; groupThreads: Thread[] }> {
   const userId = localStorage.getItem("user_id");
   if (!userId) throw new Error("User not authenticated");
 
@@ -17,16 +17,33 @@ export async function clientLoader(): Promise<{ threads: Thread[] }> {
     throw new Error(threadResult.message || "Failed to load threads");
   }
 
-  return { threads: threadResult.data };
+  const groupThreadResponse = await apiFetch(`/threads/group-chats?userId=${userId}`);
+  if (!groupThreadResponse.ok) throw new Error(`Failed to load group threads: ${groupThreadResponse.status}`);
+
+  const groupThreadResult = await groupThreadResponse.json();
+  if (!groupThreadResult.success || !groupThreadResult.data) {
+    throw new Error(groupThreadResult.message || "Failed to load group threads");
+  }
+
+  return { threads: threadResult.data, groupThreads: groupThreadResult.data };
 }
 
 export default function Threads() {
-  const { threads } = useLoaderData();
   const [tab, setTab] = useState(0);
 
   return (
     <main className="outer-wrapper">
       <Tabs tabs={["Chats", "Groups"]} currentTab={tab} setTab={(e) => setTab(e)} />
+      {tab === 0 ? <SingularThreadsList /> : <GroupThreadsList />}
+    </main>
+  );
+}
+
+function SingularThreadsList() {
+  const { threads } = useLoaderData();
+
+  return (
+    <>
       {threads.length === 0 ? (
         <div className="mt-8 text-center text-gray-500">No threads available. Start a new chat to connect with others!</div>
       ) : (
@@ -35,6 +52,23 @@ export default function Threads() {
           return <ThreadCard key={thread.id} threadData={thread} messageData={latestMessage} />;
         })
       )}
-    </main>
+    </>
+  );
+}
+
+function GroupThreadsList() {
+  const { groupThreads } = useLoaderData();
+
+  return (
+    <>
+      {groupThreads.length === 0 ? (
+        <div className="mt-8 text-center text-gray-500">No threads available. Start a new chat to connect with others!</div>
+      ) : (
+        groupThreads.map((thread: Thread) => {
+          const latestMessage = thread.messages[thread.messages.length - 1];
+          return <ThreadCard key={thread.id} threadData={thread} messageData={latestMessage} />;
+        })
+      )}
+    </>
   );
 }

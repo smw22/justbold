@@ -15,8 +15,28 @@ export class ThreadsController {
   @Get()
   async findAll(@Query("userId") userId: string) {
     try {
-      const data = await this.threadsService.findAll(userId);
+      const data = await this.threadsService.findAllSingularChats(userId);
 
+      if (!userId) {
+        throw new BadRequestException("userId query param is required");
+      }
+
+      return {
+        success: true,
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
+
+  @Get("group-chats")
+  async findAllGroupChats(@Query("userId") userId: string) {
+    try {
+      const data = await this.threadsService.findAllGroupChats(userId);
       if (!userId) {
         throw new BadRequestException("userId query param is required");
       }
