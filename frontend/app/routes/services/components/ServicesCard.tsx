@@ -2,10 +2,7 @@ import Icon from "~/components/icon";
 import { Link } from "react-router";
 import AvatarHeader from "../../../components/AvatarHeader";
 import type { Service } from "~/types/services/servicesProps";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-
-dayjs.extend(relativeTime);
+import fromNowDate from "~/lib/fromNowDate";
 
 type ServicesCardProps = {
   servicesData: Service;
@@ -46,7 +43,7 @@ export default function ServicesCard({ servicesData }: ServicesCardProps) {
         <div className="flex justify-between mt-2">
           <span className="font-bold underline">Read more...</span>
           <span className="text-lightgrey">
-            {servicesData.location} - {dayjs(servicesData.created).fromNow()}
+            {servicesData.location} - {fromNowDate({ date: servicesData.created })}
           </span>
         </div>
       </Link>

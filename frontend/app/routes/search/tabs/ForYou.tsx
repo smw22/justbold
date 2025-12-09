@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import Icon from "~/components/icon";
 import Button from "~/components/Button";
 import { apiFetch } from "~/lib/apiFetch";
-
-dayjs.extend(relativeTime);
+import fromNowDate from "~/lib/fromNowDate";
 
 interface ForYouProps {
   query: string;
@@ -164,7 +161,7 @@ export default function ForYou({ query }: ForYouProps) {
                   <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
                   <div className="text-(--lightgrey-text)">
                     <p>
-                      {collab.location} - {dayjs(collab.created).fromNow()}
+                      {collab.location} - {fromNowDate({ date: collab.created })}
                     </p>
                   </div>
                 </div>
@@ -203,7 +200,7 @@ export default function ForYou({ query }: ForYouProps) {
                   <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
                   <div className="text-(--lightgrey-text)">
                     <p>
-                      {service.location} - {dayjs(service.created).fromNow()}
+                      {service.location} - {fromNowDate({ date: service.created })}
                     </p>
                   </div>
                 </div>
@@ -243,7 +240,7 @@ export default function ForYou({ query }: ForYouProps) {
                 <div className="flex justify-between text-xs">
                   <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
                   <div className="text-(--lightgrey-text)">
-                    <p>{dayjs(post.created).fromNow()}</p>
+                    <p>{fromNowDate({ date: post.created })}</p>
                   </div>
                 </div>
               </div>

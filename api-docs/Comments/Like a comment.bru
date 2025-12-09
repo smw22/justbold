@@ -1,18 +1,17 @@
 meta {
-  name: Get Posts
+  name: Like a comment
   type: http
   seq: 1
 }
 
-get {
-  url: {{domain}}/posts?page=1&limit=10
+post {
+  url: {{domain}}/comments/:commentId/likes
   body: none
   auth: bearer
 }
 
-params:query {
-  page: 1
-  limit: 10
+params:path {
+  commentId: {{comment_id}}
 }
 
 auth:bearer {

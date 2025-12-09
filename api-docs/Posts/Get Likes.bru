@@ -1,18 +1,17 @@
 meta {
-  name: Get Posts
+  name: Get Likes
   type: http
-  seq: 1
+  seq: 6
 }
 
 get {
-  url: {{domain}}/posts?page=1&limit=10
+  url: {{domain}}/posts/:postId/likes
   body: none
   auth: bearer
 }
 
-params:query {
-  page: 1
-  limit: 10
+params:path {
+  postId: {{post_id}}
 }
 
 auth:bearer {

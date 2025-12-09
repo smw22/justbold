@@ -1,12 +1,6 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  ManyToMany,
-  JoinTable,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable, OneToMany } from "typeorm";
 import { User } from "../../users/entities/user.entity";
+import { Message } from "../../messages/entities/message.entity";
 
 @Entity()
 export class Thread {
@@ -20,4 +14,7 @@ export class Thread {
 
   @CreateDateColumn()
   created: Date;
+
+  @OneToMany(() => Message, (message) => message.thread, { cascade: true })
+  messages: Message[];
 }

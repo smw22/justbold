@@ -1,0 +1,31 @@
+meta {
+  name: Add a comment
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{domain}}/posts/:postId/comments
+  body: json
+  auth: bearer
+}
+
+params:path {
+  postId: {{post_id}}
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "content": "This is a comment",
+    "parentId": "af50737a-0baa-4306-aec8-3ec39e2ceaa3"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

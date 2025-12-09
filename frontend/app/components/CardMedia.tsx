@@ -5,7 +5,7 @@ export default function CardMedia({ variant = "image", url }: { variant?: CardMe
   return (
     <>
       {variant === "image" ? (
-        <img src={url} className="aspect-post md:aspect-video w-full object-cover rounded-3xl" />
+        <img src={url} className="aspect-post md:aspect-video w-full object-cover rounded-3xl bg-light-grey" />
       ) : (
         <div className="flex flex-col items-center justify-center aspect-video w-full bg-gray-200 rounded-3xl">
           <Icon name="MediaVideo" size={48} />
