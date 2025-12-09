@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, ILike } from "typeorm";
+import { Repository, ILike, Not } from "typeorm";
 import { User } from "../users/entities/user.entity";
 import { Collaboration } from "../collaborations/entities/collaboration.entity";
 import { Service } from "../services/entities/service.entity";
@@ -23,16 +23,16 @@ export class SearchService {
     private readonly postsRepository: Repository<Post>
   ) {}
 
-  async search(searchQueryDto: SearchQueryDto) {
+  async search(searchQueryDto: SearchQueryDto, currentUserId: string) {
     const { query, category = SearchCategory.ALL, page = 1, limit = 8 } = searchQueryDto;
 
     // If no search query, return recent content
     if (!query || query.trim() === "") {
       // For all categories, divide by 4. For specific categories, return 8 results
       if (category === SearchCategory.ALL) {
-        return this.getRecentResults(limit);
+        return this.getRecentResults(limit, currentUserId);
       } else {
-        return this.getRecentResultsByCategory(category, 8);
+        return this.getRecentResultsByCategory(category, 8, currentUserId);
       }
     }
 
@@ -41,7 +41,7 @@ export class SearchService {
 
     switch (category) {
       case SearchCategory.PEOPLE:
-        return { people: await this.searchPeople(searchTerm, skip, limit) };
+        return { people: await this.searchPeople(searchTerm, skip, limit, currentUserId) };
 
       case SearchCategory.COLLABORATIONS:
         return { collaborations: await this.searchCollaborations(searchTerm, skip, limit) };
@@ -73,7 +73,7 @@ export class SearchService {
         ].slice(0, 5);
 
         return {
-          people: await this.searchPeople(searchTerm, 0, 5),
+          people: await this.searchPeople(searchTerm, 0, 5, currentUserId),
           collaborations: allCollaborations,
           services: await this.searchServices(searchTerm, 0, 5),
           tags: tagResults.tags,
@@ -82,9 +82,13 @@ export class SearchService {
     }
   }
 
-  private async searchPeople(searchTerm: string, skip: number, limit: number) {
+  private async searchPeople(searchTerm: string, skip: number, limit: number, currentUserId: string) {
     return this.usersRepository.find({
-      where: [{ name: ILike(searchTerm) }, { location: ILike(searchTerm) }, { user_type: ILike(searchTerm) }],
+      where: [
+        { name: ILike(searchTerm), id: Not(currentUserId) },
+        { location: ILike(searchTerm), id: Not(currentUserId) },
+        { user_type: ILike(searchTerm), id: Not(currentUserId) },
+      ],
       take: limit,
       skip,
       select: ["id", "name", "profile_image", "location"],
@@ -158,12 +162,13 @@ export class SearchService {
     });
   }
 
-  private async getRecentResults(limit: number) {
+  private async getRecentResults(limit: number, currentUserId: string) {
     // Divide limit evenly among 4 categories
     const limitPerCategory = Math.floor(limit / 4);
 
     const [people, collaborations, services, posts] = await Promise.all([
       this.usersRepository.find({
+        where: { id: Not(currentUserId) },
         order: { created: "DESC" },
         take: limitPerCategory,
         select: ["id", "name", "profile_image", "location"],
@@ -193,11 +198,12 @@ export class SearchService {
     };
   }
 
-  private async getRecentResultsByCategory(category: SearchCategory, limit: number) {
+  private async getRecentResultsByCategory(category: SearchCategory, limit: number, currentUserId: string) {
     switch (category) {
       case SearchCategory.PEOPLE:
         return {
           people: await this.usersRepository.find({
+            where: { id: Not(currentUserId) },
             order: { created: "DESC" },
             take: limit,
             select: ["id", "name", "profile_image", "location"],
