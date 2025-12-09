@@ -6,7 +6,7 @@ import { Collaboration } from "../collaborations/entities/collaboration.entity";
 import { Service } from "../services/entities/service.entity";
 import { Tag } from "../tags/entities/tag.entity";
 import { Post } from "../posts/entities/post.entity";
-import { SearchQueryDto, SearchCategory } from "./dto/search-query-dto";
+import { SearchQueryDto, SearchCategory, SEARCH_DEFAULT_LIMIT } from "./dto/search-query-dto";
 
 @Injectable()
 export class SearchService {
@@ -28,7 +28,7 @@ export class SearchService {
   }
 
   async search(searchQueryDto: SearchQueryDto, currentUserId: string) {
-    const { query, category = SearchCategory.ALL, page = 1, limit = 8 } = searchQueryDto;
+    const { query, category = SearchCategory.ALL, page = 1, limit = SEARCH_DEFAULT_LIMIT } = searchQueryDto;
     const limitPerCategory = this.calculateLimitPerCategory(limit);
 
     // If no search query, return recent content
@@ -37,7 +37,7 @@ export class SearchService {
       if (category === SearchCategory.ALL) {
         return this.getRecentResults(limit, currentUserId);
       } else {
-        return this.getRecentResultsByCategory(category, 8, currentUserId);
+        return this.getRecentResultsByCategory(category, SEARCH_DEFAULT_LIMIT, currentUserId);
       }
     }
 
