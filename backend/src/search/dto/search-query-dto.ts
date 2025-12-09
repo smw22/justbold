@@ -29,5 +29,5 @@ export class SearchQueryDto {
   @Max(50)
   @Type(() => Number)
   @IsOptional()
-  limit?: number = 10;
+  limit?: number = 8;
 }
