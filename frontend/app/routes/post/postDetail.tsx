@@ -1,4 +1,5 @@
 import Button from "~/components/Button";
+import CommentThread from "./commentThread";
 import Icon from "~/components/icon";
 import { useEffect, useRef, useState } from "react";
 import { Form, Link, useLoaderData, useFetcher, useBlocker } from "react-router";
@@ -92,6 +93,7 @@ export default function PostDetail() {
   useEffect(() => {
     if (fetcher.data?.success) {
       formRef.current?.reset();
+      cancelReply();
     }
   }, [fetcher.data]);
 
@@ -101,6 +103,12 @@ export default function PostDetail() {
       parentIdInput.value = commentId;
     }
     setReplyTo(userName);
+    // Scroll to the form
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    // For extra niceness, implement this properly. But with these uncommented, behavior: "smooth" no work.
+    // const commentInput = formRef.current?.elements.namedItem("comment") as HTMLInputElement;
+    // commentInput?.focus();
   };
 
   const cancelReply = () => {
@@ -139,10 +147,12 @@ export default function PostDetail() {
           </fetcher.Form>
         </div>
       </div>
-      <div className="p-10 flex flex-col gap-6">
-        {post?.comments.map((comment: CommentType) => (
-          <Comment comment={comment} key={comment.id} onReply={() => handleReply(comment.id, comment.user.name)} />
-        ))}
+      <div className="p-10 flex flex-col gap-8">
+        {post?.comments
+          .filter((comment: CommentType) => !comment.parentId) // Only top-level comments
+          .map((comment: CommentType) => (
+            <CommentThread key={comment.id} comment={comment} allComments={post.comments} onReply={handleReply} />
+          ))}
       </div>
     </article>
   );
