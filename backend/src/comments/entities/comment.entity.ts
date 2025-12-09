@@ -17,7 +17,7 @@ export class Comment {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @ManyToOne(() => Comment, { nullable: true })
+  @ManyToOne(() => Comment, (comment) => comment.children, { nullable: true })
   @JoinColumn({ name: "parent_id" })
   parent: Comment | null;
 
