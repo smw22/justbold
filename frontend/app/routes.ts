@@ -37,7 +37,10 @@ export default [
 
   // Chat
   route("chats", "routes/chat/chatLayout.tsx", [
-    index("routes/chat/threads.tsx"),
+    route("", "routes/chat/threads.tsx", [
+      index("routes/chat/components/Chats.tsx"),
+      route("groups", "routes/chat/components/Groups.tsx"),
+    ]),
     route("new", "routes/chat/chatNew.tsx"),
     route(":threadId", "routes/chat/chat.tsx"),
   ]),

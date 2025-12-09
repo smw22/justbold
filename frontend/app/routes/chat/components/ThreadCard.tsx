@@ -11,6 +11,7 @@ export default function ThreadCard({
   messageData: Message;
   isGroup?: boolean;
 }) {
+  const route = isGroup ? `/chats/groups/${threadData.id}` : `/chats/${threadData.id}`;
   const imageUrl = isGroup
     ? `https://img.icons8.com/?size=100&id=87221&format=png&color=000000`
     : messageData.user.profile_image;
@@ -18,7 +19,7 @@ export default function ThreadCard({
   const title = isGroup ? `Group ${threadData.id.slice(0, 8)}` : messageData.user.name;
 
   return (
-    <Link to={`/chats/${threadData.id}`}>
+    <Link to={route}>
       <div className="flex items-center p-6 border-b border-gray-300 hover:bg-gray-100 cursor-pointer gap-4">
         <div className="flex items-center gap-4 flex-1">
           <div className="w-[60px] h-[60px] flex-shrink-0">

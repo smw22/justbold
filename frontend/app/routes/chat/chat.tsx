@@ -1,7 +1,6 @@
 import { useLoaderData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Message } from "~/types/messages";
-import MessagesHeader from "./components/MessagesHeader";
 
 export async function clientLoader({ params }: { params: { threadId: string } }) {
   const threadId = params.threadId;
@@ -18,17 +17,11 @@ export async function clientLoader({ params }: { params: { threadId: string } })
     throw new Error(result.message || "Failed to load messages");
   }
 
-  // Get the other user (not logged in user)
-  const userId = localStorage.getItem("user_id");
-  const otherUser = result.data.find((msg: Message) => msg.user.id !== userId)?.user;
-
-  console.log("otherUser", otherUser);
-
-  return { messages: result.data, otherUser };
+  return { messages: result.data };
 }
 
 export default function Chat() {
-  const { messages, otherUser } = useLoaderData();
+  const { messages } = useLoaderData();
   const firstMessage = messages[0];
   const dateStr = firstMessage
     ? new Date(firstMessage.created).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })
@@ -51,10 +44,6 @@ export default function Chat() {
 function Bubble({ message }: { message: Message }) {
   const userId = localStorage.getItem("user_id");
   const isMe = message.user.id === userId;
-
-  console.log("Message user ID:", message.user.id);
-  console.log("Logged in user ID:", userId);
-  console.log("isMe:", isMe);
 
   if (isMe) {
     return (
