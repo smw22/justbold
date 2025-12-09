@@ -25,6 +25,10 @@ export class ThreadsService {
       .leftJoinAndSelect("thread.messages", "allMessages")
       .leftJoinAndSelect("allMessages.user", "allMessageUsers")
       .where("messageUser.id = :userId", { userId })
+      // Ensure the thread includes only two participants (1:1 chats)
+      // TODO - extend for group chats in this endpoint or in a new one
+      .groupBy("thread.id")
+      .having("COUNT(DISTINCT allMessageUsers.id) = :userCount", { userCount: 2 })
       .orderBy("thread.created", "DESC")
       .addOrderBy("allMessages.created", "DESC")
       .getMany();

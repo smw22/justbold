@@ -25,7 +25,7 @@ export default function Threads() {
   const [tab, setTab] = useState(0);
 
   return (
-    <main>
+    <main className="outer-wrapper">
       <Tabs tabs={["Chats", "Groups"]} currentTab={tab} setTab={(e) => setTab(e)} />
       {threads.length === 0 ? (
         <div className="mt-8 text-center text-gray-500">No threads available. Start a new chat to connect with others!</div>
