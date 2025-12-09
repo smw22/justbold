@@ -179,13 +179,14 @@ export class MainSeeder implements Seeder {
 
     // Seed threads
     const threadFactory = factoryManager.get(Thread);
+    const allUsers = [...users, adminUser]; // Include admin user
     const threads = await Promise.all(
       Array(50)
         .fill("")
         .map(async () => {
           const thread = await threadFactory.make();
           // Assign 2-4 random users as participants
-          const threadUsers = faker.helpers.arrayElements(users, {
+          const threadUsers = faker.helpers.arrayElements(allUsers, {
             min: 2,
             max: 4,
           });
@@ -195,18 +196,28 @@ export class MainSeeder implements Seeder {
     );
     await dataSource.getRepository(Thread).save(threads);
 
-    // Seed messages linked to threads and users
+    //Seed messages linked to threads and users
     const messageFactory = factoryManager.get(Message);
-    const messages = await Promise.all(
-      Array(400)
+    // 1) One message per thread (This ensures all threads have at least one message)
+    const onePerThread = await Promise.all(
+      threads.map(async (thread) => {
+        const user = faker.helpers.arrayElement(allUsers);
+        return messageFactory.make({ user, thread });
+      })
+    );
+
+    // 2) Extra random messages
+    const extraMessages = await Promise.all(
+      Array(150)
         .fill("")
         .map(async () => {
-          const user = faker.helpers.arrayElement(users);
+          const user = faker.helpers.arrayElement(allUsers);
           const thread = faker.helpers.arrayElement(threads);
           return messageFactory.make({ user, thread });
         })
     );
-    await dataSource.getRepository(Message).save(messages);
+
+    await dataSource.getRepository(Message).save([...onePerThread, ...extraMessages]);
 
     // Seed comments
     const commentFactory = factoryManager.get(Comment);
