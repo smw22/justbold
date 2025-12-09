@@ -20,12 +20,13 @@ export class ThreadsService {
   async findAll(userId: string): Promise<Thread[]> {
     const threads = await this.threadsRepository
       .createQueryBuilder("thread")
-      .innerJoin("thread.users", "user")
-      .leftJoinAndSelect("thread.messages", "message")
-      .leftJoinAndSelect("message.user", "messageUser")
-      .where("user.id = :userId", { userId })
+      .innerJoin("thread.messages", "message")
+      .innerJoin("message.user", "messageUser")
+      .leftJoinAndSelect("thread.messages", "allMessages")
+      .leftJoinAndSelect("allMessages.user", "allMessageUsers")
+      .where("messageUser.id = :userId", { userId })
       .orderBy("thread.created", "DESC")
-      .addOrderBy("message.created", "DESC")
+      .addOrderBy("allMessages.created", "DESC")
       .getMany();
 
     // Keep only the latest message per thread (no overfetching unused data)

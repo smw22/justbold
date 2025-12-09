@@ -1,39 +1,34 @@
-import type { MetaFunction } from "react-router";
+import { useLoaderData } from "react-router";
+import { apiFetch } from "~/lib/apiFetch";
+import type { Message } from "~/types/messages";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Chat with [INSERT USER NAME HERE] | LineUp" },
-    {
-      property: "og:title",
-      content: "Chat [INSERT USER NAME HERE] | LineUp",
-    },
-  ];
-};
+export async function clientLoader({ params }: { params: { threadId: string } }) {
+  const threadId = params.threadId;
+  if (!threadId) throw new Error("Thread ID is required");
 
-type Message = {
-  id: number;
-  text: string;
-  from: "me" | "friend";
-};
+  const response = await apiFetch(`/messages?threadId=${threadId}`);
 
-const messages: Message[] = [
-  { id: 1, text: "ok, so that was cool!", from: "me" },
-  { id: 2, text: "yo that jam was fire 🔥", from: "friend" },
-  { id: 3, text: "omg i know right? crazy vibes", from: "me" },
-  { id: 4, text: "we def gotta record that version", from: "friend" },
-  { id: 5, text: "the one after the second chorus", from: "friend" },
-  { id: 6, text: "yep! I’ll clean up the synth line tonight and send you the file", from: "me" },
-  { id: 7, text: "perfect. I’ll layer some guitar over it and see if we can make it a full track", from: "friend" },
-];
+  if (!response.ok) {
+    throw new Error(`Failed to load messages: ${response.status}`);
+  }
+
+  const result = await response.json();
+  if (!result.success || !result.data) {
+    throw new Error(result.message || "Failed to load messages");
+  }
+
+  return { messages: result.data };
+}
 
 export default function Chat() {
+  const { messages } = useLoaderData();
   return (
     <main className="outer-wrapper min-h-screen bg-white text-darkgrey px-5 py-6">
       <div className="flex m-auto mb-4">
         <p className="text-xs m-auto">Thu, 22 Jun</p>
       </div>
       <div className="flex flex-col space-y-3">
-        {messages.slice(0, 7).map((message) => (
+        {messages.map((message: Message) => (
           <Bubble key={message.id} message={message} />
         ))}
       </div>
@@ -42,13 +37,18 @@ export default function Chat() {
 }
 
 function Bubble({ message }: { message: Message }) {
-  const isMe = message.from === "me";
+  const userId = localStorage.getItem("user_id");
+  const isMe = message.user.id === userId;
+
+  console.log("Message user ID:", message.user.id);
+  console.log("Logged in user ID:", userId);
+  console.log("isMe:", isMe);
 
   if (isMe) {
     return (
       <div className="flex justify-end">
         <div className="max-w-[78%] rounded-2xl rounded-br-sm bg-header-bg-4 px-4 py-3 text-white text-sm leading-snug shadow-sm">
-          {message.text}
+          {message.content}
         </div>
       </div>
     );
@@ -56,13 +56,9 @@ function Bubble({ message }: { message: Message }) {
 
   return (
     <div className="flex items-end gap-3">
-      <img
-        src="https://avatar.iran.liara.run/public"
-        alt="user avatar"
-        className="w-[28px] h-[28px] rounded-full object-cover"
-      />
+      <img src={message.user.profile_image} alt="user avatar" className="w-[28px] h-[28px] rounded-full object-cover" />
       <div className="max-w-[78%] rounded-2xl rounded-bl-sm bg-light-grey px-4 py-3 text-black text-sm leading-snug shadow-sm">
-        {message.text}
+        {message.content}
       </div>
     </div>
   );

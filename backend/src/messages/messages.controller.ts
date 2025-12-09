@@ -13,12 +13,12 @@ export class MessagesController {
   }
 
   @Get()
-  async findAll(@Query("threadId") threadId: string, @Query("userId") userId: string) {
+  async findAll(@Query("threadId") threadId: string) {
     try {
-      const data = await this.messagesService.findAll(threadId, userId);
+      const data = await this.messagesService.findAll(threadId);
 
-      if (!threadId || !userId) {
-        throw new BadRequestException("threadId and userId query params are required");
+      if (!threadId) {
+        throw new BadRequestException("threadId query param is required");
       }
 
       return {

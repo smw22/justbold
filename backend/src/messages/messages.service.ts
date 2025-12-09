@@ -15,7 +15,7 @@ export class MessagesService {
     return "This action adds a new message";
   }
 
-  async findAll(threadId: string, userId: string) {
+  async findAll(threadId: string) {
     const messages = await this.messagesRepository
       .createQueryBuilder("message")
       .innerJoin("message.thread", "thread")
@@ -24,14 +24,7 @@ export class MessagesService {
       .orderBy("message.created", "ASC")
       .getMany();
 
-    // Separate messages in application layer
-    const senderMessages = messages.filter((msg) => msg.user.id === userId);
-    const receiverMessages = messages.filter((msg) => msg.user.id !== userId);
-
-    return {
-      senderMessages,
-      receiverMessages,
-    };
+    return messages;
   }
 
   async findOne(threadId: string) {
