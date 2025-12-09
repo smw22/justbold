@@ -15,13 +15,52 @@ export default function ForYou({ query }: ForYouProps) {
   const [results, setResults] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [connections, setConnections] = useState<Record<string, "pending" | "accepted">>({});
 
+  // Fetch connections on mount
+  useEffect(() => {
+    const fetchConnections = async () => {
+      try {
+        const res = await apiFetch("/connections");
+        if (res.ok) {
+          const data = await res.json();
+
+          // Creates an empty object that will store connection statuses
+          const map: Record<string, "pending" | "accepted"> = {};
+
+          // Loop through each connection
+          for (const connection of data.accepted ?? []) {
+            // Figure out who the other user is
+            // If "you" are the requester, the other person is the addressee or vice versa
+            const otherId = connection.requester.id === data.me ? connection.addressee.id : connection.requester.id;
+
+            // Store connection
+            map[otherId] = "accepted";
+          }
+
+          // Same as above, but for pending connections
+          for (const connection of data.pending ?? []) {
+            const otherId = connection.requester.id === data.me ? connection.addressee.id : connection.requester.id;
+            map[otherId] = "pending";
+          }
+
+          // Save the map to state so the component can render it
+          setConnections(map);
+        }
+      } catch (error) {
+        console.error("Failed to fetch connections:", error);
+      }
+    };
+    fetchConnections();
+  }, []); // Run only once
+
+  // Fetch search results
   useEffect(() => {
     const fetchResults = async () => {
       setLoading(true);
       setError(null);
       try {
-        const searchParams = query ? `query=${encodeURIComponent(query)}&category=all` : "&category=all"; // When no query, limit total results to 10 (distributed evenly)
+        const searchParams = query ? `query=${encodeURIComponent(query)}&category=all` : `category=all`;
         const response = await apiFetch(`/search?${searchParams}`);
         if (!response.ok) throw new Error("Search failed");
         const json = await response.json();
@@ -38,6 +77,21 @@ export default function ForYou({ query }: ForYouProps) {
     return () => clearTimeout(debounce);
   }, [query]);
 
+  const handleConnect = async (userId: string) => {
+    try {
+      const res = await apiFetch("/connections", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ targetUserId: userId }),
+      });
+      if (res.ok) {
+        setConnections((prev) => ({ ...prev, [userId]: "pending" }));
+      }
+    } catch (error) {
+      console.error("Failed to send connection request:", error);
+    }
+  };
+
   if (loading) return <div className="text-xs text-(--lightgrey-text)">Loading...</div>;
   if (error) return <div className="text-xs text-red-500">{error}</div>;
   if (!results) return <div className="text-xs text-(--lightgrey-text)">Loading...</div>;
@@ -52,27 +106,37 @@ export default function ForYou({ query }: ForYouProps) {
         <section className="flex flex-col gap-3">
           <p className="font-medium text-xs text-neutral-grey">People</p>
           <div className="flex flex-col gap-3">
-            {results.people.map((person: any) => (
-              <div key={person.id} className="flex items-center gap-1.5 w-full justify-between">
-                <div className="flex gap-1.5">
-                  <img
-                    src={person.profile_image || "placeholder.jpg"}
-                    alt={person.name}
-                    className="rounded-full w-12 h-12 object-cover"
-                  />
-                  <div className="flex flex-col gap-1.5">
-                    <p className="text-neutral-grey font-medium text-sm">{person.name}</p>
-                    <p className="text-(--lightgrey-text) text-xs">{person.location}</p>
+            {results.people.map((person: any) => {
+              const status = connections[person.id];
+              const hideButton = status === "accepted";
+              const isPending = status === "pending";
+
+              return (
+                <div key={person.id} className="flex items-center gap-1.5 w-full justify-between">
+                  <div className="flex gap-1.5">
+                    <img
+                      src={person.profile_image || "placeholder.jpg"}
+                      alt={person.name}
+                      className="rounded-full w-12 h-12 object-cover"
+                    />
+                    <div className="flex flex-col gap-1.5">
+                      <p className="text-neutral-grey font-medium text-sm">{person.name}</p>
+                      <p className="text-(--lightgrey-text) text-xs">{person.location}</p>
+                    </div>
                   </div>
+                  {!hideButton && (
+                    <Button
+                      variant="primary"
+                      text={isPending ? "Pending" : "Connect"}
+                      disabled={isPending}
+                      onClick={() => handleConnect(person.id)}
+                      icon="AddCircle"
+                      className="flex flex-row-reverse text-sm font-medium"
+                    />
+                  )}
                 </div>
-                <Button
-                  variant="primary"
-                  text="Connect"
-                  icon="AddCircle"
-                  className="flex flex-row-reverse text-sm font-medium"
-                />
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}

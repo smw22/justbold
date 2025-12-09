@@ -19,7 +19,7 @@ export default function Tags({ query }: TagsProps) {
       setLoading(true);
       setError(null);
       try {
-        const searchParams = query ? `query=${encodeURIComponent(query)}&category=tags` : "category=tags";
+        const searchParams = query ? `query=${encodeURIComponent(query)}&category=tags` : `category=tags`;
         const response = await apiFetch(`/search?${searchParams}`);
         if (!response.ok) throw new Error("Search failed");
         const json = await response.json();
