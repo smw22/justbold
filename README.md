@@ -50,6 +50,10 @@ Features Eventuelle kendte issues eller manglende features
 
 - Genres er lige nu en statisk ressource hvor brugeren kan vælge genre, men der mangler mulighed for at oprette nye genrere
 
+### Skills
+
+- Skills er lige nu en statisk ressource hvor brugeren kan vælge skill, men der mangler mulighed for at oprette nye skills
+
 # Beslutninger ud over designet 🚨
 
 En liste og kort beskrivelse af eventuelle ekstra features eller innovationer, I har tilføjet ud over kravene
