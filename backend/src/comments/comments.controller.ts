@@ -1,41 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from "@nestjs/common";
+import { Controller, Get, Post, Param, Delete, Req } from "@nestjs/common";
 import { CommentsService } from "./comments.service";
-import { CreateCommentDto } from "./dto/create-comment.dto";
-import { UpdateCommentDto } from "./dto/update-comment.dto";
-import { Like } from "../likes/entities/like.entity";
 
 @Controller("comments")
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Post()
-  create(@Body() createCommentDto: CreateCommentDto) {
-    return this.commentsService.create(createCommentDto);
-  }
-
   @Get()
   findAll() {
-    return this.commentsService.findAll();
-  }
-
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.commentsService.findOne(+id);
-  }
-
-  @Patch(":id")
-  update(@Param("id") id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentsService.update(+id, updateCommentDto);
-  }
-
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.commentsService.remove(+id);
+    return {
+      success: true,
+      message: "Create and get comments from the /posts/:postId/comments endpoint",
+    };
   }
 
   @Post(":id/likes")
-  async addLike(@Param("id") id: string, @Req() req) {
+  async addLike(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
     try {
+      if (!req.user || !req.user.id) {
+        throw new Error("User not authenticated");
+      }
       const userId = req.user.id;
       const data = await this.commentsService.addLike(id, userId);
       // Fetch updated total likes
@@ -47,16 +30,20 @@ export class CommentsController {
         message: "Like added successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
 
   @Delete(":id/likes")
-  async removeLike(@Param("id") id: string, @Req() req) {
+  async removeLike(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
     try {
+      if (!req.user || !req.user.id) {
+        throw new Error("User not authenticated");
+      }
       const userId = req.user.id;
       const data = await this.commentsService.removeLike(id, userId);
       const likes = await this.commentsService.getLikes(id);
@@ -67,9 +54,10 @@ export class CommentsController {
         message: "Like removed successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
