@@ -1,17 +1,13 @@
 meta {
-  name: Get Users Questions
+  name: Get User
   type: http
-  seq: 7
+  seq: 1
 }
 
 get {
-  url: {{domain}}/user/:userId/questions
+  url: {{domain}}/user
   body: none
   auth: bearer
-}
-
-params:path {
-  userId: {{user_id}}
 }
 
 auth:bearer {

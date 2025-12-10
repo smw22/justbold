@@ -1,11 +1,11 @@
 meta {
   name: Get Users Posts
   type: http
-  seq: 2
+  seq: 5
 }
 
 get {
-  url: {{domain}}/users/:userId/posts
+  url: {{domain}}/user/:userId/posts
   body: none
   auth: bearer
 }
