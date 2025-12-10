@@ -16,9 +16,10 @@ export class SearchController {
         message: "Search completed successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
