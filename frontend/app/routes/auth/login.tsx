@@ -50,7 +50,6 @@ export async function clientAction({ params, request }: { params: any; request: 
     console.log("Login successful! User:", email);
 
     localStorage.setItem("access_token", result.access_token);
-    localStorage.setItem("user_id", result.user_id);
 
     const url = new URL(request.url);
     const redirectTo = url.searchParams.get("redirectTo") || "/";
@@ -64,7 +63,6 @@ export default function Login({ onNext, onLogin }: LoginProps) {
   const actionData = useActionData();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
-
   return (
     <div className="h-dvh w-screen flex flex-col items-center relative py-[50px]">
       <div className="m-auto flex flex-col items-center justify-center h-full gap-6 w-[263px]">
