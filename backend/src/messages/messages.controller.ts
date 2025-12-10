@@ -21,10 +21,6 @@ export class MessagesController {
     try {
       const data = await this.messagesService.findAll(threadId);
 
-      if (!threadId) {
-        throw new BadRequestException("threadId query param is required");
-      }
-
       return {
         success: true,
         data,
@@ -39,12 +35,13 @@ export class MessagesController {
 
   @Get(":threadId")
   async findOne(@Param("threadId") threadId: string) {
+    if (!threadId) {
+      throw new BadRequestException("threadId param is required");
+    }
+
     try {
       const data = await this.messagesService.findOne(threadId);
 
-      if (!threadId) {
-        throw new BadRequestException("threadId param is required");
-      }
       return {
         success: true,
         data,

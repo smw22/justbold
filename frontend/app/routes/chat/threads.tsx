@@ -2,7 +2,6 @@ import { useLoaderData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Thread } from "~/types/threads";
 import ThreadCard from "./components/ThreadCard";
-import ChatTabs from "./components/chatTabs";
 
 export async function clientLoader() {
   const userId = localStorage.getItem("user_id");

@@ -35,12 +35,16 @@ export default function ThreadCard({
           </div>
           <div>
             <h3 className="font-semibold text-lg">{title}</h3>
-            <p className="text-sm text-gray-600 line-clamp-1">{messageData.content}</p>
+            <p className="text-sm text-gray-600 line-clamp-1">{messageData.content || "No messages yet"}</p>
           </div>
         </div>
 
         <div>
-          <p>{new Date(messageData.created).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
+          {messageData.created ? (
+            <p>{new Date(messageData.created).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </Link>
