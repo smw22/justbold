@@ -27,13 +27,9 @@ export const meta: MetaFunction = () => {
 };
 
 export async function clientLoader() {
-  const currentUser = localStorage.getItem("user_id");
+  const profileResponse = await apiFetch(`/user/`);
 
-  const profileResponse = await apiFetch(`/users/${currentUser}`);
-  const questionsResponse = await apiFetch(`/users/${currentUser}/questions`);
-  const genresResponse = await apiFetch(`/genres`);
-
-  if (!profileResponse.ok || !questionsResponse.ok || !genresResponse.ok) {
+  if (!profileResponse.ok) {
     throw new Error("Unknown error.");
   }
 
@@ -42,6 +38,14 @@ export async function clientLoader() {
   }
 
   const profile = await profileResponse.json();
+
+  const questionsResponse = await apiFetch(`/user/${profile.id}/questions`);
+  const genresResponse = await apiFetch(`/genres`);
+
+  if (!questionsResponse.ok || !genresResponse.ok) {
+    throw new Error("Unknown error.");
+  }
+
   const questions = await questionsResponse.json();
   const genres = await genresResponse.json();
 
@@ -53,11 +57,7 @@ export async function clientLoader() {
 }
 
 export async function clientAction({ request }: { request: Request }) {
-  const currentUser = localStorage.getItem("user_id");
-  const apiUrl = import.meta.env.VITE_API_URL;
-  // Extract form data
   const formData = await request.formData();
-
   const name = formData.get("name")?.toString();
   const bio = formData.get("bio")?.toString();
   const about = formData.get("about")?.toString();
@@ -86,10 +86,8 @@ export async function clientAction({ request }: { request: Request }) {
     return { error: "About cannot be empty" };
   }
 
-  console.log(`/users/${currentUser}`);
-
   try {
-    const response = await apiFetch(`/users/${currentUser}`, {
+    const response = await apiFetch(`/user/`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
