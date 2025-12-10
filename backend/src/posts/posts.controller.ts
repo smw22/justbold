@@ -12,7 +12,6 @@ import {
 import { PostsService } from "./posts.service";
 import { CreatePostDto } from "./dto/create-post.dto";
 import { UpdatePostDto } from "./dto/update-post.dto";
-import { LikesController } from "src/likes/likes.controller";
 
 interface Post {
   user_id: string;
@@ -25,9 +24,12 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  async create(@Body() createPostDto: CreatePostDto, @Req() req) {
+  async create(@Body() createPostDto: CreatePostDto, @Req() req: Request & { user?: { id: string } }) {
     try {
-      const userId = req.user.id;
+      const userId = req.user?.id;
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
       const data = await this.postsService.create(createPostDto, userId);
       return {
         success: true,
@@ -35,17 +37,25 @@ export class PostsController {
         message: "Post created successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
 
   @Get()
-  async findAll(@Query("page") page: string = "1", @Query("limit") limit: string = "10", @Req() req) {
+  async findAll(
+    @Query("page") page: string = "1",
+    @Query("limit") limit: string = "10",
+    @Req() req: Request & { user?: { id: string } }
+  ) {
     try {
       const userId = req.user?.id;
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
       const pageNum = parseInt(page, 10) || 1;
       const limitNum = parseInt(limit, 10) || 10;
       const { data } = await this.postsService.findAll(pageNum, limitNum, userId);
@@ -55,17 +65,21 @@ export class PostsController {
         message: "Posts retrieved successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: string, @Req() req) {
+  async findOne(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
     try {
       const userId = req.user?.id;
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
       const data = await this.postsService.findOne(id, userId);
       return {
         success: true,
@@ -73,9 +87,10 @@ export class PostsController {
         message: "Post retrieved successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
@@ -151,9 +166,10 @@ export class PostsController {
         message: "Post likes retrieved successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
