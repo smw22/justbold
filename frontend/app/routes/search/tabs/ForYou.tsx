@@ -101,7 +101,7 @@ export default function ForYou({ query }: ForYouProps) {
     <div className="flex flex-col gap-6">
       {results.people?.length > 0 && (
         <section className="flex flex-col gap-3">
-          <p className="font-medium text-xs text-neutral-grey">People</p>
+          <p className="font-medium text-xs text-neutral-grey">{query ? "Users" : "Recently created users"}</p>
           <div className="flex flex-col gap-3">
             {results.people.map((person: any) => {
               const status = connections[person.id];
@@ -140,7 +140,9 @@ export default function ForYou({ query }: ForYouProps) {
 
       {results.collaborations?.length > 0 && (
         <section className="flex flex-col gap-3 max-w-[331px]">
-          <p className="font-medium text-xs text-neutral-grey">Collaboration requests</p>
+          <p className="font-medium text-xs text-neutral-grey">
+            {query ? "Collaboration requests" : "Recent collaboration requests"}
+          </p>
           <div className="flex flex-col gap-3">
             {results.collaborations.map((collab: any) => (
               <div key={collab.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
@@ -173,7 +175,7 @@ export default function ForYou({ query }: ForYouProps) {
 
       {results.services?.length > 0 && (
         <section className="flex flex-col gap-3 max-w-[331px]">
-          <p className="font-medium text-xs text-neutral-grey">Services</p>
+          <p className="font-medium text-xs text-neutral-grey">{query ? "Services" : "Recent services"}</p>
           <div className="flex flex-col gap-3">
             {results.services.map((service: any) => (
               <div key={service.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
@@ -212,7 +214,7 @@ export default function ForYou({ query }: ForYouProps) {
 
       {results.posts?.length > 0 && (
         <section className="flex flex-col gap-3 max-w-[331px]">
-          <p className="font-medium text-xs text-neutral-grey">Posts</p>
+          <p className="font-medium text-xs text-neutral-grey">{query ? "Posts" : "Recent posts"}</p>
           <div className="flex flex-col gap-3">
             {results.posts.map((post: any) => (
               <div key={post.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">

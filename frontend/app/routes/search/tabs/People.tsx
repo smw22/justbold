@@ -99,7 +99,7 @@ export default function People({ query }: PeopleProps) {
     <div className="flex flex-col gap-6">
       {results.people?.length > 0 && (
         <section className="flex flex-col gap-3">
-          <p className="font-medium text-xs text-neutral-grey">People</p>
+          <p className="font-medium text-xs text-neutral-grey">{query ? "Users" : "Recently created users"}</p>
           <div className="flex flex-col gap-3">
             {results.people.map((person: any) => {
               const status = connections[person.id];
