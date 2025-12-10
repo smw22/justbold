@@ -1,7 +1,8 @@
-import { Link, useLoaderData } from "react-router";
+import { useLoaderData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Thread } from "~/types/threads";
 import ThreadCard from "./components/ThreadCard";
+import ChatTabs from "./components/chatTabs";
 
 export async function clientLoader() {
   const userId = localStorage.getItem("user_id");
@@ -22,23 +23,6 @@ export default function Threads() {
 
   return (
     <main className="outer-wrapper pb-28">
-      {/* Tabs UI */}
-      <div className="bg-white flex flex-row w-full items-center rounded-tl-3xl rounded-tr-3xl -mt-6 overflow-hidden">
-        <Link
-          to="/chats"
-          className="flex py-3 m-2 rounded-2xl flex-row bg-white items-center justify-center w-full text-black border-b-2 border-black"
-        >
-          Chats
-        </Link>
-        <div className="w-px bg-gray-300 h-8" />
-        <Link
-          to="/chats/groups"
-          className="flex py-3 m-2 rounded-2xl flex-row bg-white items-center justify-center w-full text-gray-400"
-        >
-          Groups
-        </Link>
-      </div>
-
       {/* Threads List */}
       <div className="bg-white">
         {threads.length === 0 ? (
