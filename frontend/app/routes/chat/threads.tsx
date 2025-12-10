@@ -21,7 +21,7 @@ export default function Threads() {
   const { threads } = useLoaderData<typeof clientLoader>();
 
   return (
-    <main className="outer-wrapper">
+    <main className="outer-wrapper pb-28">
       {/* Tabs UI */}
       <div className="bg-white flex flex-row w-full items-center rounded-tl-3xl rounded-tr-3xl -mt-6 overflow-hidden">
         <Link
