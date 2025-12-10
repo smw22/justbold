@@ -46,6 +46,10 @@ Features Eventuelle kendte issues eller manglende features
 
 - Tags er lige nu en statisk ressource hvor brugeren kan vælge tags, men der mangler mulighed for at oprette nye tags
 
+### Genres
+
+- Genres er lige nu en statisk ressource hvor brugeren kan vælge genre, men der mangler mulighed for at oprette nye genrere
+
 # Beslutninger ud over designet 🚨
 
 En liste og kort beskrivelse af eventuelle ekstra features eller innovationer, I har tilføjet ud over kravene
