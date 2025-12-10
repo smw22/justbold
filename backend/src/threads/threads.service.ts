@@ -20,16 +20,25 @@ export class ThreadsService {
   async findAllSingularChats(userId: string): Promise<Thread[]> {
     const threads = await this.threadsRepository
       .createQueryBuilder("thread")
-      .innerJoin("thread.messages", "message")
-      .innerJoin("message.user", "messageUser")
-      .leftJoinAndSelect("thread.messages", "allMessages")
-      .leftJoinAndSelect("allMessages.user", "allMessageUsers")
-      .where("messageUser.id = :userId", { userId })
-      // Ensure the thread includes only two participants (1:1 chats)
-      .groupBy("thread.id")
-      .having("COUNT(DISTINCT allMessageUsers.id) = :userCount", { userCount: 2 })
+      // Join to get only threads where the user is a participant
+      .innerJoin("thread.users", "currentUser", "currentUser.id = :userId", { userId })
+      // Load all participants for each thread
+      .leftJoinAndSelect("thread.users", "participants")
+      // Load the latest message
+      .leftJoinAndSelect("thread.messages", "messages")
+      .leftJoinAndSelect("messages.user", "messageUser")
+      // Filter for 1:1 chats (exactly 2 participants)
+      .andWhere((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select("COUNT(tu.userId)")
+          .from("thread_users", "tu")
+          .where("tu.threadId = thread.id")
+          .getQuery();
+        return `(${subQuery}) = 2`;
+      })
       .orderBy("thread.created", "DESC")
-      .addOrderBy("allMessages.created", "DESC")
+      .addOrderBy("messages.created", "DESC")
       .getMany();
 
     // Keep only the latest message per thread (no overfetching unused data)
@@ -42,17 +51,28 @@ export class ThreadsService {
   async findAllGroupChats(userId: string): Promise<Thread[]> {
     const threads = await this.threadsRepository
       .createQueryBuilder("thread")
-      .innerJoin("thread.messages", "message")
-      .innerJoin("message.user", "messageUser")
-      .leftJoinAndSelect("thread.messages", "allMessages")
-      .leftJoinAndSelect("allMessages.user", "allMessageUsers")
-      .where("messageUser.id = :userId", { userId })
-      // Ensure the thread includes more than two participants (group chats)
+      // Join to get only threads where the user is a participant
+      .innerJoin("thread.users", "currentUser", "currentUser.id = :userId", { userId })
+      // Load all participants for each thread
+      .leftJoinAndSelect("thread.users", "participants")
+      // Load the latest message
+      .leftJoinAndSelect("thread.messages", "messages")
+      .leftJoinAndSelect("messages.user", "messageUser")
+      // Filter for group chats (more than 2 participants)
+      .andWhere((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select("COUNT(tu.userId)")
+          .from("thread_users", "tu")
+          .where("tu.threadId = thread.id")
+          .getQuery();
+        return `(${subQuery}) > 2`;
+      })
       .orderBy("thread.created", "DESC")
-      .addOrderBy("allMessages.created", "DESC")
+      .addOrderBy("messages.created", "DESC")
       .getMany();
 
-    // Keep only the latest message per thread (no overfetching unused data)
+    // Keep only the latest message per thread
     return threads.map((thread) => ({
       ...thread,
       messages: thread.messages.slice(0, 1),
