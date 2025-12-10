@@ -58,7 +58,7 @@ export class UpdateServiceDto extends PartialType(CreateServiceDto) {
   @Max(99999999.99)
   price: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @MaxLength(255)
   location: string;
