@@ -12,11 +12,8 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
   @Get()
-  async findCurrent(@Req() req: Request & { user?: { id: string } }) {
+  async findCurrent(@Req() req: Request & { user: { id: string } }) {
     try {
-      if (!req.user || !req.user.id) {
-        throw new Error("User not authenticated");
-      }
       const userId = req.user.id;
       const data = await this.usersService.findOne(userId);
       return {
@@ -33,11 +30,8 @@ export class UsersController {
   }
 
   @Patch()
-  async update(@Req() req: Request & { user?: { id: string } }, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Req() req: Request & { user: { id: string } }, @Body() updateUserDto: UpdateUserDto) {
     try {
-      if (!req.user || !req.user.id) {
-        throw new Error("User not authenticated");
-      }
       const userId = req.user.id;
       const data = await this.usersService.update(userId, updateUserDto);
       return {

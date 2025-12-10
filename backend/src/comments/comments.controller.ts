@@ -14,11 +14,8 @@ export class CommentsController {
   }
 
   @Post(":id/likes")
-  async addLike(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
+  async addLike(@Param("id") id: string, @Req() req: Request & { user: { id: string } }) {
     try {
-      if (!req.user || !req.user.id) {
-        throw new Error("User not authenticated");
-      }
       const userId = req.user.id;
       const data = await this.commentsService.addLike(id, userId);
       // Fetch updated total likes
@@ -39,11 +36,8 @@ export class CommentsController {
   }
 
   @Delete(":id/likes")
-  async removeLike(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
+  async removeLike(@Param("id") id: string, @Req() req: Request & { user: { id: string } }) {
     try {
-      if (!req.user || !req.user.id) {
-        throw new Error("User not authenticated");
-      }
       const userId = req.user.id;
       const data = await this.commentsService.removeLike(id, userId);
       const likes = await this.commentsService.getLikes(id);

@@ -8,12 +8,9 @@ export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Post()
-  async create(@Body() createServiceDto: CreateServiceDto, @Req() req: Request & { user?: { id: string } }) {
+  async create(@Body() createServiceDto: CreateServiceDto, @Req() req: Request & { user: { id: string } }) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const data = await this.servicesService.create(createServiceDto, userId);
 
       return {
@@ -115,13 +112,10 @@ export class ServicesController {
   async update(
     @Param("id") id: string,
     @Body() updateServiceDto: UpdateServiceDto,
-    @Req() req: Request & { user?: { id: string } }
+    @Req() req: Request & { user: { id: string } }
   ) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const service = await this.servicesService.findOne(id);
       if (!service) {
         throw new Error("Service not found");
@@ -145,12 +139,9 @@ export class ServicesController {
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
+  async remove(@Param("id") id: string, @Req() req: Request & { user: { id: string } }) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const service = await this.servicesService.findOne(id);
       if (!service) {
         throw new Error("Service not found");

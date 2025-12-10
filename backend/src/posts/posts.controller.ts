@@ -24,12 +24,9 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  async create(@Body() createPostDto: CreatePostDto, @Req() req: Request & { user?: { id: string } }) {
+  async create(@Body() createPostDto: CreatePostDto, @Req() req: Request & { user: { id: string } }) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const data = await this.postsService.create(createPostDto, userId);
       return {
         success: true,
@@ -49,13 +46,10 @@ export class PostsController {
   async findAll(
     @Query("page") page: string = "1",
     @Query("limit") limit: string = "10",
-    @Req() req: Request & { user?: { id: string } }
+    @Req() req: Request & { user: { id: string } }
   ) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const pageNum = parseInt(page, 10) || 1;
       const limitNum = parseInt(limit, 10) || 10;
       const { data } = await this.postsService.findAll(pageNum, limitNum, userId);
@@ -74,12 +68,9 @@ export class PostsController {
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
+  async findOne(@Param("id") id: string, @Req() req: Request & { user: { id: string } }) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const data = await this.postsService.findOne(id, userId);
       return {
         success: true,
@@ -96,12 +87,9 @@ export class PostsController {
   }
 
   @Patch(":id")
-  async update(@Param("id") id: string, @Body() updatePostDto: UpdatePostDto, @Req() req: Request & { user?: { id: string } }) {
+  async update(@Param("id") id: string, @Body() updatePostDto: UpdatePostDto, @Req() req: Request & { user: { id: string } }) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const post = (await this.postsService.findOne(id, userId)) as Post | null;
       if (!post) {
         throw new Error("Post not found");
@@ -125,12 +113,9 @@ export class PostsController {
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
+  async remove(@Param("id") id: string, @Req() req: Request & { user: { id: string } }) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const post = (await this.postsService.findOne(id, userId)) as Post | null;
       if (!post) {
         throw new Error("Post not found");
@@ -175,12 +160,9 @@ export class PostsController {
   }
 
   @Post(":id/likes")
-  async addLike(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
+  async addLike(@Param("id") id: string, @Req() req: Request & { user: { id: string } }) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const post = (await this.postsService.findOne(id, userId)) as Post | null;
       if (!post) {
         throw new Error("Post not found");
@@ -204,12 +186,9 @@ export class PostsController {
   }
 
   @Delete(":id/likes")
-  async removeLike(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
+  async removeLike(@Param("id") id: string, @Req() req: Request & { user: { id: string } }) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const post = (await this.postsService.findOne(id, userId)) as Post | null;
       if (!post) {
         throw new Error("Post not found");
@@ -236,13 +215,10 @@ export class PostsController {
     @Param("id") id: string,
     @Body("content") content: string,
     @Body("parentId") parentId: string | undefined,
-    @Req() req: Request & { user?: { id: string } }
+    @Req() req: Request & { user: { id: string } }
   ) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const post = (await this.postsService.findOne(id, userId)) as Post | null;
       if (!post) {
         throw new Error("Post not found");

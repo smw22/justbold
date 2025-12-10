@@ -8,12 +8,9 @@ export class CollaborationsController {
   constructor(private readonly collaborationsService: CollaborationsService) {}
 
   @Post()
-  async create(@Body() createCollaborationDto: CreateCollaborationDto, @Req() req: Request & { user?: { id: string } }) {
+  async create(@Body() createCollaborationDto: CreateCollaborationDto, @Req() req: Request & { user: { id: string } }) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const data = await this.collaborationsService.create(createCollaborationDto, userId);
       return {
         success: true,
@@ -77,13 +74,10 @@ export class CollaborationsController {
   async update(
     @Param("id") id: string,
     @Body() updateCollaborationDto: UpdateCollaborationDto,
-    @Req() req: Request & { user?: { id: string } }
+    @Req() req: Request & { user: { id: string } }
   ) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const collaboration = await this.collaborationsService.findOne(id);
       if (!collaboration) {
         throw new Error("Collaboration not found");
@@ -107,12 +101,9 @@ export class CollaborationsController {
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
+  async remove(@Param("id") id: string, @Req() req: Request & { user: { id: string } }) {
     try {
-      const userId = req.user?.id;
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      const userId = req.user.id;
       const collaboration = await this.collaborationsService.findOne(id);
       if (!collaboration) {
         throw new Error("Collaboration not found");
