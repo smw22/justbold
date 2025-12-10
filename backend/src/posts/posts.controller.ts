@@ -14,6 +14,12 @@ import { CreatePostDto } from "./dto/create-post.dto";
 import { UpdatePostDto } from "./dto/update-post.dto";
 import { LikesController } from "src/likes/likes.controller";
 
+interface Post {
+  user_id: string;
+  title?: string;
+  [key: string]: any;
+}
+
 @Controller("posts")
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
@@ -75,26 +81,48 @@ export class PostsController {
   }
 
   @Patch(":id")
-  async update(@Param("id") id: string, @Body() updatePostDto: UpdatePostDto) {
+  async update(@Param("id") id: string, @Body() updatePostDto: UpdatePostDto, @Req() req: Request & { user?: { id: string } }) {
     try {
+      const userId = req.user?.id;
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+      const post = (await this.postsService.findOne(id, userId)) as Post | null;
+      if (!post) {
+        throw new Error("Post not found");
+      }
+      if (post.user.id !== userId) {
+        throw new Error("You are not authorized to update this post");
+      }
       const data = await this.postsService.update(id, updatePostDto);
-      updatePostDto;
       return {
         success: true,
         data,
         message: "Post updated successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string) {
+  async remove(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
     try {
+      const userId = req.user?.id;
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+      const post = (await this.postsService.findOne(id, userId)) as Post | null;
+      if (!post) {
+        throw new Error("Post not found");
+      }
+      if (post.user.id !== userId) {
+        throw new Error("You are not authorized to delete this post");
+      }
       const data = await this.postsService.remove(id);
       return {
         success: true,
@@ -104,9 +132,10 @@ export class PostsController {
         message: "Post deleted successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
@@ -130,9 +159,16 @@ export class PostsController {
   }
 
   @Post(":id/likes")
-  async addLike(@Param("id") id: string, @Req() req) {
+  async addLike(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
     try {
-      const userId = req.user.id;
+      const userId = req.user?.id;
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+      const post = (await this.postsService.findOne(id, userId)) as Post | null;
+      if (!post) {
+        throw new Error("Post not found");
+      }
       const data = await this.postsService.addLike(id, userId);
       // Fetch updated total likes
       const likes = await this.postsService.getLikes(id);
@@ -143,17 +179,25 @@ export class PostsController {
         message: "Like added successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
 
   @Delete(":id/likes")
-  async removeLike(@Param("id") id: string, @Req() req) {
+  async removeLike(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
     try {
-      const userId = req.user.id;
+      const userId = req.user?.id;
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+      const post = (await this.postsService.findOne(id, userId)) as Post | null;
+      if (!post) {
+        throw new Error("Post not found");
+      }
       const data = await this.postsService.removeLike(id, userId);
       const likes = await this.postsService.getLikes(id);
       return {
@@ -163,9 +207,10 @@ export class PostsController {
         message: "Like removed successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
@@ -175,22 +220,40 @@ export class PostsController {
     @Param("id") id: string,
     @Body("content") content: string,
     @Body("parentId") parentId: string | undefined,
-    @Req() req
+    @Req() req: Request & { user?: { id: string } }
   ) {
     try {
-      const userId = req.user.id;
+      const userId = req.user?.id;
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+      const post = (await this.postsService.findOne(id, userId)) as Post | null;
+      if (!post) {
+        throw new Error("Post not found");
+      }
+      if (parentId) {
+        const parentComment = await this.postsService.findCommentById(parentId);
+        if (!parentComment) {
+          throw new Error("Parent comment not found");
+        }
+        console.log(parentComment);
+        if (parentComment.post.id !== id) {
+          throw new Error("Parent comment does not belong to this post");
+        }
+      }
       const data = await this.postsService.addComment(id, userId, content, parentId);
-      const comments = await this.postsService.findOne(id, userId);
+      const comments = (await this.postsService.findOne(id, userId)) as Post | null;
       return {
         success: true,
-        totalComments: comments.comments ? comments.comments.length : 0,
+        totalComments: comments && Array.isArray(comments.comments) ? comments.comments.length : 0,
         data,
         message: "Comment added successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
