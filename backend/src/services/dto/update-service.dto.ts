@@ -1,18 +1,6 @@
 import { PartialType } from "@nestjs/mapped-types";
 import { CreateServiceDto } from "./create-service.dto";
-import {
-  IsNotEmpty,
-  IsString,
-  IsOptional,
-  IsNumber,
-  IsUUID,
-  IsUrl,
-  Min,
-  Max,
-  MaxLength,
-  MinLength,
-  IsIn,
-} from "class-validator";
+import { IsString, IsOptional, IsNumber, IsUrl, Min, Max, MaxLength, MinLength, IsIn } from "class-validator";
 
 const categories = [
   "art",

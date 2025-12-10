@@ -77,7 +77,10 @@ export class ServicesService {
   }
 
   async findOne(id: string): Promise<Service> {
-    const serviceData = await this.servicesRepository.findOneBy({ id });
+    const serviceData = await this.servicesRepository.findOne({
+      where: { id },
+      relations: ["user"],
+    });
     if (!serviceData) {
       throw new HttpException("Service not found", 404);
     }

@@ -9,7 +9,7 @@ export class ReviewsController {
   findAll() {
     return {
       success: true,
-      message: "Reviews can we retrieved from /user/:userId/reviews",
+      message: "Reviews can be retrieved from /user/:userId/reviews",
     };
   }
 }

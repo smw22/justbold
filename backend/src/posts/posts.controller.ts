@@ -1,23 +1,8 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Query, // <-- add Query import
-  Req,
-} from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Req } from "@nestjs/common";
 import { PostsService } from "./posts.service";
 import { CreatePostDto } from "./dto/create-post.dto";
 import { UpdatePostDto } from "./dto/update-post.dto";
-
-interface Post {
-  user_id: string;
-  title?: string;
-  [key: string]: any;
-}
+import { Post as PostEntity } from "./entities/post.entity";
 
 @Controller("posts")
 export class PostsController {
@@ -71,7 +56,7 @@ export class PostsController {
   async findOne(@Param("id") id: string, @Req() req: Request & { user: { id: string } }) {
     try {
       const userId = req.user.id;
-      const data = await this.postsService.findOne(id, userId);
+      const data = (await this.postsService.findOne(id, userId)) as PostEntity | null;
       return {
         success: true,
         data,
@@ -90,7 +75,7 @@ export class PostsController {
   async update(@Param("id") id: string, @Body() updatePostDto: UpdatePostDto, @Req() req: Request & { user: { id: string } }) {
     try {
       const userId = req.user.id;
-      const post = (await this.postsService.findOne(id, userId)) as Post | null;
+      const post = (await this.postsService.findOne(id, userId)) as PostEntity | null;
       if (!post) {
         throw new Error("Post not found");
       }
@@ -116,7 +101,7 @@ export class PostsController {
   async remove(@Param("id") id: string, @Req() req: Request & { user: { id: string } }) {
     try {
       const userId = req.user.id;
-      const post = (await this.postsService.findOne(id, userId)) as Post | null;
+      const post = (await this.postsService.findOne(id, userId)) as PostEntity | null;
       if (!post) {
         throw new Error("Post not found");
       }
@@ -163,7 +148,7 @@ export class PostsController {
   async addLike(@Param("id") id: string, @Req() req: Request & { user: { id: string } }) {
     try {
       const userId = req.user.id;
-      const post = (await this.postsService.findOne(id, userId)) as Post | null;
+      const post = (await this.postsService.findOne(id, userId)) as PostEntity | null;
       if (!post) {
         throw new Error("Post not found");
       }
@@ -189,7 +174,7 @@ export class PostsController {
   async removeLike(@Param("id") id: string, @Req() req: Request & { user: { id: string } }) {
     try {
       const userId = req.user.id;
-      const post = (await this.postsService.findOne(id, userId)) as Post | null;
+      const post = (await this.postsService.findOne(id, userId)) as PostEntity | null;
       if (!post) {
         throw new Error("Post not found");
       }
@@ -219,7 +204,7 @@ export class PostsController {
   ) {
     try {
       const userId = req.user.id;
-      const post = (await this.postsService.findOne(id, userId)) as Post | null;
+      const post = (await this.postsService.findOne(id, userId)) as PostEntity | null;
       if (!post) {
         throw new Error("Post not found");
       }
@@ -228,13 +213,12 @@ export class PostsController {
         if (!parentComment) {
           throw new Error("Parent comment not found");
         }
-        console.log(parentComment);
         if (parentComment.post.id !== id) {
           throw new Error("Parent comment does not belong to this post");
         }
       }
       const data = await this.postsService.addComment(id, userId, content, parentId);
-      const comments = (await this.postsService.findOne(id, userId)) as Post | null;
+      const comments = (await this.postsService.findOne(id, userId)) as PostEntity | null;
       return {
         success: true,
         totalComments: comments && Array.isArray(comments.comments) ? comments.comments.length : 0,

@@ -15,9 +15,9 @@ export class QuestionsService {
     private readonly usersRepository: Repository<User>
   ) {}
 
-  async create(createQuestionDto: CreateQuestionDto) {
+  async create(createQuestionDto: CreateQuestionDto, userId: string) {
     const user = await this.usersRepository.findOne({
-      where: { id: createQuestionDto.user_id },
+      where: { id: userId },
     });
 
     if (!user) {

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from "@nestjs/common";
 import { QuestionsService } from "./questions.service";
 import { CreateQuestionDto } from "./dto/create-question.dto";
 import { UpdateQuestionDto } from "./dto/update-question.dto";
@@ -8,9 +8,10 @@ export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
 
   @Post()
-  async create(@Body() createQuestionDto: CreateQuestionDto) {
+  async create(@Body() createQuestionDto: CreateQuestionDto, @Req() req: Request & { user: { id: string } }) {
     try {
-      const data = await this.questionsService.create(createQuestionDto);
+      const userId = req.user.id;
+      const data = await this.questionsService.create(createQuestionDto, userId);
       return {
         success: true,
         data,
