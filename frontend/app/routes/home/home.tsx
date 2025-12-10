@@ -33,35 +33,40 @@ const stories = [
 ];
 
 export async function clientLoader(): Promise<{}> {
+  let collaborationsError = null;
+  let postsError = null;
+
   // Get Collaborations
   const collabResponse = await apiFetch(`/collaborations`);
 
   if (!collabResponse.ok) {
-    throw new Error(`Failed to fetch collaborations: ${collabResponse.status}`);
+    collaborationsError = `Failed to fetch collaborations: ${collabResponse.statusText}`;
+    // throw new Error(`Failed to fetch collaborations: ${collabResponse.status}`);
   }
 
-  const collaborations = await collabResponse.json();
+  const collaborations = await collabResponse?.json();
 
   // Get Posts
   const postsResponse = await apiFetch(`/posts`);
 
   if (!postsResponse.ok) {
-    throw new Error(`Failed to fetch posts: ${postsResponse.status}`);
+    postsError = `Failed to fetch posts: ${postsResponse.statusText}`;
+    // throw new Error(`Failed to fetch posts: ${postsResponse.status}`);
   }
 
-  const posts = await postsResponse.json();
+  const posts = await postsResponse?.json();
 
-  return { collaborations, posts };
+  return { collaborations, collaborationsError, posts, postsError };
 }
 
 export default function Home() {
-  const { collaborations, posts } = useLoaderData();
+  const { collaborations, collaborationsError, posts, postsError } = useLoaderData();
 
   return (
     <div className="flex flex-col gap-4">
       <StoriesSlider stories={stories} />
-      <CollaborationsSlider collaborations={collaborations} />
-      <PostsFeed posts={posts.data} />
+      <CollaborationsSlider collaborations={collaborations} error={collaborationsError} />
+      <PostsFeed posts={posts.data} error={postsError} />
     </div>
   );
 }
