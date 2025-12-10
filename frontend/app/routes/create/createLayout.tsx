@@ -4,9 +4,7 @@ import { apiFetch } from "~/lib/apiFetch";
 import AvatarHeader from "../../components/AvatarHeader";
 
 export async function clientLoader(): Promise<{}> {
-  const userId = localStorage.getItem("user_id");
-
-  const userResponse = await apiFetch(`/users/${userId}`);
+  const userResponse = await apiFetch(`/user/`);
 
   if (!userResponse.ok) {
     throw new Error(`Failed to load user: ${userResponse.status}`);
