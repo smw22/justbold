@@ -13,7 +13,7 @@ export default function Comment({ comment, onReply }: { comment: CommentType; on
 
   const handleLike = async () => {
     try {
-      const response = await apiFetch(`/posts/${comment.id}/likes`, {
+      const response = await apiFetch(`/comments/${comment.id}/likes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
@@ -33,7 +33,7 @@ export default function Comment({ comment, onReply }: { comment: CommentType; on
 
   const handleUnlike = async () => {
     try {
-      const response = await apiFetch(`/posts/${comment.id}/likes`, {
+      const response = await apiFetch(`/comments/${comment.id}/likes`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });

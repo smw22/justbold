@@ -4,6 +4,7 @@ export interface CommentType {
   content: string;
   likeCount: number;
   likedByCurrentUser: boolean;
+  parentId: string;
   created: Date;
   user: ProfileType;
 }
