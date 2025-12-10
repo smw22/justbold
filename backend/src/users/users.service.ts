@@ -31,7 +31,7 @@ export class UsersService {
     return "This action adds a new user";
   }
 
-  async findAll(): Promise<User[]> {
+  async findCurrent(): Promise<User[]> {
     return await this.usersRepository.find();
   }
 

@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 
-@Controller("users")
+@Controller("user")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -11,19 +11,45 @@ export class UsersController {
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
-
   @Get()
-  async findAll() {
+  async findCurrent(@Req() req: Request & { user?: { id: string } }) {
     try {
-      const data = await this.usersService.findAll();
+      if (!req.user || !req.user.id) {
+        throw new Error("User not authenticated");
+      }
+      const userId = req.user.id;
+      const data = await this.usersService.findOne(userId);
       return {
         success: true,
         data,
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
+      };
+    }
+  }
+
+  @Patch()
+  async update(@Req() req: Request & { user?: { id: string } }, @Body() updateUserDto: UpdateUserDto) {
+    try {
+      if (!req.user || !req.user.id) {
+        throw new Error("User not authenticated");
+      }
+      const userId = req.user.id;
+      const data = await this.usersService.update(userId, updateUserDto);
+      return {
+        success: true,
+        data,
+        message: "User updated successfully",
+      };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      return {
+        success: false,
+        message,
       };
     }
   }
@@ -37,34 +63,12 @@ export class UsersController {
         data,
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
-  }
-
-  @Patch(":id")
-  async update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
-    try {
-      const data = await this.usersService.update(id, updateUserDto);
-      updateUserDto;
-      return {
-        success: true,
-        data,
-        message: "User updated successfully",
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: error.message,
-      };
-    }
-  }
-
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.usersService.remove(+id);
   }
 
   @Get(":id/posts")
@@ -78,9 +82,10 @@ export class UsersController {
         message: "User posts retrieved successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
@@ -96,9 +101,10 @@ export class UsersController {
         message: "User reviews retrieved successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
@@ -113,9 +119,10 @@ export class UsersController {
         message: "User questions retrieved successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
