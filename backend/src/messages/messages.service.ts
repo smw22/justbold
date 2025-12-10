@@ -1,21 +1,35 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { UpdateMessageDto } from "./dto/update-message.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Message } from "./entities/message.entity";
+import { Thread } from "../threads/entities/thread.entity";
 
 @Injectable()
 export class MessagesService {
   constructor(
     @InjectRepository(Message)
-    private readonly messagesRepository: Repository<Message>
+    private readonly messagesRepository: Repository<Message>,
+    @InjectRepository(Thread)
+    private readonly threadsRepository: Repository<Thread>
   ) {}
+
   create(createMessageDto: CreateMessageDto) {
     return "This action adds a new message";
   }
 
   async findAll(threadId: string) {
+    const thread = await this.threadsRepository
+      .createQueryBuilder("thread")
+      .leftJoinAndSelect("thread.users", "users")
+      .where("thread.id = :threadId", { threadId })
+      .getOne();
+
+    if (!thread) {
+      throw new NotFoundException("Thread not found");
+    }
+
     const messages = await this.messagesRepository
       .createQueryBuilder("message")
       .innerJoin("message.thread", "thread")
