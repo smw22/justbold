@@ -17,30 +17,19 @@ export class QuestionsController {
         message: "Question created successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
 
   @Get()
   findAll() {
-    return this.questionsService.findAll();
-  }
-
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.questionsService.findOne(+id);
-  }
-
-  @Patch(":id")
-  update(@Param("id") id: string, @Body() updateQuestionDto: UpdateQuestionDto) {
-    return this.questionsService.update(+id, updateQuestionDto);
-  }
-
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.questionsService.remove(+id);
+    return {
+      success: true,
+      message: "Questions can be retrieved from the /user/:id/questions endpoint",
+    };
   }
 }
