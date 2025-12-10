@@ -129,6 +129,7 @@ export class SearchService {
     }
 
     const tagIds = tags.map((tag) => tag.id);
+    const limitPerType = Math.floor(limit / 2);
 
     // Find collaborations with given tag
     const collaborations = await this.collaborationsRepository
@@ -137,7 +138,7 @@ export class SearchService {
       .leftJoinAndSelect("collaboration.tags", "tags")
       .leftJoinAndSelect("collaboration.genres", "genres")
       .where("tags.id IN (:...tagIds)", { tagIds })
-      .take(limit)
+      .take(limitPerType)
       .skip(skip)
       .getMany();
 
@@ -147,7 +148,7 @@ export class SearchService {
       .leftJoinAndSelect("post.user", "user")
       .leftJoinAndSelect("post.tags", "tags")
       .where("tags.id IN (:...tagIds)", { tagIds })
-      .take(limit)
+      .take(limitPerType)
       .skip(skip)
       .getMany();
 
@@ -233,15 +234,25 @@ export class SearchService {
         };
 
       case SearchCategory.TAGS:
-        return {
-          tags: [],
-          posts: await this.postsRepository
+        const limitPerCategory = Math.floor(limit / 2);
+        const [collaborations, posts] = await Promise.all([
+          this.collaborationsRepository.find({
+            order: { created: "DESC" },
+            take: limitPerCategory,
+            relations: ["user", "tags", "genres"],
+          }),
+          this.postsRepository
             .createQueryBuilder("post")
             .leftJoinAndSelect("post.user", "user")
             .leftJoinAndSelect("post.tags", "tags")
             .orderBy("post.created", "DESC")
-            .take(limit)
+            .take(limitPerCategory)
             .getMany(),
+        ]);
+        return {
+          tags: [],
+          collaborations,
+          posts,
         };
 
       default:
