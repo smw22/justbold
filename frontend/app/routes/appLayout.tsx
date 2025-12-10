@@ -1,8 +1,24 @@
-import { Outlet } from "react-router";
+import { Outlet, useLoaderData } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { apiFetch } from "~/lib/apiFetch";
+
+export async function clientLoader() {
+  const userResponse = await apiFetch(`/user`);
+
+  if (!userResponse.ok) {
+    throw new Error(`Failed to load user: ${userResponse.status}`);
+  }
+
+  const user = await userResponse.json();
+  const userId = user.data.id;
+
+  return { userId };
+}
 
 export default function AppLayout() {
+  const { userId } = useLoaderData();
+
   return (
     <>
       <Header />
@@ -11,7 +27,7 @@ export default function AppLayout() {
         <Outlet />
       </main>
 
-      <Footer />
+      <Footer userId={userId} />
     </>
   );
 }
