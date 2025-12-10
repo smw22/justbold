@@ -6,10 +6,11 @@ import MessagesHeader from "./components/MessagesHeader";
 export async function clientLoader({ params }: { params: { threadId: string } }) {
   const threadId = params.threadId;
   const userId = localStorage.getItem("user_id");
+
   if (!threadId) throw new Error("Thread ID is required");
   if (!userId) throw new Error("User not authenticated");
 
-  const response = await apiFetch(`/messages?threadId=${threadId}`);
+  const response = await apiFetch(`/messages?threadId=${threadId}&userId=${userId}`);
 
   if (!response.ok) {
     throw new Error(`Failed to load messages: ${response.status}`);

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { UpdateMessageDto } from "./dto/update-message.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -19,7 +19,8 @@ export class MessagesService {
     return "This action adds a new message";
   }
 
-  async findAll(threadId: string) {
+  async findAll(threadId: string, userId: string): Promise<Message[]> {
+    // Verify thread exists and get participants
     const thread = await this.threadsRepository
       .createQueryBuilder("thread")
       .leftJoinAndSelect("thread.users", "users")
@@ -28,6 +29,11 @@ export class MessagesService {
 
     if (!thread) {
       throw new NotFoundException("Thread not found");
+    }
+
+    const isParticipant = thread.users.some((user) => user.id === userId);
+    if (!isParticipant) {
+      throw new ForbiddenException("You do not have access to this thread");
     }
 
     const messages = await this.messagesRepository
@@ -43,6 +49,7 @@ export class MessagesService {
 
   async findOne(threadId: string) {
     // Get the latest message in the thread
+    // Add user verification if used like in findAll
     // (not used for now as the threads endpoint already fetches messages)
     const message = await this.messagesRepository
       .createQueryBuilder("message")
