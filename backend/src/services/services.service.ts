@@ -18,15 +18,14 @@ export class ServicesService {
     private readonly reviewsRepository: Repository<Review>
   ) {}
 
-  async create(createServiceDto: CreateServiceDto): Promise<Service> {
+  async create(createServiceDto: CreateServiceDto, userId: string): Promise<Service> {
     // Fetch the User entity
-    // This can be used for authentication/authorization checks in the future
     const user = await this.usersRepository.findOne({
-      where: { id: createServiceDto.user_id },
+      where: { id: userId },
     });
 
     if (!user) {
-      throw new NotFoundException(`User with ID ${createServiceDto.user_id} not found`);
+      throw new NotFoundException(`User with ID ${userId} not found`);
     }
 
     // Create service with entity references (not IDs)

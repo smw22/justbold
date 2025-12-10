@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Req } from "@nestjs/common";
 import { ServicesService } from "./services.service";
 import { CreateServiceDto } from "./dto/create-service.dto";
 import { UpdateServiceDto } from "./dto/update-service.dto";
@@ -8,9 +8,13 @@ export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Post()
-  async create(@Body() createServiceDto: CreateServiceDto) {
+  async create(@Body() createServiceDto: CreateServiceDto, @Req() req: Request & { user?: { id: string } }) {
     try {
-      const data = await this.servicesService.create(createServiceDto);
+      const userId = req.user?.id;
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+      const data = await this.servicesService.create(createServiceDto, userId);
 
       return {
         success: true,
@@ -18,9 +22,10 @@ export class ServicesController {
         message: "Service created successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
@@ -38,9 +43,10 @@ export class ServicesController {
         message: "Services retrieved successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
@@ -61,9 +67,10 @@ export class ServicesController {
         message: "Services retrieved successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
@@ -78,9 +85,10 @@ export class ServicesController {
         message: "Service retrieved successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
@@ -95,41 +103,71 @@ export class ServicesController {
         message: "Service reviews retrieved successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
 
   @Patch(":id")
-  async update(@Param("id") id: string, @Body() updateServiceDto: UpdateServiceDto) {
+  async update(
+    @Param("id") id: string,
+    @Body() updateServiceDto: UpdateServiceDto,
+    @Req() req: Request & { user?: { id: string } }
+  ) {
     try {
-      await this.servicesService.update(id, updateServiceDto);
+      const userId = req.user?.id;
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+      const service = await this.servicesService.findOne(id);
+      if (!service) {
+        throw new Error("Service not found");
+      }
+      if (service.user.id !== userId) {
+        throw new Error("You are not authorized to update this service");
+      }
+      const updatedService = await this.servicesService.update(id, updateServiceDto);
       return {
         success: true,
+        data: updatedService,
         message: "Service updated successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string) {
+  async remove(@Param("id") id: string, @Req() req: Request & { user?: { id: string } }) {
     try {
+      const userId = req.user?.id;
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+      const service = await this.servicesService.findOne(id);
+      if (!service) {
+        throw new Error("Service not found");
+      }
+      if (service.user.id !== userId) {
+        throw new Error("You are not authorized to delete this service");
+      }
       await this.servicesService.remove(id);
       return {
         success: true,
         message: "Service removed successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
