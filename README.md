@@ -42,6 +42,10 @@ Features Eventuelle kendte issues eller manglende features
 
 - Visning på homepage er der, men der er ikke noget backend funktionalitet.
 
+### Tags
+
+- Tags er lige nu en statisk ressource hvor brugeren kan vælge tags, men der mangler mulighed for at oprette nye tags
+
 # Beslutninger ud over designet 🚨
 
 En liste og kort beskrivelse af eventuelle ekstra features eller innovationer, I har tilføjet ud over kravene
