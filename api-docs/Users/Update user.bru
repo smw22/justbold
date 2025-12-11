@@ -1,0 +1,26 @@
+meta {
+  name: Update user
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{domain}}/user
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "name": "Awesome User"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

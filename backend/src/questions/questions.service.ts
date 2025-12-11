@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException } from "@nestjs/common";
 import { CreateQuestionDto } from "./dto/create-question.dto";
 import { UpdateQuestionDto } from "./dto/update-question.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -15,9 +15,9 @@ export class QuestionsService {
     private readonly usersRepository: Repository<User>
   ) {}
 
-  async create(createQuestionDto: CreateQuestionDto) {
+  async create(createQuestionDto: CreateQuestionDto, userId: string) {
     const user = await this.usersRepository.findOne({
-      where: { id: createQuestionDto.user_id },
+      where: { id: userId },
     });
 
     if (!user) {
@@ -36,16 +36,25 @@ export class QuestionsService {
     return questionWithoutUser;
   }
 
-  findAll() {
-    return `This action returns all questions`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} question`;
-  }
-
-  update(id: number, updateQuestionDto: UpdateQuestionDto) {
-    return `This action updates a #${id} question`;
+  async updateMany(questions: { id: string; answer: string }[], userId?: string): Promise<Question[]> {
+    const results = await Promise.all(
+      questions.map(async (q) => {
+        if (!q) {
+          return null;
+        }
+        const { id, answer } = q;
+        const question = await this.questionsRepository.findOne({
+          where: { id },
+          relations: ["user"],
+        });
+        if (question && question.user.id === userId) {
+          question.answer = answer;
+          return await this.questionsRepository.save(question);
+        }
+        return null;
+      })
+    );
+    return results.filter((q): q is Question => q !== null);
   }
 
   remove(id: number) {

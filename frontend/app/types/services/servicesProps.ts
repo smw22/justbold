@@ -10,5 +10,5 @@ export type Service = {
   price: number;
   location: string;
   category: string;
-  created: Date | string;
+  created: Date;
 };

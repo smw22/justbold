@@ -1,26 +1,58 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { Injectable, HttpException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Like } from "../likes/entities/like.entity";
+import { Comment } from "./entities/comment.entity";
 
 @Injectable()
 export class CommentsService {
-  create(createCommentDto: CreateCommentDto) {
-    return 'This action adds a new comment';
+  constructor(
+    @InjectRepository(Comment)
+    private readonly commentsRepository: Repository<Comment>,
+    @InjectRepository(Like)
+    private readonly likesRepository: Repository<Like>
+  ) {}
+
+  async addLike(commentId: string, userId: string) {
+    const existingLike = await this.likesRepository.findOne({
+      where: {
+        type: "comment",
+        object_id: commentId,
+        user: { id: userId },
+      },
+      relations: ["user"],
+    });
+    if (existingLike) {
+      throw new HttpException("User has already liked this comment", 400);
+    }
+    const likeData = this.likesRepository.create({
+      type: "comment",
+      object_id: commentId,
+      user: { id: userId },
+    });
+    return this.likesRepository.save(likeData);
   }
 
-  findAll() {
-    return `This action returns all comments`;
+  async removeLike(commentId: string, userId: string) {
+    const existingLike = await this.likesRepository.findOne({
+      where: {
+        type: "comment",
+        object_id: commentId,
+        user: { id: userId },
+      },
+      relations: ["user"],
+    });
+    if (!existingLike) {
+      throw new HttpException("Like not found", 404);
+    }
+    await this.likesRepository.remove(existingLike);
+    return { commentId, userId };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
-  }
-
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async getLikes(commentId: string) {
+    return this.likesRepository.find({
+      where: { type: "comment", object_id: commentId },
+      relations: ["user"],
+    });
   }
 }

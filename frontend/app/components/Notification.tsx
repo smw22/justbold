@@ -1,10 +1,7 @@
 import type { NotificationType } from "~/types/notification";
 import Icon from "./icon";
 import Button from "./Button";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-
-dayjs.extend(relativeTime);
+import fromNowDate from "~/lib/fromNowDate";
 
 type NotificationVariant = "connection" | "collaboration" | "post_like" | "post_repost" | "post_comment";
 
@@ -22,7 +19,7 @@ export default function Notification({ notification }: { notification: Notificat
               <span className="font-bold">{notification.user_id}</span> wants to connect.
             </p>
 
-            <p className="text-xs text-gray-500">{dayjs(notification.created).fromNow()}</p>
+            <p className="text-xs text-gray-500">{fromNowDate({ date: notification.created })}</p>
           </div>
           <Button text="Accept" variant="secondary-glass" onClick={() => alert("Acceptér connection.")} />
         </div>
@@ -37,7 +34,7 @@ export default function Notification({ notification }: { notification: Notificat
               <span className="font-bold">{notification.user_id}</span> wants to collaborate.
             </p>
 
-            <p className="text-xs text-gray-500">{dayjs(notification.created).fromNow()}</p>
+            <p className="text-xs text-gray-500">{fromNowDate({ date: notification.created })}</p>
           </div>
           <Button text="Reply" variant="secondary-glass" onClick={() => alert("Reply to collab request.")} />
         </div>
@@ -51,7 +48,7 @@ export default function Notification({ notification }: { notification: Notificat
             <p className="text-sm">
               <span className="font-bold">{notification.user_id}</span> liked your post.
             </p>
-            <p className="text-xs text-gray-500">{dayjs(notification.created).fromNow()}</p>
+            <p className="text-xs text-gray-500">{fromNowDate({ date: notification.created })}</p>
           </div>
           <Icon name="Heart" size={24} />
         </div>
@@ -65,7 +62,7 @@ export default function Notification({ notification }: { notification: Notificat
             <p className="text-sm">
               <span className="font-bold">{notification.user_id}</span> reposted your post.
             </p>
-            <p className="text-xs text-gray-500">{dayjs(notification.created).fromNow()}</p>
+            <p className="text-xs text-gray-500">{fromNowDate({ date: notification.created })}</p>
           </div>
           <Icon name="Repeat21" size={24} />
         </div>
@@ -79,7 +76,7 @@ export default function Notification({ notification }: { notification: Notificat
             <p className="text-sm">
               <span className="font-bold">{notification.user_id}</span> commented on your post.
             </p>
-            <p className="text-xs text-gray-500">{dayjs(notification.created).fromNow()}</p>
+            <p className="text-xs text-gray-500">{fromNowDate({ date: notification.created })}</p>
           </div>
         </div>
       );

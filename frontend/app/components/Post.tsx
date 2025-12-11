@@ -1,13 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { PostType } from "~/types/post";
 import { Link } from "react-router";
 import Icon from "./icon";
 import ContextMenu from "./ContextMenu";
 import Button from "./Button";
 import CardMedia from "./CardMedia";
+import { apiFetch } from "~/lib/apiFetch";
 
 export default function Post({ post, clickable = true }: { post: PostType; clickable?: boolean }) {
   const [showContextMenu, setShowContextMenu] = useState(false);
+  const [likes, setLikes] = useState(post.totalLikes);
+  const [likedByUser, setLikedByUser] = useState(post.likedByCurrentUser);
+
+  const handleLike = async () => {
+    try {
+      const response = await apiFetch(`/posts/${post.id}/likes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+
+        setLikes(data.totalLikes);
+        setLikedByUser(true);
+      } else {
+        alert("Failed to like post.");
+      }
+    } catch {
+      alert("Error liking post.");
+    }
+  };
+
+  const handleUnlike = async () => {
+    try {
+      const response = await apiFetch(`/posts/${post.id}/likes`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+
+        setLikes(data.totalLikes);
+        setLikedByUser(false);
+      } else {
+        alert("Failed to like post.");
+      }
+    } catch {
+      alert("Error liking post.");
+    }
+  };
 
   return (
     <div className="bg-white flex flex-col gap-4 w-full items-start overflow-hidden p-4 md:p-8">
@@ -72,7 +115,7 @@ export default function Post({ post, clickable = true }: { post: PostType; click
       </div>
       {clickable ? (
         // if the post is clickable. and therefore can take the user to the details page of the post.
-        <Link to={`/posts/${post.id}`} className="gap-4 flex flex-col">
+        <Link to={`/posts/${post.id}`} className="gap-4 flex flex-col w-full">
           <h2 className="px-2">{post.title}</h2>
           <CardMedia variant="image" url={post.media} />
           <p className="text-sm px-2">{post.content}</p>
@@ -89,11 +132,11 @@ export default function Post({ post, clickable = true }: { post: PostType; click
         <div className="flex items-center gap-1">
           <button
             className="cursor-pointer hover:bg-gray-100 w-8 h-8 flex justify-center items-center rounded-full transition-colors duration-200 ease-in-out"
-            onClick={() => alert("Tilføj funktionalitet")}
+            onClick={likedByUser ? () => handleUnlike() : () => handleLike()}
           >
-            <Icon name="Heart" size={24} className="text-neutral-grey" />
+            <Icon name={likedByUser ? "HeartFilled" : "Heart"} size={24} className="text-neutral-grey" />
           </button>
-          <p className="text-sm text-neutral-grey">{post.likes.length}</p>
+          <p className="text-sm text-neutral-grey">{likes}</p>
         </div>
         <div className="flex items-center gap-1">
           {clickable ? (

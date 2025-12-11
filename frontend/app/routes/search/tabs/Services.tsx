@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import Icon from "~/components/icon";
 import { apiFetch } from "~/lib/apiFetch";
-
-dayjs.extend(relativeTime);
+import fromNowDate from "~/lib/fromNowDate";
 
 interface ServicesProps {
   query: string;
@@ -20,7 +17,7 @@ export default function Services({ query }: ServicesProps) {
       setLoading(true);
       setError(null);
       try {
-        const searchParams = query ? `query=${encodeURIComponent(query)}&category=services` : "category=services";
+        const searchParams = query ? `query=${encodeURIComponent(query)}&category=services` : `category=services`;
         const response = await apiFetch(`/search?${searchParams}`);
         if (!response.ok) throw new Error("Search failed");
         const json = await response.json();
@@ -49,7 +46,7 @@ export default function Services({ query }: ServicesProps) {
     <div className="flex flex-col gap-6">
       {results.services?.length > 0 && (
         <section className="flex flex-col gap-3 max-w-[331px]">
-          <p className="font-medium text-xs text-neutral-grey">Services</p>
+          <p className="font-medium text-xs text-neutral-grey">{query ? "Services" : "Recent services"}</p>
           <div className="flex flex-col gap-3">
             {results.services.map((service: any) => (
               <div key={service.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
@@ -76,7 +73,7 @@ export default function Services({ query }: ServicesProps) {
                   <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
                   <div className="text-(--lightgrey-text)">
                     <p>
-                      {service.location} - {dayjs(service.created).fromNow()}
+                      {service.location} - {fromNowDate({ date: service.created })}
                     </p>
                   </div>
                 </div>

@@ -12,6 +12,8 @@ import { CollaborationFactory } from "./collaboration.factory";
 import { ServiceFactory } from "./service.factory";
 import { ReviewFactory } from "./reviews.factory";
 import { SkillFactory } from "./skill.factory";
+import { CommentFactory } from "./comment.factory";
+import { LikeFactory } from "./like.factory";
 import { ThreadFactory } from "./thread.factory";
 import { MessageFactory } from "./message.factory";
 
@@ -26,6 +28,8 @@ const options: DataSourceOptions & SeederOptions = {
     ServiceFactory,
     ReviewFactory,
     SkillFactory,
+    CommentFactory,
+    LikeFactory,
     ThreadFactory,
     MessageFactory,
   ],

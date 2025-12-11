@@ -1,10 +1,4 @@
-import {
-  IsString,
-  IsOptional,
-  IsBoolean,
-  IsArray,
-  IsUUID,
-} from "class-validator";
+import { IsString, IsOptional, IsBoolean, IsArray, IsUUID } from "class-validator";
 
 export class UpdateCollaborationDto {
   @IsOptional()
@@ -12,12 +6,15 @@ export class UpdateCollaborationDto {
   media?: string;
 
   @IsString()
+  @IsOptional()
   title: string;
 
   @IsString()
+  @IsOptional()
   content: string;
 
   @IsArray()
+  @IsOptional()
   @IsUUID("4", { each: true })
   genreIds: string[];
 
@@ -30,6 +27,7 @@ export class UpdateCollaborationDto {
   location?: string;
 
   @IsArray()
+  @IsOptional()
   @IsUUID("4", { each: true })
   tagIds: string[];
 }
