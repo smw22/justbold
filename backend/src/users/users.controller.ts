@@ -62,9 +62,14 @@ export class UsersController {
   async findOne(@Param("id") id: string) {
     try {
       const data = await this.usersService.findOne(id);
+      let connections = 0;
+      if (this.connectionsService && typeof this.connectionsService.countAcceptedConnections === "function") {
+        connections = await this.connectionsService.countAcceptedConnections(id);
+      }
       return {
         success: true,
         data,
+        connections,
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);

@@ -107,6 +107,8 @@ export default function Profile() {
     }
   };
 
+  console.log(profile);
+
   return (
     <div className="outer-wrapper">
       <div className="px-4">
@@ -114,7 +116,7 @@ export default function Profile() {
         <ProfileHeader
           name={profile.data.name}
           bio={profile.data.bio}
-          //   connection_count={profile.data.connections.length}
+          connection_count={profile.connections}
           post_count={user_posts.total_posts}
           image={profile.data.profile_image}
           theme={profile.data.theme}
