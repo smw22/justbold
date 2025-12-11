@@ -24,7 +24,7 @@ export default function ProfileHeader({
   const [showContextMenu, setShowContextMenu] = useState(false);
   return (
     <article className={`p-5 rounded-4xl mb-12 mt-4 bg-${theme} text-white flex flex-col justify-center gap-3 items-center`}>
-      <div className="w-full relative flex items-end justify-end">
+      <div className="w-full relative flex items-end justify-end -mb-8">
         <button
           className="cursor-pointer hover:bg-gray-100 w-8 h-8 flex justify-center items-center rounded-full transition-colors duration-200 ease-in-out"
           onClick={() => setShowContextMenu(!showContextMenu)}
