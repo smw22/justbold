@@ -2,6 +2,21 @@ import { useLoaderData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Thread } from "~/types/threads";
 import ThreadCard from "./components/ThreadCard";
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Group Threads List | LineUp" },
+    {
+      property: "og:title",
+      content: "Group Threads List | LineUp",
+    },
+    // {
+    //   name: "description",
+    //   content: "This app is the best",
+    // },
+  ];
+};
 
 export async function clientLoader() {
   const userId = localStorage.getItem("user_id");

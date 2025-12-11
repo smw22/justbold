@@ -2,6 +2,21 @@ import { useLoaderData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Message } from "~/types/messages";
 import MessagesHeader from "./components/MessagesHeader";
+import type { MetaFunction } from "react-router";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Chat Detail | LineUp" },
+    {
+      property: "og:title",
+      content: "Chat Detail | LineUp",
+    },
+    // {
+    //   name: "description",
+    //   content: "This app is the best",
+    // },
+  ];
+};
 
 export async function clientLoader({ params }: { params: { threadId: string } }) {
   const threadId = params.threadId;
