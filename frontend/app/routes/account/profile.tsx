@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLoaderData, useSearchParams } from "react-router";
+import { useLoaderData, useOutletContext, useSearchParams } from "react-router";
 import ProfileHeader from "./components/ProfileHeader";
 import Tabs from "~/components/Tabs";
 import About from "./components/About";
@@ -86,10 +86,17 @@ export async function clientAction({ request, params }: { request: Request; para
 }
 
 export default function Profile() {
+  const { userId } = useOutletContext<{ userId: string }>();
+
   // Access the profile from the loader
   const { profile, user_posts, reviews, questions, currentUsersProfile } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   const [tab, setTab] = useState(searchParams.get("show") === "posts" ? 1 : 0);
+
+  const currentUserId = profile.data.id;
+
+  const [currentUser, setCurrentUser] = useState(userId);
+  const isCurrentUserProfile = currentUserId === currentUser;
 
   const handleTabChange = (newTab: number) => {
     setTab(newTab);
@@ -111,7 +118,7 @@ export default function Profile() {
           post_count={user_posts.total_posts}
           image={profile.data.profile_image}
           theme={profile.data.theme}
-          currentUsersProfile={currentUsersProfile}
+          currentUsersProfile={isCurrentUserProfile}
         />
       </div>
       {/* // Tabs component, "About" and "Posts" - the current tab is held as a number in a state. */}
