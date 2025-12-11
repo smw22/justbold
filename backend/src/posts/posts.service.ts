@@ -260,6 +260,13 @@ export class PostsService {
     await this.likesRepository.remove(existingLike);
   }
 
+  async findCommentById(commentId: string): Promise<Comment | null> {
+    return this.commentsRepository.findOne({
+      where: { id: commentId },
+      relations: ["post"],
+    });
+  }
+
   async addComment(postId: string, userId: string, content: string, parentId?: string): Promise<Comment> {
     const post = await this.postsRepository.findOneBy({ id: postId });
     if (!post) {

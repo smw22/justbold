@@ -15,9 +15,9 @@ export class QuestionsService {
     private readonly usersRepository: Repository<User>
   ) {}
 
-  async create(createQuestionDto: CreateQuestionDto) {
+  async create(createQuestionDto: CreateQuestionDto, userId: string) {
     const user = await this.usersRepository.findOne({
-      where: { id: createQuestionDto.user_id },
+      where: { id: userId },
     });
 
     if (!user) {
@@ -34,14 +34,6 @@ export class QuestionsService {
     // Transform the response to exclude the full user object
     const { user: _, ...questionWithoutUser } = savedQuestion;
     return questionWithoutUser;
-  }
-
-  findAll() {
-    return `This action returns all questions`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} question`;
   }
 
   async updateMany(questions: { id: string; answer: string }[], userId?: string): Promise<Question[]> {
