@@ -2,7 +2,6 @@ import { Outlet, useLocation, useLoaderData } from "react-router";
 import Footer from "~/components/Footer";
 import ChatFooter from "./components/ChatFooter";
 import Threadheader from "./components/ThreadHeader";
-import MessagesHeader from "./components/MessagesHeader";
 import { apiFetch } from "~/lib/apiFetch";
 
 export async function clientLoader() {
@@ -21,11 +20,11 @@ export async function clientLoader() {
 export default function ChatLayout() {
   const { userId } = useLoaderData();
   const location = useLocation();
-  const isThreadPage = location.pathname === "/chats";
+  const isThreadPage = location.pathname === "/chats" || location.pathname === "/chats/groups";
 
   return (
     <>
-      {isThreadPage ? <Threadheader /> : <MessagesHeader />}
+      {isThreadPage ? <Threadheader /> : null}
       <Outlet />
       {isThreadPage ? <Footer userId={userId} /> : <ChatFooter />}
     </>
