@@ -19,9 +19,7 @@ export const meta: MetaFunction = () => {
 };
 
 export async function clientLoader(): Promise<{}> {
-  const userId = localStorage.getItem("user_id");
-
-  const userResponse = await apiFetch(`/users/${userId}`);
+  const userResponse = await apiFetch(`/user/`);
 
   if (!userResponse.ok) {
     throw new Error(`Failed to load user: ${userResponse.status}`);
@@ -40,8 +38,6 @@ export async function clientAction({ request }: { request: Request }) {
   const content = formData.get("content") as string;
   const price = formData.get("price") as string;
   const location = formData.get("location") as string;
-
-  const user_id = localStorage.getItem("user_id");
 
   if (!title || !content || !category || !price || !location) {
     console.error("Error creating service; Missing fields:", {
@@ -86,7 +82,6 @@ export async function clientAction({ request }: { request: Request }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id,
         title,
         media: media || undefined,
         content,

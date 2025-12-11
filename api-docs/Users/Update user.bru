@@ -1,10 +1,10 @@
 meta {
-  name: Create User
+  name: Update user
   type: http
-  seq: 3
+  seq: 4
 }
 
-post {
+patch {
   url: {{domain}}/user
   body: json
   auth: bearer
@@ -16,9 +16,7 @@ auth:bearer {
 
 body:json {
   {
-    "name": "Test user",
-    "email": "user@email.com",
-    "password": "admin"
+    "name": "Awesome User"
   }
 }
 

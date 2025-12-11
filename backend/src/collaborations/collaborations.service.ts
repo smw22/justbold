@@ -84,7 +84,10 @@ export class CollaborationsService {
   }
 
   async findOne(id: string): Promise<Collaboration> {
-    const collabData = await this.collaborationRepository.findOneBy({ id });
+    const collabData = await this.collaborationRepository.findOne({
+      where: { id },
+      relations: ["user"],
+    });
     if (!collabData) {
       throw new HttpException("Collaboration not found", 404);
     }

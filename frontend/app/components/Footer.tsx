@@ -2,9 +2,9 @@ import Icon from "./icon";
 import { NavLink, useLocation } from "react-router";
 import { useEffect, useState, useRef } from "react";
 
-export default function Footer() {
+export default function Footer({ userId }: { userId: string }) {
   const location = useLocation().pathname;
-  const [currentUser, setCurrentUser] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<string | null>(userId);
   const [glassPosition, setGlassPosition] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -12,7 +12,7 @@ export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    setCurrentUser(localStorage.getItem("user_id"));
+    setCurrentUser(userId);
   }, []);
 
   // calculate window size for use in the tab bar

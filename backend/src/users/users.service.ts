@@ -31,10 +31,6 @@ export class UsersService {
     return "This action adds a new user";
   }
 
-  async findAll(): Promise<User[]> {
-    return await this.usersRepository.find();
-  }
-
   async findOne(id: string): Promise<User> {
     const userData = await this.usersRepository.findOne({
       where: { id },
