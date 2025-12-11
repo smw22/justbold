@@ -196,7 +196,7 @@ export class MainSeeder implements Seeder {
     );
     await dataSource.getRepository(Thread).save(threads);
 
-    //Seed messages linked to threads and users
+    // Seed messages linked to threads and users
     const messageFactory = factoryManager.get(Message);
     // 1) One message per thread (This ensures all threads have at least one message)
     const onePerThread = await Promise.all(
