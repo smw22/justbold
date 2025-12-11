@@ -73,9 +73,11 @@ En liste og kort beskrivelse af de områder, hvor I har truffet design-beslutnin
 # Projektstyring 📌 ⚠️
 
 Et fungerende link til jeres primære project board (eller et screenshot, hvis ikke det er offentligt tilgængeligt)
-https://github.com/orgs/eaaa-dob-wu-e25a/projects/14
 
 Fungerende links til:
+https://github.com/orgs/eaaa-dob-wu-e25a/projects/14
+<img width="1907" height="862" alt="kanban-justbold" src="https://github.com/user-attachments/assets/13e63d39-884a-4aa3-bb8b-16f27aa9c853" />
+
 
 # Links 🔗 🚨
 
