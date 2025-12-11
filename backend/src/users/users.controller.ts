@@ -2,10 +2,14 @@ import { Controller, Get, Post, Body, Patch, Param, Req } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { ConnectionsService } from "../connections/connections.service";
 
 @Controller("user")
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly connectionsService: ConnectionsService
+  ) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -16,9 +20,15 @@ export class UsersController {
     try {
       const userId = req.user.id;
       const data = await this.usersService.findOne(userId);
+      // Get accepted connections count
+      let connections = 0;
+      if (this.connectionsService && typeof this.connectionsService.countAcceptedConnections === "function") {
+        connections = await this.connectionsService.countAcceptedConnections(userId);
+      }
       return {
         success: true,
         data,
+        connections,
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -52,9 +62,14 @@ export class UsersController {
   async findOne(@Param("id") id: string) {
     try {
       const data = await this.usersService.findOne(id);
+      let connections = 0;
+      if (this.connectionsService && typeof this.connectionsService.countAcceptedConnections === "function") {
+        connections = await this.connectionsService.countAcceptedConnections(id);
+      }
       return {
         success: true,
         data,
+        connections,
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
