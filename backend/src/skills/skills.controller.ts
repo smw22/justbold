@@ -17,9 +17,10 @@ export class SkillsController {
         message: "Skill created successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
@@ -34,9 +35,10 @@ export class SkillsController {
         message: "Skills retrieved successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
@@ -52,9 +54,10 @@ export class SkillsController {
         message: "Skill retrieved successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
@@ -70,9 +73,10 @@ export class SkillsController {
         message: "Skill updated successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
@@ -88,9 +92,10 @@ export class SkillsController {
         message: "Skill removed successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }

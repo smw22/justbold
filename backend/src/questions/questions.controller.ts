@@ -1,37 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from "@nestjs/common";
 import { QuestionsService } from "./questions.service";
 import { CreateQuestionDto } from "./dto/create-question.dto";
-import { UpdateManyQuestionsDto } from "./dto/update-many-questions.dto";
 
 @Controller("questions")
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
 
   @Post()
-  async create(@Body() createQuestionDto: CreateQuestionDto) {
+  async create(@Body() createQuestionDto: CreateQuestionDto, @Req() req: Request & { user: { id: string } }) {
     try {
-      const data = await this.questionsService.create(createQuestionDto);
+      const userId = req.user.id;
+      const data = await this.questionsService.create(createQuestionDto, userId);
       return {
         success: true,
         data,
         message: "Question created successfully",
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        message: error.message,
+        message,
       };
     }
   }
 
   @Get()
   findAll() {
-    return this.questionsService.findAll();
-  }
-
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.questionsService.findOne(+id);
+    return {
+      success: true,
+      message: "Questions can be retrieved from the /user/:id/questions endpoint",
+    };
   }
 
   @Patch("user/:userId")

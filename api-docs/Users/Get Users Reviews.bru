@@ -1,11 +1,11 @@
 meta {
   name: Get Users Reviews
   type: http
-  seq: 3
+  seq: 6
 }
 
 get {
-  url: {{domain}}/users/:userId/reviews
+  url: {{domain}}/user/:userId/reviews
   body: none
   auth: bearer
 }

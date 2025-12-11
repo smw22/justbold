@@ -1,17 +1,23 @@
 meta {
-  name: Get Users
+  name: Update user
   type: http
-  seq: 1
+  seq: 4
 }
 
-get {
-  url: {{domain}}/users
-  body: none
+patch {
+  url: {{domain}}/user
+  body: json
   auth: bearer
 }
 
 auth:bearer {
   token: {{access_token}}
+}
+
+body:json {
+  {
+    "name": "Awesome User"
+  }
 }
 
 settings {

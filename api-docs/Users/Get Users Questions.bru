@@ -1,11 +1,11 @@
 meta {
   name: Get Users Questions
   type: http
-  seq: 5
+  seq: 7
 }
 
 get {
-  url: {{domain}}/users/:userId/questions
+  url: {{domain}}/user/:userId/questions
   body: none
   auth: bearer
 }

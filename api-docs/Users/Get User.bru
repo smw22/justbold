@@ -1,17 +1,13 @@
 meta {
-  name: Like a post
+  name: Get User
   type: http
-  seq: 7
+  seq: 1
 }
 
-post {
-  url: {{domain}}/posts/:postId/likes
+get {
+  url: {{domain}}/user
   body: none
   auth: bearer
-}
-
-params:path {
-  postId: {{post_id}}
 }
 
 auth:bearer {
