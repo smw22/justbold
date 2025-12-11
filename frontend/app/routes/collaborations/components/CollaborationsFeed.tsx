@@ -97,7 +97,7 @@ function CollabCardActions({ collabId }: { collabId: string }) {
 export default function CollaborationsFeed({ collaborations }: CollaborationsSliderProps) {
   return (
     <div className="flex flex-col gap-6">
-      {collaborations.data.map((collab: Collaboration) => (
+      {collaborations?.data?.map((collab: Collaboration) => (
         <CollabCard key={collab.id}>
           <CollabCardHeader userName={collab.user.name} userImage={collab.user.profile_image} role={collab.role} />
           <CollabCardTitle title={collab.title} />
