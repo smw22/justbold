@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from "@nestjs/common";
+import { Controller, Get, Query, Req } from "@nestjs/common";
 import { SearchService } from "./search.service";
 import { SearchQueryDto } from "./dto/search-query-dto";
 
@@ -7,9 +7,9 @@ export class SearchController {
   constructor(private readonly searchService: SearchService) {}
 
   @Get()
-  async search(@Query() searchQueryDto: SearchQueryDto) {
+  async search(@Query() searchQueryDto: SearchQueryDto, @Req() req: Request & { user: { id: string } }) {
     try {
-      const results = await this.searchService.search(searchQueryDto);
+      const results = await this.searchService.search(searchQueryDto, req.user.id);
       return {
         success: true,
         data: results,

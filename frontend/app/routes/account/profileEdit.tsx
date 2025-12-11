@@ -58,6 +58,23 @@ export async function clientLoader() {
 
 export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();
+  const profileId = formData.get("profile_id")?.toString();
+  const questionsResponse = await apiFetch(`/user/${profileId}/questions`);
+  const questions = (await questionsResponse.json()).data;
+
+  // Build array of { id, answer } with the data from the form.
+  const answers = questions.map((q: { id: string }) => ({
+    id: q.id,
+    answer: formData.get(q.id)?.toString() ?? "",
+  }));
+
+  // Now you can send this array to your backend
+  await apiFetch(`/questions/user/${profileId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ questions: answers }),
+  });
+
   const name = formData.get("name")?.toString();
   const bio = formData.get("bio")?.toString();
   const about = formData.get("about")?.toString();
@@ -153,17 +170,7 @@ export default function ProfileEdit() {
   return (
     <article className="outer-wrapper">
       <Form method="post">
-        {/* Display success message */}
-        {actionData?.success && (
-          <div className="m-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-            Profile updated successfully!
-          </div>
-        )}
-
-        {/* Display error message */}
-        {actionData?.error && (
-          <div className="m-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">{actionData.error}</div>
-        )}
+        <input type="hidden" name="profile_id" value={profile.data.id} />
         <section className="flex flex-col items-center justify-center gap-4">
           <img
             src="https://loremflickr.com/640/480?lock=702965218279424"
@@ -419,10 +426,17 @@ export default function ProfileEdit() {
         <section className="m-4 bg-white rounded-3xl border border-gray-200 text-sm">
           <div className="p-4 flex flex-col gap-4">
             <p className="py-2 w-20 min-w-20">Questions</p>
-            {questions.data.map((q: QuestionType) => (
+            <p className="text-xs text-neutral-500">Answered questions will appear on your profile.</p>
+            {questions.data.map((q: QuestionType, index: number) => (
               <div className="mx-4" key={q.id}>
                 <p className="font-bold">{q.question}</p>
-                <input type="text" placeholder="Write your answer." className="flex-1 p-2 border-b border-b-gray-200 w-full" />
+                <Input
+                  variant="onboarding"
+                  name={`${q.id}`}
+                  placeholder="Write your answer..."
+                  className="flex-1 w-full"
+                  defaultValue={`${q.answer}`}
+                />
               </div>
             ))}
           </div>
@@ -430,6 +444,17 @@ export default function ProfileEdit() {
         <section className="flex justify-center my-6">
           <Button type="submit" variant="primary" text="Save profile" icon="Check"></Button>
         </section>
+        {/* Display success message */}
+        {actionData?.success && (
+          <div className="m-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+            Profile updated successfully!
+          </div>
+        )}
+
+        {/* Display error message */}
+        {actionData?.error && (
+          <div className="m-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">{actionData.error}</div>
+        )}
       </Form>
     </article>
   );
