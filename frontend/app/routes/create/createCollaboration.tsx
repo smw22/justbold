@@ -5,6 +5,7 @@ import Button from "~/components/Button";
 import Input from "~/components/Input";
 import EditArray from "~/components/EditArray";
 import { apiFetch } from "~/lib/apiFetch";
+import AddPeople from "~/components/AddPeople";
 
 export const meta: MetaFunction = () => {
   return [
@@ -103,6 +104,7 @@ export default function CreateCollaboration() {
   return (
     <div className="flex flex-col gap-4">
       <Form method="post" className="flex flex-col gap-4" encType="multipart/form-data">
+        <AddPeople />
         <Input type="text" name="title" id="title" placeholder="Title *" required />
         <Input type="url" name="media" id="media" placeholder="Media (Image/Video) *" accept="image/*,video/*" required />
         <Input textarea name="content" id="content" placeholder="Write your description here..." required />
