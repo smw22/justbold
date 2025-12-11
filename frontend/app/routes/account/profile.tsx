@@ -36,7 +36,6 @@ export async function clientLoader({ params }: { params: { profileId: string } }
   const user_posts = await postsResponse.json();
   const reviews = await reviewsResponse.json();
   const questions = await questionsResponse.json();
-  console.log(questions);
 
   return {
     profile,
