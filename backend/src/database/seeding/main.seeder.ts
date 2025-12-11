@@ -198,10 +198,11 @@ export class MainSeeder implements Seeder {
 
     // Seed messages linked to threads and users
     const messageFactory = factoryManager.get(Message);
+
     // 1) One message per thread (This ensures all threads have at least one message)
     const onePerThread = await Promise.all(
       threads.map(async (thread) => {
-        const user = faker.helpers.arrayElement(allUsers);
+        const user = faker.helpers.arrayElement(thread.users);
         return messageFactory.make({ user, thread });
       })
     );
@@ -211,8 +212,8 @@ export class MainSeeder implements Seeder {
       Array(150)
         .fill("")
         .map(async () => {
-          const user = faker.helpers.arrayElement(allUsers);
           const thread = faker.helpers.arrayElement(threads);
+          const user = faker.helpers.arrayElement(thread.users);
           return messageFactory.make({ user, thread });
         })
     );
