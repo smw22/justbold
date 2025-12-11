@@ -16,7 +16,7 @@ export default function Collaborations({ query }: CollaborationsProps) {
       setLoading(true);
       setError(null);
       try {
-        const searchParams = query ? `query=${encodeURIComponent(query)}&category=collaborations` : "category=collaborations";
+        const searchParams = query ? `query=${encodeURIComponent(query)}&category=collaborations` : `category=collaborations`;
         const response = await apiFetch(`/search?${searchParams}`);
         if (!response.ok) throw new Error("Search failed");
         const json = await response.json();
@@ -45,7 +45,9 @@ export default function Collaborations({ query }: CollaborationsProps) {
     <div className="flex flex-col gap-6">
       {results.collaborations?.length > 0 && (
         <section className="flex flex-col gap-3 max-w-[331px]">
-          <p className="font-medium text-xs text-neutral-grey">Collaboration requests</p>
+          <p className="font-medium text-xs text-neutral-grey">
+            {query ? "Collaboration requests" : "Recent collaboration requests"}
+          </p>
           <div className="flex flex-col gap-3">
             {results.collaborations.map((collab: any) => (
               <div key={collab.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">

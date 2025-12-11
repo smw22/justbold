@@ -9,6 +9,8 @@ export enum SearchCategory {
   TAGS = "tags",
 }
 
+export const SEARCH_DEFAULT_LIMIT = 8;
+
 export class SearchQueryDto {
   @IsString()
   @IsOptional()
@@ -29,5 +31,5 @@ export class SearchQueryDto {
   @Max(50)
   @Type(() => Number)
   @IsOptional()
-  limit?: number = 10;
+  limit?: number = SEARCH_DEFAULT_LIMIT;
 }

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException } from "@nestjs/common";
 import { CreateQuestionDto } from "./dto/create-question.dto";
 import { UpdateQuestionDto } from "./dto/update-question.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -34,5 +34,30 @@ export class QuestionsService {
     // Transform the response to exclude the full user object
     const { user: _, ...questionWithoutUser } = savedQuestion;
     return questionWithoutUser;
+  }
+
+  async updateMany(questions: { id: string; answer: string }[], userId?: string): Promise<Question[]> {
+    const results = await Promise.all(
+      questions.map(async (q) => {
+        if (!q) {
+          return null;
+        }
+        const { id, answer } = q;
+        const question = await this.questionsRepository.findOne({
+          where: { id },
+          relations: ["user"],
+        });
+        if (question && question.user.id === userId) {
+          question.answer = answer;
+          return await this.questionsRepository.save(question);
+        }
+        return null;
+      })
+    );
+    return results.filter((q): q is Question => q !== null);
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} question`;
   }
 }

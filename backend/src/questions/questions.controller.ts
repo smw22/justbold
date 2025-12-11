@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from "@nestjs/common";
 import { QuestionsService } from "./questions.service";
 import { CreateQuestionDto } from "./dto/create-question.dto";
-import { UpdateQuestionDto } from "./dto/update-question.dto";
 
 @Controller("questions")
 export class QuestionsController {
@@ -32,5 +31,15 @@ export class QuestionsController {
       success: true,
       message: "Questions can be retrieved from the /user/:id/questions endpoint",
     };
+  }
+
+  @Patch("user/:userId")
+  async updateManyQuestions(@Param("userId") userId: string, @Body() body: any) {
+    return this.questionsService.updateMany(body.questions, userId);
+  }
+
+  @Delete(":id")
+  remove(@Param("id") id: string) {
+    return this.questionsService.remove(+id);
   }
 }
