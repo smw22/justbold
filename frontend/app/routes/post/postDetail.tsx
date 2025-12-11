@@ -46,7 +46,6 @@ export async function clientLoader({ params }: { params: { postId: string } }): 
 }
 
 export async function clientAction({ request, params }: { request: Request; params: { postId: string } }) {
-  const currentUser = localStorage.getItem("user_id");
   // Extract form data
   const formData = await request.formData();
 

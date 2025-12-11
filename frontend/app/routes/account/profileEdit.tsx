@@ -27,13 +27,9 @@ export const meta: MetaFunction = () => {
 };
 
 export async function clientLoader() {
-  const currentUser = localStorage.getItem("user_id");
+  const profileResponse = await apiFetch(`/user/`);
 
-  const profileResponse = await apiFetch(`/users/${currentUser}`);
-  const questionsResponse = await apiFetch(`/users/${currentUser}/questions`);
-  const genresResponse = await apiFetch(`/genres`);
-
-  if (!profileResponse.ok || !questionsResponse.ok || !genresResponse.ok) {
+  if (!profileResponse.ok) {
     throw new Error("Unknown error.");
   }
 
@@ -42,6 +38,14 @@ export async function clientLoader() {
   }
 
   const profile = await profileResponse.json();
+
+  const questionsResponse = await apiFetch(`/user/${profile.id}/questions`);
+  const genresResponse = await apiFetch(`/genres`);
+
+  if (!questionsResponse.ok || !genresResponse.ok) {
+    throw new Error("Unknown error.");
+  }
+
   const questions = await questionsResponse.json();
   const genres = await genresResponse.json();
 
@@ -53,12 +57,9 @@ export async function clientLoader() {
 }
 
 export async function clientAction({ request }: { request: Request }) {
-  const currentUser = localStorage.getItem("user_id");
-  const apiUrl = import.meta.env.VITE_API_URL;
-  // Extract form data
   const formData = await request.formData();
-
-  const questionsResponse = await apiFetch(`/users/${currentUser}/questions`);
+  const profileId = formData.get("profile_id")?.toString();
+  const questionsResponse = await apiFetch(`/user/${profileId}/questions`);
   const questions = (await questionsResponse.json()).data;
 
   // Build array of { id, answer } with the data from the form.
@@ -68,7 +69,7 @@ export async function clientAction({ request }: { request: Request }) {
   }));
 
   // Now you can send this array to your backend
-  await apiFetch(`/questions/user/${currentUser}`, {
+  await apiFetch(`/questions/user/${profileId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ questions: answers }),
@@ -103,7 +104,7 @@ export async function clientAction({ request }: { request: Request }) {
   }
 
   try {
-    const response = await apiFetch(`/users/${currentUser}`, {
+    const response = await apiFetch(`/user/`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -169,6 +170,7 @@ export default function ProfileEdit() {
   return (
     <article className="outer-wrapper">
       <Form method="post">
+        <input type="hidden" name="profile_id" value={profile.data.id} />
         <section className="flex flex-col items-center justify-center gap-4">
           <img
             src="https://loremflickr.com/640/480?lock=702965218279424"

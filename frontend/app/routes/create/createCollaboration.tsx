@@ -42,12 +42,6 @@ export async function clientAction({ request }: { request: Request }) {
   const skillIds = formData.getAll("skillIds").filter(Boolean) as string[];
   const role = formData.get("role") as string;
 
-  const user_id = localStorage.getItem("user_id");
-
-  if (!user_id) {
-    return { error: "User not logged in" };
-  }
-
   const CollabData = {
     media,
     title,

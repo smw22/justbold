@@ -20,30 +20,28 @@ export const meta: MetaFunction = ({ matches }: { matches: any }) => {
 };
 
 export async function clientLoader({ params }: { params: { profileId: string } }) {
-  const profileResponse = await apiFetch(`/users/${params.profileId}`);
-  const postsResponse = await apiFetch(`/users/${params.profileId}/posts`);
-  const reviewsResponse = await apiFetch(`/users/${params.profileId}/reviews`);
-  const questionsResponse = await apiFetch(`/users/${params.profileId}/questions`);
-  if (!profileResponse.ok || !postsResponse.ok || !reviewsResponse.ok || !questionsResponse.ok) {
-    throw new Error("Unknown error.");
-  }
+  const profileResponse = await apiFetch(`/user/${params.profileId}`);
 
   if (profileResponse.status === 404) {
     throw new Response("Profile not found", { status: 404 });
   }
-
   const profile = await profileResponse.json();
+  const postsResponse = await apiFetch(`/user/${profile.data.id}/posts`);
+  const reviewsResponse = await apiFetch(`/user/${profile.data.id}/reviews`);
+  const questionsResponse = await apiFetch(`/user/${profile.data.id}/questions`);
+  if (!profileResponse.ok || !postsResponse.ok || !reviewsResponse.ok || !questionsResponse.ok) {
+    throw new Error("Unknown error.");
+  }
+
   const user_posts = await postsResponse.json();
   const reviews = await reviewsResponse.json();
   const questions = await questionsResponse.json();
-  const currentUsersProfile = localStorage.getItem("user_id") === params.profileId;
 
   return {
     profile,
     user_posts,
     reviews,
     questions,
-    currentUsersProfile,
   };
 }
 
@@ -109,7 +107,7 @@ export default function Profile() {
         <ProfileHeader
           name={profile.data.name}
           bio={profile.data.bio}
-          connection_count={profile.data.connections.length}
+          //   connection_count={profile.data.connections.length}
           post_count={user_posts.total_posts}
           image={profile.data.profile_image}
           theme={profile.data.theme}
