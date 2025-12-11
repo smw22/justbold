@@ -6,6 +6,7 @@ export default function LogOut() {
 
   useEffect(() => {
     localStorage.removeItem("access_token");
+    localStorage.removeItem("user_id");
     if (!localStorage.getItem("access_token")) {
       console.log("Logged out successfully");
     } else {

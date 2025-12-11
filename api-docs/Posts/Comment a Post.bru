@@ -1,0 +1,31 @@
+meta {
+  name: Comment a Post
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{domain}}/posts/:postId/comments
+  body: json
+  auth: bearer
+}
+
+params:path {
+  postId: {{post_id}}
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "content": "Reply to the Best comment ever!",
+    "parentId": "e457533d-794d-4b93-b1e2-f87c45f335d7"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
