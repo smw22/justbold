@@ -87,9 +87,8 @@ function CollabCardActions({ collabId }: { collabId: string }) {
       <Link className="text-gray-600 font-bold text-sm" to={`/collaborations/${collabId}`}>
         Read more
       </Link>
-      <Link to={`/collaborations/${collabId}`}>
-        <Button variant="primary" text="See all collaborations" icon="ChatBubble" />
-      </Link>
+
+      <Button variant="primary" text="Start Chat" icon="ChatBubble" />
     </div>
   );
 }
