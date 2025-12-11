@@ -45,19 +45,17 @@ export class QuestionsService {
   }
 
   async updateMany(questions: { id: string; answer: string }[], userId?: string): Promise<Question[]> {
-    console.log("Questions:", questions);
     const results = await Promise.all(
       questions.map(async (q) => {
         if (!q) {
-          console.log("Undefined question item!");
           return null;
         }
         const { id, answer } = q;
         const question = await this.questionsRepository.findOne({
           where: { id },
-          relations: ["user"], // <-- Load the user relation
+          relations: ["user"],
         });
-        if (question && (!userId || question.user.id === userId)) {
+        if (question && question.user.id === userId) {
           question.answer = answer;
           return await this.questionsRepository.save(question);
         }

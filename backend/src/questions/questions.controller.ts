@@ -36,7 +36,6 @@ export class QuestionsController {
 
   @Patch("user/:userId")
   async updateManyQuestions(@Param("userId") userId: string, @Body() body: any) {
-    console.log("Body:", body);
     return this.questionsService.updateMany(body.questions, userId);
   }
 
