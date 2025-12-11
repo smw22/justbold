@@ -39,7 +39,7 @@ export async function clientLoader() {
 
   const profile = await profileResponse.json();
 
-  const questionsResponse = await apiFetch(`/user/${profile.id}/questions`);
+  const questionsResponse = await apiFetch(`/user/${profile.data.id}/questions`);
   const genresResponse = await apiFetch(`/genres`);
 
   if (!questionsResponse.ok || !genresResponse.ok) {
@@ -435,7 +435,7 @@ export default function ProfileEdit() {
                   name={`${q.id}`}
                   placeholder="Write your answer..."
                   className="flex-1 w-full"
-                  defaultValue={`${q.answer}`}
+                  defaultValue={q.answer ?? ""}
                 />
               </div>
             ))}
