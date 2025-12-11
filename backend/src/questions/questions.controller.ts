@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
 import { QuestionsService } from "./questions.service";
 import { CreateQuestionDto } from "./dto/create-question.dto";
-import { UpdateQuestionDto } from "./dto/update-question.dto";
+import { UpdateManyQuestionsDto } from "./dto/update-many-questions.dto";
 
 @Controller("questions")
 export class QuestionsController {
@@ -34,9 +34,9 @@ export class QuestionsController {
     return this.questionsService.findOne(+id);
   }
 
-  @Patch(":id")
-  update(@Param("id") id: string, @Body() updateQuestionDto: UpdateQuestionDto) {
-    return this.questionsService.update(+id, updateQuestionDto);
+  @Patch("user/:userId")
+  async updateManyQuestions(@Param("userId") userId: string, @Body() body: any) {
+    return this.questionsService.updateMany(body.questions, userId);
   }
 
   @Delete(":id")
