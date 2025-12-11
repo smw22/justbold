@@ -8,6 +8,7 @@ type Collaboration = {
   id: string;
   media: string;
   user: {
+    id: string;
     name: string;
     profile_image: string;
   };
@@ -81,14 +82,16 @@ function CollabCardContent({ content }: { content: string }) {
   );
 }
 
-function CollabCardActions({ collabId }: { collabId: string }) {
+function CollabCardActions({ collabId, userId }: { collabId: string; userId: string }) {
   return (
     <div className="mt-auto flex items-center justify-between gap-4">
       <Link className="text-gray-600 font-bold text-sm" to={`/collaborations/${collabId}`}>
         Read more
       </Link>
 
-      <Button variant="primary" text="Start Chat" icon="ChatBubble" />
+      <Link to={`/chats/new?collaborationId=${collabId}&userId=${userId}`}>
+        <Button variant="primary" text="Start Chat" icon="ChatBubble" />
+      </Link>
     </div>
   );
 }
@@ -103,7 +106,7 @@ export default function CollaborationsFeed({ collaborations }: CollaborationsSli
           <CollabCardMeta location={collab.location} created={collab.created} tags={collab.tags} />
           <CollabCardImage media={collab.media} alt={collab.title} />
           <CollabCardContent content={collab.content} />
-          <CollabCardActions collabId={collab.id} />
+          <CollabCardActions collabId={collab.id} userId={collab.user.id} />
         </CollabCard>
       ))}
     </div>

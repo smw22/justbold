@@ -85,10 +85,10 @@ function CollabContent({ content }: { content: string }) {
   return <p className="text-gray-700">{content}</p>;
 }
 
-function CollabChat({ collabId }: { collabId: string }) {
+function CollabChat({ collabId, userId }: { collabId: string; userId: string }) {
   return (
     <div className="mt-auto flex items-center justify-between gap-4">
-      <Link to={`/collaborations/${collabId}`}>
+      <Link to={`/chats/new?collaborationId=${collabId}&userId=${userId}`}>
         <Button text="Start Chat" variant="primary" icon="ChatBubble" />
       </Link>
     </div>
@@ -138,7 +138,7 @@ export default function CollaborationDetails() {
       <CollabTitle title={collab.title} />
       <CollabImage imageUrl={collab.media} />
       <CollabContent content={collab.content} />
-      <CollabChat collabId={collab.id} />
+      <CollabChat collabId={collab.id} userId={collab.user.id} />
       <CollabGenres genres={collab.genres} />
       <CollabSkills skills={collab.skills} />
     </div>
