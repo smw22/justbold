@@ -37,7 +37,7 @@ export async function clientLoader(): Promise<{}> {
   let postsError = null;
 
   // Get Collaborations
-  const collabResponse = await apiFetch(`/collaboration`);
+  const collabResponse = await apiFetch(`/collaborations`);
 
   if (!collabResponse.ok) {
     collaborationsError = `Failed to fetch collaborations: ${collabResponse.statusText}`;
@@ -47,7 +47,7 @@ export async function clientLoader(): Promise<{}> {
   const collaborations = await collabResponse?.json();
 
   // Get Posts
-  const postsResponse = await apiFetch(`/post`);
+  const postsResponse = await apiFetch(`/posts`);
 
   if (!postsResponse.ok) {
     postsError = `Failed to fetch posts: ${postsResponse.statusText}`;
