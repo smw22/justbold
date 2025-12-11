@@ -1,4 +1,4 @@
-import { Outlet, useLoaderData, useLocation } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import Footer from "~/components/Footer";
 import ChatFooter from "./components/ChatFooter";
 import Threadheader from "./components/ThreadHeader";
