@@ -16,11 +16,9 @@ export default function ThreadCard({
   const route = isGroup ? `/chats/groups/${threadData.id}` : `/chats/${threadData.id}`;
   const otherUser = !isGroup && threadData.users ? threadData.users.find((u) => u.id !== userId) : null;
 
-  const imageUrl = isGroup
-    ? `https://img.icons8.com/?size=100&id=87221&format=png&color=000000`
-    : otherUser?.profile_image || messageData.user.profile_image;
+  const imageUrl = isGroup ? `/images/group-chat-avatar.png` : otherUser?.profile_image || messageData.user.profile_image;
 
-  const title = isGroup ? `Group ${threadData.id.slice(0, 8)}` : otherUser?.name || messageData.user.name;
+  const title = isGroup ? `Group ${threadData.id.slice(0, 8)}` : otherUser?.name || messageData.user.name || "Unknown";
 
   return (
     <Link to={route}>

@@ -19,9 +19,7 @@ export default function MessagesHeader({ otherUser, threadId, isGroup }: Message
   const [showContextMenu, setShowContextMenu] = useState(false);
   const navigate = useNavigate();
 
-  const imageUrl = isGroup
-    ? "https://img.icons8.com/?size=100&id=87221&format=png&color=000000"
-    : otherUser?.profile_image || "https://avatar.iran.liara.run/public";
+  const imageUrl = isGroup ? `/images/group-chat-avatar.png` : otherUser?.profile_image || "/images/user-avatar.png";
 
   const title = isGroup ? `Group ${threadId?.slice(0, 8)}` : otherUser?.name || "Chat";
 

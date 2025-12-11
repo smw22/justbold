@@ -9,7 +9,7 @@ export default function ChatLayout() {
 
   return (
     <>
-      {isThreadPage ? <Threadheader /> : <> </>}
+      {isThreadPage ? <Threadheader /> : null}
       <Outlet />
       {isThreadPage ? <Footer /> : <ChatFooter />}
     </>
