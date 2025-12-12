@@ -17,7 +17,7 @@ export default function ChatFooter() {
           >
             <Icon name="Plus" size={20} />
           </button>
-          <ContextMenu show={showContextMenu} setShow={(e) => setShowContextMenu(e)} classname="-top-40! left-12">
+          <ContextMenu show={showContextMenu} setShow={(e) => setShowContextMenu(e)} className="-top-40! left-12">
             <>
               <Button
                 text="Attach a picture"

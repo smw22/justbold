@@ -13,10 +13,6 @@ export const meta: MetaFunction = () => {
       property: "og:title",
       content: "Group Chat Detail | LineUp",
     },
-    // {
-    //   name: "description",
-    //   content: "This app is the best",
-    // },
   ];
 };
 

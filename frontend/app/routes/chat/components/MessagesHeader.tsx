@@ -28,8 +28,8 @@ export default function MessagesHeader({ otherUser, threadId, isGroup }: Message
     // Check if we're on /chats/:threadId (but not /chats/groups/:threadId or /chats/new)
     const isChatDetailRoute =
       location.pathname.match(/^\/chats\/[^/]+$/) &&
-      !location.pathname.includes("/groups") &&
-      !location.pathname.includes("/new");
+      !location.pathname.startsWith("/chats/groups") &&
+      !location.pathname.startsWith("/chats/new");
 
     if (isChatDetailRoute) {
       navigate("/chats");

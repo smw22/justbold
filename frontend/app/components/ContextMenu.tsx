@@ -6,12 +6,12 @@ type ContextVariant = "profile" | "post";
 export default function ContextMenu({
   show,
   setShow,
-  classname,
+  className,
   children,
 }: {
   show: boolean;
   setShow: (e: boolean) => void;
-  classname?: string;
+  className?: string;
   children: any;
 }) {
   const menuRef = useRef<HTMLDivElement>(null);
@@ -26,7 +26,7 @@ export default function ContextMenu({
   });
 
   return (
-    <div ref={menuRef} className={`${show ? "absolute" : "hidden"} top-10 right-0 display ${classname}`}>
+    <div ref={menuRef} className={`${show ? "absolute" : "hidden"} top-10 right-0 display ${className}`}>
       <div className="glass-card bg-neutral-grey text-white rounded-3xl min-w-60 max-w-60 p-2 flex flex-col gap-1">
         {children}
       </div>
