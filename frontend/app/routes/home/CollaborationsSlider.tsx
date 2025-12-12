@@ -48,7 +48,7 @@ export default function CollaborationsSlider({ collaborations }: { collaboration
                 <span className="text-xs">{collab.user.name.split(" ")[0]}</span>
               </div>
               <span className="text-xs text-gray-400">looking for a</span>
-              {collab.tags && collab.tags.length > 0 && <span className="text-xs text-gray-400">#{role}</span>}
+              {collab.tags && collab.tags.length > 0 && <span className="text-xs text-gray-400">#{collab.role}</span>}
             </div>
             <div className="flex flex-col gap-2">
               <h5>{collab.title}</h5>
