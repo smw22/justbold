@@ -1,4 +1,4 @@
-import { redirect, useLoaderData, useSearchParams } from "react-router";
+import { redirect, useLoaderData } from "react-router";
 import type { MetaFunction } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import MessagesHeader from "./components/MessagesHeader";

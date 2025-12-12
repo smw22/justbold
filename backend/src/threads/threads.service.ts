@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateThreadDto } from "./dto/create-thread.dto";
 import { UpdateThreadDto } from "./dto/update-thread.dto";
 import { Thread } from "./entities/thread.entity";
@@ -24,7 +24,7 @@ export class ThreadsService {
       where: { id: currentUserId },
     });
     if (!currentUser) {
-      throw new Error("Current user not found");
+      throw new NotFoundException("Current user not found");
     }
 
     // Get the other user
@@ -32,7 +32,7 @@ export class ThreadsService {
       where: { id: createThreadDto.userId },
     });
     if (!otherUser) {
-      throw new Error("Other user not found");
+      throw new NotFoundException("Other user not found");
     }
 
     // Create thread with both users
