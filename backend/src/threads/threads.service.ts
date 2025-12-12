@@ -118,11 +118,17 @@ export class ThreadsService {
     }));
   }
 
-  async findOne(threadId: string) {
-    const thread = await this.threadsRepository.findOne({
-      where: { id: threadId },
-      relations: ["users", "messages", "messages.user"],
-    });
+  async findOne(threadId: string, limit: number = 5) {
+    const thread = await this.threadsRepository
+      .createQueryBuilder("thread")
+      .leftJoinAndSelect("thread.users", "users")
+      .leftJoinAndSelect("thread.messages", "messages")
+      .leftJoinAndSelect("messages.user", "messageUser")
+      .where("thread.id = :threadId", { threadId })
+      .orderBy("messages.created", "DESC")
+      .take(limit)
+      .getOne();
+
     return thread;
   }
 

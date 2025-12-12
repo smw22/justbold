@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router";
+import { useLoaderData, useActionData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Message } from "~/types/messages";
 import MessagesHeader from "./components/MessagesHeader";
@@ -88,6 +88,8 @@ export async function clientAction({ params, request }: { params: { threadId: st
 
 export default function ChatDetail() {
   const { messages, otherUser, isGroup, messagesError } = useLoaderData();
+  const actionData = useActionData<typeof clientAction>();
+
   const firstMessage = messages ? messages[0] : null;
   const dateStr = firstMessage
     ? new Date(firstMessage.created).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })
@@ -105,6 +107,11 @@ export default function ChatDetail() {
           {messages?.map((message: Message) => (
             <Bubble key={message.id} message={message} />
           ))}
+          {actionData?.success === false && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
+              <strong>Error:</strong> {actionData.message || "Failed to send message"}
+            </div>
+          )}
         </div>
       </main>
       <ChatFooter />
