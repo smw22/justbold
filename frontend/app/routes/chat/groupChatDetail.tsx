@@ -2,10 +2,12 @@ import { useLoaderData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Message } from "~/types/messages";
 import MessagesHeader from "./components/MessagesHeader";
+import ErrorMessage from "~/components/ErrorMessage";
 
 export async function clientLoader({ params }: { params: { threadId: string } }) {
   const threadId = params.threadId;
   const userId = localStorage.getItem("user_id");
+  let messagesError = null;
 
   if (!threadId) throw new Error("Thread ID is required");
   if (!userId) throw new Error("User not authenticated");
@@ -13,20 +15,22 @@ export async function clientLoader({ params }: { params: { threadId: string } })
   const response = await apiFetch(`/messages?threadId=${threadId}&userId=${userId}`);
 
   if (!response.ok) {
-    throw new Error(`Failed to load messages: ${response.status}`);
+    messagesError = `Failed to load messages: ${response.status}`;
+    // throw new Error(`Failed to load messages: ${response.status}`);
   }
 
   const result = await response.json();
   if (!result.success || !result.data) {
-    throw new Error(result.message || "Failed to load messages");
+    messagesError = result.message || "Failed to load messages";
+    // throw new Error(result.message || "Failed to load messages");
   }
 
-  return { messages: result.data, threadId, isGroup: true };
+  return { messages: result.data, threadId, isGroup: true, messagesError };
 }
 
 export default function GroupChatDetail() {
-  const { messages, threadId, isGroup } = useLoaderData<typeof clientLoader>();
-  const firstMessage = messages[0];
+  const { messages, threadId, isGroup, messagesError } = useLoaderData<typeof clientLoader>();
+  const firstMessage = messages ? messages[0] : null;
   const dateStr = firstMessage
     ? new Date(firstMessage.created).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })
     : "";
@@ -39,7 +43,8 @@ export default function GroupChatDetail() {
           <p className="text-xs m-auto">{dateStr}</p>
         </div>
         <div className="flex flex-col space-y-3">
-          {messages.map((message: Message) => (
+          <ErrorMessage error={messagesError} />
+          {messages?.map((message: Message) => (
             <GroupBubble key={message.id} message={message} />
           ))}
         </div>

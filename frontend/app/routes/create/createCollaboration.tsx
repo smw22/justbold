@@ -6,6 +6,7 @@ import Input from "~/components/Input";
 import EditArray from "~/components/EditArray";
 import ImageUpload from "~/components/ImageUpload";
 import { apiFetch } from "~/lib/apiFetch";
+import ErrorMessage from "~/components/ErrorMessage";
 
 export const meta: MetaFunction = () => {
   return [
@@ -20,16 +21,6 @@ export const meta: MetaFunction = () => {
     // },
   ];
 };
-
-export async function clientLoader(): Promise<{}> {
-  const skillResponse = await apiFetch(`/skills`);
-  if (!skillResponse.ok) {
-    throw new Error(`Failed to load user skills: ${skillResponse.status}`);
-  }
-  const skills = await skillResponse.json();
-
-  return { skills: skills.data };
-}
 
 export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();
@@ -87,10 +78,10 @@ export async function clientAction({ request }: { request: Request }) {
 }
 
 export default function CreateCollaboration() {
-  const { skills } = useLoaderData();
-  const { tags, genres } = useOutletContext<{
+  const { tags, genres, skills } = useOutletContext<{
     tags: Array<{ id: string; title: string }>;
     genres: Array<{ id: string; title: string }>;
+    skills: Array<{ id: string; title: string }>;
   }>();
   const actionData = useActionData();
   const navigation = useNavigation();
@@ -109,39 +100,50 @@ export default function CreateCollaboration() {
         <ImageUpload onUploadComplete={setMediaUrl} currentUrl={mediaUrl} />
         <input type="hidden" name="media" value={mediaUrl} />
         <Input textarea name="content" id="content" placeholder="Write your description here..." required />
-        <EditArray
-          array={formTags.map((tag) => tag.title)}
-          editableText={false}
-          selectOptions={tags.map((tag: { id: string; title: string }) => tag.title)}
-          placeholder="Pick tag..."
-          onChange={(selectedTitles: string[]) => setFormTags(tags.filter((tag) => selectedTitles.includes(tag.title)))}
-        />
+        {tags.length > 0 ? (
+          <EditArray
+            array={formTags.map((tag) => tag.title)}
+            editableText={false}
+            selectOptions={tags.map((tag: { id: string; title: string }) => tag.title)}
+            placeholder="Pick tag..."
+            onChange={(selectedTitles: string[]) => setFormTags(tags.filter((tag) => selectedTitles.includes(tag.title)))}
+          />
+        ) : (
+          <ErrorMessage error="No tags available" />
+        )}
         {formTags.map((tag) => (
           <input key={tag.id} type="hidden" name="tagIds" value={tag.id} />
         ))}
-        {/* Replace genreIds select with EditArray */}
-        <EditArray
-          array={formGenres.map((genre: { id: string; title: string }) => genre.title)}
-          editableText={false}
-          selectOptions={genres.map((genre: { id: string; title: string }) => genre.title)}
-          placeholder="Pick genre..."
-          onChange={(selectedTitles: string[]) =>
-            setFormGenres(genres.filter((genre: { id: string; title: string }) => selectedTitles.includes(genre.title)))
-          }
-        />
+        {genres.length > 0 ? (
+          <EditArray
+            array={formGenres.map((genre: { id: string; title: string }) => genre.title)}
+            editableText={false}
+            selectOptions={genres.map((genre: { id: string; title: string }) => genre.title)}
+            placeholder="Pick genre..."
+            onChange={(selectedTitles: string[]) =>
+              setFormGenres(genres.filter((genre: { id: string; title: string }) => selectedTitles.includes(genre.title)))
+            }
+          />
+        ) : (
+          <ErrorMessage error="No genres available" />
+        )}
+
         {formGenres.map((genre: { id: string; title: string }) => (
           <input key={genre.id} type="hidden" name="genreIds" value={genre.id} />
         ))}
-        {/* Replace skillIds select with EditArray */}
-        <EditArray
-          array={formSkills.map((skill: { id: string; title: string }) => skill.title)}
-          editableText={false}
-          selectOptions={skills.map((skill: { id: string; title: string }) => skill.title)}
-          placeholder="Pick skill..."
-          onChange={(selectedTitles: string[]) =>
-            setFormSkills(skills.filter((skill: { id: string; title: string }) => selectedTitles.includes(skill.title)))
-          }
-        />
+        {skills.length > 0 ? (
+          <EditArray
+            array={formSkills.map((skill: { id: string; title: string }) => skill.title)}
+            editableText={false}
+            selectOptions={skills.map((skill: { id: string; title: string }) => skill.title)}
+            placeholder="Pick skill..."
+            onChange={(selectedTitles: string[]) =>
+              setFormSkills(skills.filter((skill: { id: string; title: string }) => selectedTitles.includes(skill.title)))
+            }
+          />
+        ) : (
+          <ErrorMessage error="No skills available" />
+        )}
         {formSkills.map((skill: { id: string; title: string }) => (
           <input key={skill.id} type="hidden" name="skillIds" value={skill.id} />
         ))}

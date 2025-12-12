@@ -18,14 +18,36 @@ export async function apiFetch(path: string, options: ApiFetchOptions = {}): Pro
     headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch(url, {
-    ...options,
-    headers,
-  });
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers,
+    });
 
-  if (response.status === 401) {
-    throw redirect(`/login`);
+    if (response.status === 401) {
+      throw redirect(`/login`);
+    }
+
+    if (!response.ok) {
+      // If user has a token, don't redirect - let the calling code handle the error
+      if (token) {
+        return response;
+      }
+      throw redirect(`/onboarding`);
+    }
+
+    return response;
+  } catch (error) {
+    // Handle network errors (server offline, connection issues, etc.)
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      // If user has a token, don't redirect - let the calling code handle the error
+      if (token) {
+        // Return a mock response that indicates the error
+        throw error;
+      }
+      throw redirect(`/onboarding`);
+    }
+    // Re-throw other errors (like redirects)
+    throw error;
   }
-
-  return response;
 }

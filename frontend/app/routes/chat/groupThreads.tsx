@@ -2,30 +2,44 @@ import { useLoaderData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Thread } from "~/types/threads";
 import ThreadCard from "./components/ThreadCard";
+import ErrorMessage from "~/components/ErrorMessage";
 
 export async function clientLoader() {
   const userId = localStorage.getItem("user_id");
-  if (!userId) throw new Error("User not authenticated");
+  let threadsError = null;
 
-  const groupThreadResponse = await apiFetch(`/threads/group-chats?userId=${userId}`);
-  if (!groupThreadResponse.ok) throw new Error(`Failed to load group threads: ${groupThreadResponse.status}`);
-  const groupThreadResult = await groupThreadResponse.json();
-  if (!groupThreadResult.success || !groupThreadResult.data) {
-    throw new Error(groupThreadResult.message || "Failed to load group threads");
+  if (!userId) {
+    threadsError = `User not authenticated`;
+    // throw new Error("User not authenticated");
   }
 
-  return { groupThreads: groupThreadResult.data };
+  const groupThreadResponse = await apiFetch(`/threads/group-chats?userId=${userId}`);
+
+  if (!groupThreadResponse.ok) {
+    threadsError = `Failed to load group threads: ${groupThreadResponse.status}`;
+    // throw new Error(`Failed to load group threads: ${groupThreadResponse.status}`);
+  }
+
+  const groupThreadResult = await groupThreadResponse?.json();
+
+  if (!groupThreadResult.success || !groupThreadResult.data) {
+    threadsError = `Failed to load group threads.`;
+    // throw new Error(groupThreadResult.message || "Failed to load group threads");
+  }
+
+  return { groupThreads: groupThreadResult.data, threadsError };
 }
 
 export default function GroupThreads() {
-  const { groupThreads } = useLoaderData<typeof clientLoader>();
+  const { groupThreads, threadsError } = useLoaderData<typeof clientLoader>();
 
   return (
     <main className="outer-wrapper pb-28">
       {/* Group Threads List */}
       <div className="bg-white">
-        {groupThreads.length === 0 ? (
-          <p className="text-center py-8 text-gray-500">No group chats yet</p>
+        <ErrorMessage error={threadsError} />
+        {!groupThreads ? (
+          <p className="text-center py-8 text-gray-500">It looks a little empty here...</p>
         ) : (
           groupThreads.map((thread: Thread) => (
             <ThreadCard key={thread.id} threadData={thread} messageData={thread.messages[0]} isGroup={true} />

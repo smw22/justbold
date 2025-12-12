@@ -1,11 +1,25 @@
-import { useState } from "react";
-import { useLoaderData, useOutletContext, useSearchParams } from "react-router";
+import { useState, Suspense } from "react";
+import {
+  useLoaderData,
+  useSearchParams,
+  useNavigate,
+  Link,
+  Await,
+  useRouteError,
+  isRouteErrorResponse,
+  useOutletContext,
+} from "react-router";
 import ProfileHeader from "./components/ProfileHeader";
 import Tabs from "~/components/Tabs";
 import About from "./components/About";
 import Posts from "./components/Posts";
 import { apiFetch } from "~/lib/apiFetch";
 import type { MetaFunction } from "react-router";
+import Button from "~/components/Button";
+import PostRedacted from "~/components/PostRedacted";
+import { getUserById, getUserPosts, getUserQuestions, getUserReviews } from "~/lib/data/userData";
+import ErrorMessage from "~/components/ErrorMessage";
+import ProfileHeaderRedacted from "./components/ProfileHeaderRedacted";
 
 export const meta: MetaFunction = ({ matches }: { matches: any }) => {
   const routeData = matches.find((match: any) => match.id === "routes/account/profile")?.data as any;
@@ -19,29 +33,40 @@ export const meta: MetaFunction = ({ matches }: { matches: any }) => {
   ];
 };
 
+export function ErrorBoundary() {
+  const error = useRouteError();
+  let message = "Oops!";
+  let details = "An unexpected error occurred.";
+  let stack: string | undefined;
+
+  if (isRouteErrorResponse(error)) {
+    message = error.status === 404 ? "404" : "Error";
+    details = error.status === 404 ? "The requested page could not be found." : error.statusText || details;
+  } else if (import.meta.env.DEV && error && error instanceof Error) {
+    details = error.message;
+    stack = error.stack;
+  }
+
+  return (
+    <div className="outer-wrapper">
+      <div className="px-4">
+        <ProfileHeaderRedacted />
+        <ErrorMessage error="Failed to fetch profile data" />
+      </div>
+    </div>
+  );
+}
+
 export async function clientLoader({ params }: { params: { profileId: string } }) {
-  const profileResponse = await apiFetch(`/user/${params.profileId}`);
-
-  if (profileResponse.status === 404) {
-    throw new Response("Profile not found", { status: 404 });
-  }
-  const profile = await profileResponse.json();
-  const postsResponse = await apiFetch(`/user/${profile.data.id}/posts`);
-  const reviewsResponse = await apiFetch(`/user/${profile.data.id}/reviews`);
-  const questionsResponse = await apiFetch(`/user/${profile.data.id}/questions`);
-  if (!profileResponse.ok || !postsResponse.ok || !reviewsResponse.ok || !questionsResponse.ok) {
-    throw new Error("Unknown error.");
-  }
-
-  const user_posts = await postsResponse.json();
-  const reviews = await reviewsResponse.json();
-  const questions = await questionsResponse.json();
-
+  const user = await getUserById(params.profileId);
+  const userPosts = await getUserPosts(params.profileId);
+  const userReviews = await getUserReviews(params.profileId);
+  const userQuestions = await getUserQuestions(params.profileId);
   return {
-    profile,
-    user_posts,
-    reviews,
-    questions,
+    profile: user,
+    user_posts: userPosts,
+    reviews: userReviews,
+    questions: userQuestions,
   };
 }
 
@@ -89,8 +114,9 @@ export default function Profile() {
   const { userId } = useOutletContext<{ userId: string }>();
 
   // Access the profile from the loader
-  const { profile, user_posts, reviews, questions, currentUsersProfile } = useLoaderData();
+  const { profile, user_posts, reviews, questions } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [tab, setTab] = useState(searchParams.get("show") === "posts" ? 1 : 0);
 
   const currentUserId = profile.data.id;
@@ -112,16 +138,21 @@ export default function Profile() {
   return (
     <div className="outer-wrapper">
       <div className="px-4">
-        {/* // The profile header component */}
-        <ProfileHeader
-          name={profile.data.name}
-          bio={profile.data.bio}
-          connection_count={profile.connections}
-          post_count={user_posts.total_posts}
-          image={profile.data.profile_image}
-          theme={profile.data.theme}
-          currentUsersProfile={isCurrentUserProfile}
-        />
+        <Suspense fallback={<div className="flex flex-col gap-4 outer-wrapper">Profile Header</div>}>
+          <Await resolve={profile} errorElement={<div>Profile Error</div>}>
+            {(profile) => (
+              <ProfileHeader
+                name={profile.data.name}
+                bio={profile.data.bio}
+                // connection_count={profile.data.connections.length}
+                post_count={user_posts.total_posts}
+                image={profile.data.profile_image}
+                theme={profile.data.theme}
+                currentUsersProfile={false}
+              />
+            )}
+          </Await>
+        </Suspense>
       </div>
       {/* // Tabs component, "About" and "Posts" - the current tab is held as a number in a state. */}
       <Tabs tabs={["About", "Posts"]} currentTab={tab} setTab={handleTabChange} />
