@@ -19,8 +19,11 @@ export const meta: MetaFunction = () => {
 };
 
 export async function clientLoader() {
-  const userId = localStorage.getItem("user_id");
-  if (!userId) throw new Error("User not authenticated");
+  const userResponse = await apiFetch(`/user`);
+  if (!userResponse.ok) throw new Error(`Failed to load user: ${userResponse.status}`);
+  const userResult = await userResponse.json();
+
+  const userId = userResult.data.id;
 
   const groupThreadResponse = await apiFetch(`/threads/group-chats?userId=${userId}`);
   if (!groupThreadResponse.ok) throw new Error(`Failed to load group threads: ${groupThreadResponse.status}`);

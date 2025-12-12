@@ -20,10 +20,13 @@ export const meta: MetaFunction = () => {
 
 export async function clientLoader({ params }: { params: { threadId: string } }) {
   const threadId = params.threadId;
-  const userId = localStorage.getItem("user_id");
-
   if (!threadId) throw new Error("Thread ID is required");
-  if (!userId) throw new Error("User not authenticated");
+
+  const userResponse = await apiFetch(`/user`);
+  if (!userResponse.ok) throw new Error(`Failed to load user: ${userResponse.status}`);
+  const userResult = await userResponse.json();
+
+  const userId = userResult.data.id;
 
   const response = await apiFetch(`/messages?threadId=${threadId}&userId=${userId}`);
 
@@ -36,7 +39,7 @@ export async function clientLoader({ params }: { params: { threadId: string } })
     throw new Error(result.message || "Failed to load messages");
   }
 
-  return { messages: result.data, threadId, isGroup: true };
+  return { messages: result.data, threadId, isGroup: true, userId };
 }
 
 export default function GroupChatDetail() {
@@ -64,7 +67,7 @@ export default function GroupChatDetail() {
 }
 
 function GroupBubble({ message }: { message: Message }) {
-  const userId = localStorage.getItem("user_id");
+  const { userId } = useLoaderData<typeof clientLoader>();
   const isMe = message.user.id === userId;
 
   if (isMe) {
