@@ -13,6 +13,7 @@ type Collaboration = {
     name: string;
     profile_image: string;
   };
+  role: string;
   title: string;
   content: string;
   tags: [
@@ -47,11 +48,7 @@ export default function CollaborationsSlider({ collaborations }: { collaboration
                 <span className="text-xs">{collab.user.name.split(" ")[0]}</span>
               </div>
               <span className="text-xs text-gray-400">looking for a</span>
-              {collab.tags && collab.tags.length > 0 && (
-                <span className="text-xs text-gray-400">
-                  #{typeof collab.tags[0] === "string" ? collab.tags[0] : collab.tags[0]?.title}
-                </span>
-              )}
+              {collab.tags && collab.tags.length > 0 && <span className="text-xs text-gray-400">#{role}</span>}
             </div>
             <div className="flex flex-col gap-2">
               <h5>{collab.title}</h5>

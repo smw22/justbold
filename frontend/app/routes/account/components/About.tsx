@@ -20,15 +20,11 @@ export default function About({
   reviews,
   avg_user_rating,
   questions,
-  reviewsError,
-  questionsError,
 }: {
   profile: ProfileType;
   reviews: ReviewType[];
   avg_user_rating: number;
   questions: QuestionType[];
-  reviewsError: string;
-  questionsError: string;
 }) {
   const [showArtistsILike, setShowArtistsILike] = useState(false);
   const [showPastCollabs, setShowPastCollabs] = useState(false);
@@ -66,7 +62,6 @@ export default function About({
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Reviews</h5>
-        <ErrorMessage error={reviewsError} />
         {reviews && reviews.length > 0 ? (
           <div className="m-4 flex flex-col gap-2 items-start">
             <div className="flex gap-2 items-center">
@@ -225,7 +220,6 @@ export default function About({
       </section>
       <section>
         <h5 className="font-normal text-gray-400! text-sm">Questions</h5>
-        <ErrorMessage error={reviewsError} />
         <div className="m-4 flex flex-col gap-4">
           {questions && questions.length > 0 ? (
             questions
