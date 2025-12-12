@@ -1,9 +1,13 @@
 import StoriesSlider from "./StoriesSlider";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useRouteError, Await } from "react-router";
+import { Suspense } from "react";
 import CollaborationsSlider from "./CollaborationsSlider";
 import PostsFeed from "./PostsFeed";
-import { apiFetch } from "~/lib/apiFetch";
 import type { MetaFunction } from "react-router";
+import ErrorMessage from "~/components/ErrorMessage";
+
+import { getAllCollaborations } from "~/lib/data/collaborationData";
+import { getAllPosts } from "~/lib/data/postsData";
 
 export const meta: MetaFunction = () => {
   return [
@@ -19,6 +23,23 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  const isNotFound = error?.status === 404;
+
+  return (
+    <div className="bg-red-500">
+      <h2>{isNotFound ? "Thread Not Found" : "Something Went Wrong"}</h2>
+      <p>
+        {isNotFound
+          ? "This conversation may have been deleted or never existed."
+          : error?.message || "An unexpected error occurred."}
+      </p>
+    </div>
+  );
+}
+
 const stories = [
   { id: 1, userName: "Alice", imageUrl: "https://unsplash.it/640/425?1" },
   { id: 2, userName: "Bob", imageUrl: "https://unsplash.it/640/425?2" },
@@ -32,41 +53,32 @@ const stories = [
   { id: 10, userName: "Judy", imageUrl: "https://unsplash.it/640/425?10" },
 ];
 
-export async function clientLoader(): Promise<{}> {
-  let collaborationsError = null;
-  let postsError = null;
+export async function clientLoader() {
+  const collaborations = getAllCollaborations();
+  const posts = getAllPosts();
 
-  // Get Collaborations
-  const collabResponse = await apiFetch(`/collaborations`);
-
-  if (!collabResponse.ok) {
-    collaborationsError = `Failed to fetch collaborations: ${collabResponse.statusText}`;
-    // throw new Error(`Failed to fetch collaborations: ${collabResponse.status}`);
-  }
-
-  const collaborations = await collabResponse?.json();
-
-  // Get Posts
-  const postsResponse = await apiFetch(`/posts`);
-
-  if (!postsResponse.ok) {
-    postsError = `Failed to fetch posts: ${postsResponse.statusText}`;
-    // throw new Error(`Failed to fetch posts: ${postsResponse.status}`);
-  }
-
-  const posts = await postsResponse?.json();
-
-  return { collaborations, collaborationsError, posts, postsError };
+  return {
+    collaborations,
+    posts,
+  };
 }
 
 export default function Home() {
-  const { collaborations, collaborationsError, posts, postsError } = useLoaderData();
+  const { collaborations, posts } = useLoaderData();
 
   return (
     <div className="flex flex-col gap-4">
       <StoriesSlider stories={stories} />
-      <CollaborationsSlider collaborations={collaborations} error={collaborationsError} />
-      <PostsFeed posts={posts.data} error={postsError} />
+      <Suspense fallback={<div className="h-32">Loading collaborations...</div>}>
+        <Await resolve={collaborations} errorElement={<ErrorMessage error="Failed to load collaborations." />}>
+          {(collaborations) => <CollaborationsSlider collaborations={collaborations} error="" />}
+        </Await>
+      </Suspense>
+      <Suspense fallback={<div className="h-32">Loading posts...</div>}>
+        <Await resolve={posts} errorElement={<ErrorMessage error="Failed to load posts." />}>
+          {(posts) => <PostsFeed posts={posts.data} error="" />}
+        </Await>
+      </Suspense>
     </div>
   );
 }

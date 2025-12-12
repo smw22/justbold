@@ -1,4 +1,4 @@
-import { useLoaderData, useSearchParams } from "react-router";
+import { useLoaderData, useNavigation, useSearchParams } from "react-router";
 import ServicesCard from "./components/ServicesCard";
 import ServicesCardRedacted from "./components/ServicesCardRedacted";
 import type { Service } from "~/types/services/servicesProps";
@@ -37,28 +37,32 @@ export async function clientLoader({ request }: { request: Request }): Promise<{
     ? `/services/search?search=${encodeURIComponent(search)}&page=${page}&limit=${limit}`
     : `/services?page=${page}&limit=${limit}`;
 
-  const response = await apiFetch(endpoint);
+  try {
+    const response = await apiFetch(endpoint);
 
-  if (!response.ok) {
-    servicesError = `Failed to load services: ${response.statusText}`;
-    // throw new Error(`Failed to load services: ${response.status}`);
+    if (!response.ok) {
+      servicesError = `Failed to load services: ${response.statusText}`;
+      // throw new Error(`Failed to load services: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (!result.success || !result.data) {
+      servicesError = `Failed to load services: ${response.statusText}`;
+      // throw new Error(result.message || "Failed to load services");
+    }
+
+    return {
+      services: result.data?.services,
+      total: result.data?.total,
+      currentPage: result.data?.page,
+      totalPages: result.data?.totalPages,
+      query: search,
+      servicesError: servicesError,
+    };
+  } catch (error) {
+    return { servicesError: `Network error: ${(error as Error).message}` };
   }
-
-  const result = await response.json();
-
-  if (!result.success || !result.data) {
-    servicesError = `Failed to load services: ${response.statusText}`;
-    // throw new Error(result.message || "Failed to load services");
-  }
-
-  return {
-    services: result.data?.services,
-    total: result.data?.total,
-    currentPage: result.data?.page,
-    totalPages: result.data?.totalPages,
-    query: search,
-    servicesError: servicesError,
-  };
 }
 
 export default function Services() {

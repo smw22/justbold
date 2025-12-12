@@ -1,12 +1,12 @@
-import { useLoaderData } from "react-router";
-
+import { useLoaderData, Await } from "react-router";
+import { Suspense } from "react";
 import CollaborationsFeed from "./components/CollaborationsFeed";
 import CollaborationsFilter from "./components/CollaborationsFilter";
 import CollaborationsCardRedacted from "./components/CollaborationsCardRedacted";
-import { apiFetch } from "~/lib/apiFetch";
 
 import type { MetaFunction } from "react-router";
 import ErrorMessage from "~/components/ErrorMessage";
+import { getAllCollaborations } from "~/lib/data/collaborationData";
 
 export const meta: MetaFunction = () => {
   return [
@@ -22,38 +22,33 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function clientLoader(): Promise<{}> {
-  const collabResponse = await apiFetch(`/collaboration`);
-  let collaborationsError = null;
+export async function clientLoader() {
+  const collaborations = getAllCollaborations();
 
-  if (!collabResponse.ok) {
-    collaborationsError = `Failed to load collaborations: ${collabResponse.statusText}`;
-    // throw new Error(`Failed to fetch collaborations: ${collabResponse.status}`);
-  }
-
-  const collaborations = await collabResponse?.json();
-
-  return { collaborations, collaborationsError };
+  return {
+    collaborations,
+  };
 }
 
 export default function Collaborations() {
-  const { collaborations, collaborationsError } = useLoaderData();
+  const { collaborations } = useLoaderData();
 
   return (
-    <div className="flex flex-col gap-4 px-4 outer-wrapper">
-      <ErrorMessage error={collaborationsError} />
-      {collaborations && collaborations.data ? (
-        <>
+    <Suspense
+      fallback={
+        <div className="flex flex-col gap-4 px-4 outer-wrapper">
+          <CollaborationsCardRedacted />
+          <CollaborationsCardRedacted />
+          <CollaborationsCardRedacted />
+        </div>
+      }
+    >
+      <Await resolve={collaborations} errorElement={<ErrorMessage error="Failed to load collaborations." />}>
+        <div className="flex flex-col gap-4 px-4 outer-wrapper">
           <CollaborationsFilter />
-          <CollaborationsFeed collaborations={collaborations} />
-        </>
-      ) : (
-        <>
-          <CollaborationsCardRedacted />
-          <CollaborationsCardRedacted />
-          <CollaborationsCardRedacted />
-        </>
-      )}
-    </div>
+          {(collaborations) => <CollaborationsFeed collaborations={collaborations} />}
+        </div>
+      </Await>
+    </Suspense>
   );
 }
