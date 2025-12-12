@@ -11,6 +11,14 @@ export default function Tags({ query }: TagsProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Helper: format names like "Jean and Guy" or "Jean, Guy and Anna"
+  const formatNames = (names: string[]) => {
+    if (names.length === 0) return "";
+    if (names.length === 1) return names[0];
+    if (names.length === 2) return `${names[0]} and ${names[1]}`;
+    return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+  };
+
   useEffect(() => {
     const fetchResults = async () => {
       setLoading(true);
@@ -65,12 +73,35 @@ export default function Tags({ query }: TagsProps) {
             {interleavedResults.map((item) => {
               if (item.type === "post") {
                 const post = item.data;
+                // Prefer members/users array if present, else fall back to the single author
+                const extraUsers = (post.users ?? []).filter((u: any) => u.id !== post.user.id);
+                const allDisplayUsers = [post.user, ...extraUsers];
+                const allNames = allDisplayUsers.map((u: any) => u.name);
                 return (
                   <div key={post.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
                     <div className="flex items-center gap-1.5">
-                      <img src={post.user.profile_image} alt={post.user.name} className="h-5 w-5 object-cover rounded-full" />
+                      {/* Stacked avatars */}
+                      <div className={`flex ${allDisplayUsers.length > 1 ? "-space-x-1 mr-2" : "min-w-5"}`}>
+                        {allDisplayUsers.slice(0, 4).map((user: any, i: number) => (
+                          <img
+                            key={user.id}
+                            src={user.profile_image}
+                            alt={user.name}
+                            className="relative h-5 w-5 object-cover rounded-full ring-1 ring-white"
+                            style={{ zIndex: 100 - i }}
+                          />
+                        ))}
+                        {allDisplayUsers.length > 4 && (
+                          <div
+                            className="relative h-5 w-5 rounded-full bg-neutral-200 text-[10px] flex items-center justify-center ring-1 ring-white"
+                            style={{ zIndex: 100 - 4 }}
+                          >
+                            +{allDisplayUsers.length - 4}
+                          </div>
+                        )}
+                      </div>
                       <p className="text-xs text-(--lightgrey-text)">
-                        <span className="text-neutral-grey">{post.user.name}</span>
+                        <span className="text-neutral-grey">{formatNames(allNames)}</span>
                         {post.tags?.length > 0 && (
                           <>
                             {" tagged "}
@@ -98,24 +129,50 @@ export default function Tags({ query }: TagsProps) {
                 );
               } else {
                 const collab = item.data;
+                // Prefer members/users array if present, else fall back to the single creator
+                const extraUsers = (collab.users ?? collab.members ?? []).filter((u: any) => u.id !== collab.user.id);
+                const allDisplayUsers = [collab.user, ...extraUsers];
+                const allNames = allDisplayUsers.map((u: any) => u.name);
                 return (
                   <div key={collab.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
                     <div className="flex items-center gap-1.5">
-                      <img
-                        src={collab.user.profile_image}
-                        alt={collab.user.name}
-                        className="h-5 w-5 object-cover rounded-full"
-                      />
-                      <p className="text-xs text-(--lightgrey-text)">
-                        <span className="text-neutral-grey">{collab.user.name}</span> looking for
-                        {collab.user.looking_for.map((looking_for: any) => (
-                          <span key={looking_for}> #{looking_for}</span>
+                      {/* Stacked avatars */}
+                      <div className={`flex ${allDisplayUsers.length > 1 ? "-space-x-1 mr-1" : "min-w-5"}`}>
+                        {allDisplayUsers.slice(0, 4).map((user: any, i: number) => (
+                          <img
+                            key={user.id}
+                            src={user.profile_image}
+                            alt={user.name}
+                            className="relative h-5 w-5 object-cover rounded-full ring-1 ring-white"
+                            style={{ zIndex: 100 - i }}
+                          />
                         ))}
+                        {allDisplayUsers.length > 4 && (
+                          <div
+                            className="relative h-5 w-5 rounded-full bg-neutral-200 text-[10px] flex items-center justify-center ring-1 ring-white"
+                            style={{ zIndex: 100 - 4 }}
+                          >
+                            +{allDisplayUsers.length - 4}
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-xs text-(--lightgrey-text)">
+                        <span className="text-neutral-grey">{formatNames(allNames)}</span>
+                        {collab.user?.looking_for?.length > 0 && (
+                          <>
+                            {" looking for"}
+                            {collab.user.looking_for.map((looking_for: any) => (
+                              <span key={looking_for}> #{looking_for}</span>
+                            ))}
+                          </>
+                        )}
                       </p>
                     </div>
                     <div className="h-px bg-black/15 mx-9 my-2"></div>
                     <h4>{collab.title}</h4>
-                    <img src={collab.media} alt={collab.title} className="rounded-3xl h-[222px] w-[333px] object-cover" />
+                    {collab.media && (
+                      <img src={collab.media} alt={collab.title} className="rounded-3xl h-[222px] w-[333px] object-cover" />
+                    )}
                     <p className="text-md text-(--lightgrey-text)">{collab.content}</p>
                     <div className="flex justify-between text-xs">
                       <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>

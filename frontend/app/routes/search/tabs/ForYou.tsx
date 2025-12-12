@@ -162,7 +162,7 @@ export default function ForYou({ query }: ForYouProps) {
                 <div key={collab.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
                   <div className="flex items-center gap-1.5">
                     {/* Stacked avatars */}
-                    <div className={`flex ${allDisplayUsers.length > 1 ? "-space-x-1 mr-1" : ""}`}>
+                    <div className={`flex ${allDisplayUsers.length > 1 ? "-space-x-1 mr-1" : "min-w-5"}`}>
                       {allDisplayUsers.slice(0, 4).map((user: any, i: number) => (
                         <img
                           key={user.id}
@@ -267,7 +267,7 @@ export default function ForYou({ query }: ForYouProps) {
                 <div key={post.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
                   <div className="flex items-center gap-1.5">
                     {/* Stacked avatars */}
-                    <div className={`flex ${allDisplayUsers.length > 1 ? "-space-x-1 mr-2" : ""}`}>
+                    <div className={`flex ${allDisplayUsers.length > 1 ? "-space-x-1 mr-2" : "min-w-5"}`}>
                       {allDisplayUsers.slice(0, 4).map((user: any, i: number) => (
                         <img
                           key={user.id}
