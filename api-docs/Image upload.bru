@@ -1,0 +1,24 @@
+meta {
+  name: Image upload
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{domain}}/uploadthing
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:multipart-form {
+  file: @file(/Users/bfalberg/Downloads/IMG_6995.jpg)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

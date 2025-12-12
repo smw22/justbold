@@ -53,7 +53,10 @@ export default function Post({ post, clickable = true }: { post: PostType; click
   };
 
   return (
-    <div className="bg-white flex flex-col gap-4 w-full items-start overflow-hidden p-4 md:p-8">
+    <div
+      className="bg-white flex flex-col gap-4 w-full items-start overflow-hidden p-4 md:p-8"
+      style={{ viewTransitionName: `post-${post.id}` }}
+    >
       <div className={`flex flex-row items-center w-full px-2 gap-2`}>
         <div className={`${post.tags.length > 1 ? "flex flex-col flex-1 gap-2" : "flex flex-row items-center gap-2 w-full"}`}>
           <Link
@@ -115,7 +118,7 @@ export default function Post({ post, clickable = true }: { post: PostType; click
       </div>
       {clickable ? (
         // if the post is clickable. and therefore can take the user to the details page of the post.
-        <Link to={`/posts/${post.id}`} className="gap-4 flex flex-col w-full">
+        <Link to={`/posts/${post.id}`} className="gap-4 flex flex-col w-full" viewTransition>
           <h2 className="px-2">{post.title}</h2>
           <CardMedia variant="image" url={post.media} />
           <p className="text-sm px-2">{post.content}</p>

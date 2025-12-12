@@ -1,8 +1,12 @@
 import Input from "~/components/Input";
 import { Form } from "react-router";
 import Button from "~/components/Button";
+import ImageUpload from "~/components/ImageUpload";
+import { useState } from "react";
 
 export default function CreateServiceForm({ categories, isSubmitting }: { categories: string[]; isSubmitting: boolean }) {
+  const [mediaUrl, setMediaUrl] = useState("");
+
   const formatCategory = (category: string) =>
     category
       .split("_")
@@ -12,8 +16,8 @@ export default function CreateServiceForm({ categories, isSubmitting }: { catego
   return (
     <Form method="post" className="flex flex-col gap-4">
       <Input type="text" name="title" id="title" placeholder="Title" required />
-      {/* NOTE: We need a imageUploader component here or placeholder images with a select input */}
-      <Input type="text" name="media" id="media" placeholder="Media" />
+      <ImageUpload onUploadComplete={setMediaUrl} currentUrl={mediaUrl} />
+      <input type="hidden" name="media" value={mediaUrl} />
       <select
         name="category"
         id="category"
