@@ -43,12 +43,20 @@ export default function Collaborations() {
         </div>
       }
     >
-      <Await resolve={collaborations} errorElement={<ErrorMessage error="Failed to load collaborations." />}>
-        <div className="flex flex-col gap-4 px-4 outer-wrapper">
-          <CollaborationsFilter />
-          {(collaborations) => <CollaborationsFeed collaborations={collaborations} />}
-        </div>
-      </Await>
+      <Await
+        resolve={collaborations}
+        errorElement={
+          <div className="flex flex-col gap-4 px-4 outer-wrapper">
+            <ErrorMessage error="Failed to load collaborations." />
+          </div>
+        }
+        children={(collaborations: any) => (
+          <div className="flex flex-col gap-4 px-4 outer-wrapper">
+            <CollaborationsFilter />
+            <CollaborationsFeed collaborations={collaborations} />
+          </div>
+        )}
+      />
     </Suspense>
   );
 }
