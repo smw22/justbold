@@ -16,7 +16,7 @@ export default function ServicesCard({ servicesData }: ServicesCardProps) {
       .join(" ");
 
   return (
-    <div className="flex flex-col gap-4 p-4 m-auto w-[90%] border border-gray-300 rounded-3xl shadow-lg">
+    <div className="bg-white border border-black/10 p-4 rounded-3xl overflow-hidden flex flex-col gap-4 h-full">
       <div className="flex items-center justify-between border-b border-gray-300 pb-2">
         <AvatarHeader imageUrl={servicesData.user.profile_image} imageSize={25} title={servicesData.user.name} color="black" />
 

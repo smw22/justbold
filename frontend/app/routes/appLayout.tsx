@@ -1,19 +1,48 @@
-import { Outlet, useLoaderData } from "react-router";
+import { Outlet, useLoaderData, useRouteError, isRouteErrorResponse } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { apiFetch } from "~/lib/apiFetch";
+import { getUser } from "~/lib/data/userData";
+import ErrorMessage from "~/components/ErrorMessage";
 
-export async function clientLoader() {
-  const userResponse = await apiFetch(`/user`);
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const { userId } = useLoaderData();
+  let message = "Oops!";
+  let details = "An unexpected error occurred.";
+  let stack: string | undefined;
 
-  if (!userResponse.ok) {
-    throw new Error(`Failed to load user: ${userResponse.status}`);
+  if (isRouteErrorResponse(error)) {
+    message = error.status === 404 ? "404" : "Error";
+    details = error.status === 404 ? "The requested page could not be found." : error.statusText || details;
+  } else if (import.meta.env.DEV && error && error instanceof Error) {
+    details = error.message;
+    stack = error.stack;
   }
 
-  const user = await userResponse.json();
-  const userId = user.data.id;
+  return (
+    <>
+      <Header />
+      <main className="pb-28">
+        <div className="outer-wrapper">
+          <ErrorMessage error={`${message}: ${details}`} />
+        </div>
+      </main>
+      <Footer userId={userId} />
+    </>
+  );
+}
 
-  return { userId };
+export async function clientLoader() {
+  try {
+    const user = await getUser();
+    return {
+      userId: user.data.id,
+    };
+  } catch (error) {
+    return {
+      userId: undefined,
+    };
+  }
 }
 
 export default function AppLayout() {
@@ -22,11 +51,9 @@ export default function AppLayout() {
   return (
     <>
       <Header />
-
       <main className="pb-28">
         <Outlet context={{ userId }} />
       </main>
-
       <Footer userId={userId} />
     </>
   );

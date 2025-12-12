@@ -18,7 +18,7 @@ function CollabFilterContainer() {
 }
 
 export default function CollaborationsFilter() {
-  const [filterOpen, setFilterOpen] = useState(true);
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const toggleFilter = () => {
     setFilterOpen(!filterOpen);
