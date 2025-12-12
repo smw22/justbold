@@ -27,9 +27,7 @@ type CollaborationsSliderProps = {
 
 function CollabCard({ children }: React.PropsWithChildren<{}>) {
   return (
-    <div className=" bg-white border border-black/10 p-4 rounded-3xl overflow-hidden flex flex-col gap-4 h-full">
-      {children}
-    </div>
+    <div className="bg-white border border-black/10 p-4 rounded-3xl overflow-hidden flex flex-col gap-4 h-full">{children}</div>
   );
 }
 

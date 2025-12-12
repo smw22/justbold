@@ -5,6 +5,7 @@ import Input from "~/components/Input";
 import Button from "~/components/Button";
 import EditArray from "~/components/EditArray";
 import ErrorMessage from "~/components/ErrorMessage";
+import ImageUpload from "~/components/ImageUpload";
 
 import { useState } from "react";
 export const meta: MetaFunction = () => {
