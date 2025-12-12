@@ -28,9 +28,7 @@ type CollaborationsSliderProps = {
 
 function CollabCard({ children }: React.PropsWithChildren<{}>) {
   return (
-    <div className=" bg-white border border-black/10 p-4 rounded-3xl overflow-hidden flex flex-col gap-4 h-full">
-      {children}
-    </div>
+    <div className="bg-white border border-black/10 p-4 rounded-3xl overflow-hidden flex flex-col gap-4 h-full">{children}</div>
   );
 }
 
@@ -99,7 +97,7 @@ function CollabCardActions({ collabId, userId }: { collabId: string; userId: str
 export default function CollaborationsFeed({ collaborations }: CollaborationsSliderProps) {
   return (
     <div className="flex flex-col gap-6">
-      {collaborations.data.map((collab: Collaboration) => (
+      {collaborations?.data?.map((collab: Collaboration) => (
         <CollabCard key={collab.id}>
           <CollabCardHeader userName={collab.user.name} userImage={collab.user.profile_image} role={collab.role} />
           <CollabCardTitle title={collab.title} />

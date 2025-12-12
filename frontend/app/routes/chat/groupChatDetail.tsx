@@ -4,6 +4,7 @@ import type { Message } from "~/types/messages";
 import MessagesHeader from "./components/MessagesHeader";
 import type { MetaFunction } from "react-router";
 import ChatFooter from "./components/ChatFooter";
+import ErrorMessage from "~/components/ErrorMessage";
 
 export const meta: MetaFunction = () => {
   return [
@@ -21,6 +22,9 @@ export const meta: MetaFunction = () => {
 
 export async function clientLoader({ params }: { params: { threadId: string } }) {
   const threadId = params.threadId;
+
+  let messagesError = null;
+
   if (!threadId) throw new Error("Thread ID is required");
 
   const userResponse = await apiFetch(`/user`);
@@ -32,15 +36,17 @@ export async function clientLoader({ params }: { params: { threadId: string } })
   const response = await apiFetch(`/messages?threadId=${threadId}&userId=${userId}`);
 
   if (!response.ok) {
-    throw new Error(`Failed to load messages: ${response.status}`);
+    messagesError = `Failed to load messages: ${response.status}`;
+    // throw new Error(`Failed to load messages: ${response.status}`);
   }
 
   const result = await response.json();
   if (!result.success || !result.data) {
-    throw new Error(result.message || "Failed to load messages");
+    messagesError = result.message || "Failed to load messages";
+    // throw new Error(result.message || "Failed to load messages");
   }
 
-  return { messages: result.data, threadId, isGroup: true, userId };
+  return { messages: result.data, threadId, isGroup: true, userId, messagesError };
 }
 
 export async function clientAction({ params, request }: { params: { threadId: string }; request: Request }) {
@@ -66,8 +72,8 @@ export async function clientAction({ params, request }: { params: { threadId: st
 }
 
 export default function GroupChatDetail() {
-  const { messages, threadId, isGroup } = useLoaderData<typeof clientLoader>();
-  const firstMessage = messages[0];
+  const { messages, threadId, isGroup, messagesError } = useLoaderData<typeof clientLoader>();
+  const firstMessage = messages ? messages[0] : null;
   const dateStr = firstMessage
     ? new Date(firstMessage.created).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })
     : "";
@@ -80,7 +86,8 @@ export default function GroupChatDetail() {
           <p className="text-xs m-auto">{dateStr}</p>
         </div>
         <div className="flex flex-col space-y-3">
-          {messages.map((message: Message) => (
+          <ErrorMessage error={messagesError} />
+          {messages?.map((message: Message) => (
             <GroupBubble key={message.id} message={message} />
           ))}
         </div>

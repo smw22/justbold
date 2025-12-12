@@ -76,4 +76,13 @@ export class ConnectionsService {
     await this.repo.remove(conn);
     return { success: true };
   }
+
+  async countAcceptedConnections(userId: string) {
+    return this.repo.count({
+      where: [
+        { requester: { id: userId }, status: "accepted" },
+        { addressee: { id: userId }, status: "accepted" },
+      ],
+    });
+  }
 }

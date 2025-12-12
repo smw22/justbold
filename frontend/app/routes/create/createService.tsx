@@ -18,18 +18,6 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function clientLoader(): Promise<{}> {
-  const userResponse = await apiFetch(`/user/`);
-
-  if (!userResponse.ok) {
-    throw new Error(`Failed to load user: ${userResponse.status}`);
-  }
-
-  const user = await userResponse.json();
-
-  return { user: user.data };
-}
-
 export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();
   const title = formData.get("title") as string;
@@ -112,7 +100,6 @@ export async function clientAction({ request }: { request: Request }) {
 }
 
 export default function CreateService() {
-  const { user } = useLoaderData();
   const actionData = useActionData();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";

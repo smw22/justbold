@@ -1,4 +1,12 @@
 import type { MetaFunction } from "react-router";
+import { redirect, useActionData, useNavigation, useOutletContext, Form } from "react-router";
+import { apiFetch } from "~/lib/apiFetch";
+import Input from "~/components/Input";
+import Button from "~/components/Button";
+import EditArray from "~/components/EditArray";
+import ErrorMessage from "~/components/ErrorMessage";
+import ImageUpload from "~/components/ImageUpload";
+
 import { useState } from "react";
 export const meta: MetaFunction = () => {
   return [
@@ -9,12 +17,6 @@ export const meta: MetaFunction = () => {
     },
   ];
 };
-
-import { redirect, useActionData, useNavigation, useOutletContext, Form } from "react-router";
-import { apiFetch } from "~/lib/apiFetch";
-import Input from "~/components/Input";
-import Button from "~/components/Button";
-import EditArray from "~/components/EditArray";
 
 export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();
@@ -67,20 +69,42 @@ export default function CreatePost() {
   const isSubmitting = navigation.state === "submitting";
 
   const [formTags, setFormTags] = useState([]);
+  const [mediaUrl, setMediaUrl] = useState("");
 
   return (
     <div className="flex flex-col gap-4">
       <Form method="post" className="flex flex-col gap-4">
         <Input type="text" name="title" id="title" placeholder="Title" required />
-        <Input type="url" name="media" id="media" placeholder="Media" />
-        <Input textarea name="content" id="content" placeholder="Description" required />
-        <EditArray
-          array={formTags.map((tag) => tag.title)}
-          editableText={false}
-          selectOptions={tags.map((tag: { id: string; title: string }) => tag.title)}
-          placeholder="Pick tag..."
-          onChange={(selectedTitles: string[]) => setFormTags(tags.filter((tag) => selectedTitles.includes(tag.title)))}
+        <ImageUpload
+          onUploadComplete={(url: string) => {
+            setMediaUrl(url);
+            const mediaInput = document.getElementById("media") as HTMLInputElement | null;
+            if (mediaInput) {
+              mediaInput.value = url;
+            }
+          }}
         />
+        <Input
+          type="hidden"
+          name="media"
+          id="media"
+          placeholder="Media"
+          value={mediaUrl}
+          onChange={(e) => setMediaUrl(e.target.value)}
+        />
+        <Input textarea name="content" id="content" placeholder="Description" required />
+        {tags.length > 0 ? (
+          <EditArray
+            array={formTags.map((tag) => tag.title)}
+            editableText={false}
+            selectOptions={tags.map((tag: { id: string; title: string }) => tag.title)}
+            placeholder="Pick tag..."
+            onChange={(selectedTitles: string[]) => setFormTags(tags.filter((tag) => selectedTitles.includes(tag.title)))}
+          />
+        ) : (
+          <ErrorMessage error="No tags available" />
+        )}
+
         {formTags.map((tag) => (
           <input key={tag.id} type="hidden" name="tagIds" value={tag.id} />
         ))}

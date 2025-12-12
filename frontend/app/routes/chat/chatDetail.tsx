@@ -4,6 +4,7 @@ import type { Message } from "~/types/messages";
 import MessagesHeader from "./components/MessagesHeader";
 import type { MetaFunction } from "react-router";
 import ChatFooter from "./components/ChatFooter";
+import ErrorMessage from "~/components/ErrorMessage";
 
 export const meta: MetaFunction = () => {
   return [
@@ -17,6 +18,8 @@ export const meta: MetaFunction = () => {
 
 export async function clientLoader({ params }: { params: { threadId: string } }) {
   const threadId = params.threadId;
+  let messagesError = null;
+
   if (!threadId) throw new Error("Thread ID is required");
 
   // To get userId, fetch current user
@@ -57,6 +60,7 @@ export async function clientLoader({ params }: { params: { threadId: string } })
     otherUser,
     isGroup: false,
     userId,
+    messagesError,
   };
 }
 
@@ -83,8 +87,8 @@ export async function clientAction({ params, request }: { params: { threadId: st
 }
 
 export default function ChatDetail() {
-  const { messages, otherUser, isGroup } = useLoaderData();
-  const firstMessage = messages[0];
+  const { messages, otherUser, isGroup, messagesError } = useLoaderData();
+  const firstMessage = messages ? messages[0] : null;
   const dateStr = firstMessage
     ? new Date(firstMessage.created).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })
     : "";
@@ -97,7 +101,8 @@ export default function ChatDetail() {
           <p className="text-xs m-auto">{dateStr}</p>
         </div>
         <div className="flex flex-col space-y-3">
-          {messages.map((message: Message) => (
+          <ErrorMessage error={messagesError} />
+          {messages?.map((message: Message) => (
             <Bubble key={message.id} message={message} />
           ))}
         </div>

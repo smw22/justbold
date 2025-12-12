@@ -1,4 +1,4 @@
-import { useLoaderData, Link } from "react-router";
+import { useLoaderData, Link, Await } from "react-router";
 import Badge from "~/components/Badge";
 import Icon from "~/components/icon";
 import { apiFetch } from "~/lib/apiFetch";
@@ -6,6 +6,8 @@ import Button from "~/components/Button";
 
 import type { MetaFunction } from "react-router";
 import fromNowDate from "~/lib/fromNowDate";
+import { getCollaboration } from "~/lib/data/collaborationData";
+import { Suspense } from "react";
 
 export const meta: MetaFunction = ({ matches }) => {
   const routeData = matches.find((match: any) => match.id === "routes/collaborations/collaborationsDetails")?.loaderData as any;
@@ -21,13 +23,7 @@ export const meta: MetaFunction = ({ matches }) => {
 };
 
 export async function clientLoader({ params }: { params: { collaborationId: string } }): Promise<{}> {
-  const collabResponse = await apiFetch(`/collaborations/${params.collaborationId}`);
-
-  if (!collabResponse.ok) {
-    throw new Error(`Failed to fetch collaborations: ${collabResponse.status}`);
-  }
-
-  const collaboration = await collabResponse.json();
+  const collaboration = await getCollaboration(params.collaborationId);
 
   return { collaboration };
 }

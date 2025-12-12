@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@import "uploadthing/tw/v4";
+@source "../../node_modules/@uploadthing/react/dist";
+
 /* Utility Safelist */
 @source inline("bg-light-grey bg-header-bg-1 bg-header-bg-2 bg-header-bg-3 bg-header-bg-4 bg-header-bg-5 bg-header-bg-6 bg-header-bg-7 border-header-bg-1 border-header-bg-2 border-header-bg-3 border-header-bg-4 border-header-bg-5 border-header-bg-6 border-header-bg-7");
 
@@ -90,7 +93,7 @@ body {
 }
 
 .outer-wrapper {
-  width: 100vw;
+  width: 100%;
   max-width: 600px;
   margin-inline: auto;
 }
@@ -417,7 +420,7 @@ input[type="number"] {
   }
 }
 
-/* 
+/*
 .glass-bar::after {
   content: "";
   position: absolute;

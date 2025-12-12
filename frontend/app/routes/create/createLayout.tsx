@@ -1,38 +1,23 @@
 import { Outlet, useLoaderData } from "react-router";
 import { NavLink } from "react-router";
-import { apiFetch } from "~/lib/apiFetch";
 import AvatarHeader from "../../components/AvatarHeader";
+import { getUser } from "~/lib/data/userData";
+import { getTags } from "~/lib/data/tagsData";
+import { getGenres } from "~/lib/data/genresData";
+import { getSkills } from "~/lib/data/skillsData";
 
 export async function clientLoader(): Promise<{}> {
-  const userResponse = await apiFetch(`/user/`);
-
-  if (!userResponse.ok) {
-    throw new Error(`Failed to load user: ${userResponse.status}`);
+  try {
+    const [user, tags, genres, skills] = await Promise.all([getUser(), getTags(), getGenres(), getSkills()]);
+    return { user: user.data, tags: tags.data, genres: genres.data, error: null, skills: skills.data };
+  } catch (error) {
+    return { user: null, tags: [], genres: [], skills: [], error: "Failed to fetch data" };
   }
-
-  const user = await userResponse.json();
-
-  const tagResponse = await apiFetch(`/tags`);
-
-  if (!tagResponse.ok) {
-    throw new Error(`Failed to load tags: ${tagResponse.status}`);
-  }
-
-  const tags = await tagResponse.json();
-
-  const genreResponse = await apiFetch(`/genres`);
-
-  if (!genreResponse.ok) {
-    throw new Error(`Failed to load genres: ${genreResponse.status}`);
-  }
-
-  const genre = await genreResponse.json();
-
-  return { user: user.data, tags: tags.data, genres: genre.data };
 }
 
 export default function Create() {
-  const { user, tags, genres } = useLoaderData();
+  const { user, tags, genres, skills } = useLoaderData();
+
   return (
     <div className="outer-wrapper px-4 flex flex-col gap-4">
       <div className="flex items-center justify-center gap-2">
@@ -62,8 +47,8 @@ export default function Create() {
         </NavLink>
       </div>
       <div className="flex flex-col gap-4">
-        <AvatarHeader imageUrl={user.profile_image} imageSize={40} title={user.name} color="black" />
-        <Outlet context={{ tags, genres }} />
+        <AvatarHeader imageUrl={user?.profile_image} imageSize={40} title={user?.name} color="black" />
+        <Outlet context={{ tags, genres, skills }} />
       </div>
     </div>
   );
