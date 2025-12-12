@@ -154,7 +154,7 @@ export default function AddPeople() {
                 );
               })
             ) : (
-              <p className="text-sm text-gray-500">No connections yet</p>
+              <p className="text-sm text-gray-500">No connections</p>
             )}
           </div>
         </>
