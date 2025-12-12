@@ -5,14 +5,14 @@ import { Link } from "react-router";
 export default function ThreadCard({
   threadData,
   messageData,
+  userId,
   isGroup,
 }: {
   threadData: Thread;
   messageData: Message;
+  userId: string;
   isGroup?: boolean;
 }) {
-  const userId = localStorage.getItem("user_id");
-
   const route = isGroup ? `/chats/groups/${threadData.id}` : `/chats/${threadData.id}`;
   const otherUser = !isGroup && threadData.users ? threadData.users.find((u) => u.id !== userId) : null;
 

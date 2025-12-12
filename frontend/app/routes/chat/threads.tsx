@@ -32,12 +32,11 @@ export async function clientLoader() {
     throw new Error(threadResult.message || "Failed to load threads");
   }
 
-  return { threads: threadResult.data };
+  return { threads: threadResult.data, userId };
 }
 
 export default function Threads() {
-  const { threads } = useLoaderData<typeof clientLoader>();
-
+  const { threads, userId } = useLoaderData<typeof clientLoader>();
   return (
     <main className="outer-wrapper pb-28">
       {/* Threads List */}
@@ -46,7 +45,7 @@ export default function Threads() {
           <p className="text-center py-8 text-gray-500">No chats yet</p>
         ) : (
           threads.map((thread: Thread) => (
-            <ThreadCard key={thread.id} threadData={thread} messageData={thread.messages[0]} isGroup={false} />
+            <ThreadCard key={thread.id} threadData={thread} messageData={thread.messages[0]} isGroup={false} userId={userId} />
           ))
         )}
       </div>

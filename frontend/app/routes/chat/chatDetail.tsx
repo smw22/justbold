@@ -19,29 +19,41 @@ export async function clientLoader({ params }: { params: { threadId: string } })
   const threadId = params.threadId;
   if (!threadId) throw new Error("Thread ID is required");
 
+  // To get userId, fetch current user
   const userResponse = await apiFetch(`/user`);
   if (!userResponse.ok) throw new Error(`Failed to load user: ${userResponse.status}`);
   const userResult = await userResponse.json();
 
   const userId = userResult.data.id;
 
-  const response = await apiFetch(`/messages?threadId=${threadId}&userId=${userId}`);
+  // To get the list of messages, fetch messages for the thread
+  const messagesResponse = await apiFetch(`/messages?threadId=${threadId}&userId=${userId}`);
 
-  if (!response.ok) {
-    throw new Error(`Failed to load messages: ${response.status}`);
+  if (!messagesResponse.ok) {
+    throw new Error(`Failed to load messages: ${messagesResponse.status}`);
   }
 
-  const result = await response.json();
-  if (!result.success || !result.data) {
-    throw new Error(result.message || "Failed to load messages");
+  const messagesResult = await messagesResponse.json();
+  if (!messagesResult.success || !messagesResult.data) {
+    throw new Error(messagesResult.message || "Failed to load messages");
+  }
+
+  // To get thread information, fetch thread details
+  const threadResponse = await apiFetch(`/threads/${threadId}`);
+  if (!threadResponse.ok) {
+    throw new Error(`Failed to load thread: ${threadResponse.status}`);
+  }
+  const threadResult = await threadResponse.json();
+  if (!threadResult.success || !threadResult.data) {
+    throw new Error(threadResult.message || "Failed to load thread");
   }
 
   // Get the other user from the first message (or any message)
-  const messages = result.data;
-  const otherUser = messages.find((msg: Message) => msg.user.id !== userId)?.user;
+  const thread = threadResult.data;
+  const otherUser = thread.users.find((user: any) => user.id !== userId);
 
   return {
-    messages,
+    messages: messagesResult.data,
     otherUser,
     isGroup: false,
     userId,
