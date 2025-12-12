@@ -1,5 +1,14 @@
 import { useState, Suspense } from "react";
-import { useLoaderData, useSearchParams, useNavigate, Link, Await, useRouteError, isRouteErrorResponse } from "react-router";
+import {
+  useLoaderData,
+  useSearchParams,
+  useNavigate,
+  Link,
+  Await,
+  useRouteError,
+  isRouteErrorResponse,
+  useOutletContext,
+} from "react-router";
 import ProfileHeader from "./components/ProfileHeader";
 import Tabs from "~/components/Tabs";
 import About from "./components/About";
@@ -40,8 +49,10 @@ export function ErrorBoundary() {
 
   return (
     <div className="outer-wrapper">
-      <ProfileHeaderRedacted />
-      <ErrorMessage error="This is an error" />
+      <div className="px-4">
+        <ProfileHeaderRedacted />
+        <ErrorMessage error="Failed to fetch profile data" />
+      </div>
     </div>
   );
 }
