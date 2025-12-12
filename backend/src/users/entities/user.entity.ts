@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany } from "typeorm";
 import { Post } from "../../posts/entities/post.entity";
 import { Connection } from "../../connections/entities/connection.entity";
+import { Collaboration } from "../../collaborations/entities/collaboration.entity";
 
 @Entity()
 export class User {
@@ -81,4 +82,7 @@ export class User {
 
   @OneToMany(() => Connection, (conn) => conn.addressee)
   connections_received: Connection[];
+  
+  @ManyToMany(() => Collaboration, (collab) => collab.users)
+  collaborations: Collaboration[];
 }

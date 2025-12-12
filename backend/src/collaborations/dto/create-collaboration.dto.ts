@@ -34,4 +34,9 @@ export class CreateCollaborationDto {
   @IsString({ each: true })
   @IsOptional()
   skillIds?: string[];
+
+  @IsArray()
+  @IsUUID("4", { each: true })
+  @IsOptional()
+  userIds?: string[];
 }

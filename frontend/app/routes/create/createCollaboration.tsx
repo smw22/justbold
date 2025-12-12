@@ -39,6 +39,7 @@ export async function clientAction({ request }: { request: Request }) {
   const content = formData.get("content") as string;
   const tagIds = formData.getAll("tagIds").filter(Boolean) as string[];
   const genreIds = formData.getAll("genreIds").filter(Boolean) as string[];
+  const userIds = formData.getAll("userIds").filter(Boolean) as string[];
   const paid = formData.get("paid") === "on" ? true : undefined;
   const location = formData.get("location") as string;
   const skillIds = formData.getAll("skillIds").filter(Boolean) as string[];
@@ -54,6 +55,7 @@ export async function clientAction({ request }: { request: Request }) {
     genreIds,
     tagIds,
     skillIds,
+    userIds,
   };
 
   console.log(CollabData);

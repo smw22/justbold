@@ -104,6 +104,8 @@ export default function AddPeople() {
                   className="p-3!"
                   onClick={() => handleRemoveConnection(connection.id)}
                 />
+                {/* For submitting selectedConnections with the form */}
+                <input type="hidden" name="userIds" value={connectedUser.id} />
               </div>
             );
           })}
