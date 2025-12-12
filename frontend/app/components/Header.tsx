@@ -15,13 +15,14 @@ export default function Header() {
         {isHomePage ? (
           <Logo />
         ) : (
-          <button
-            onClick={() => navigate(-1)}
+          <Link
+            to={-1}
             aria-label="Go back"
             className="hover:bg-gray-200 p-2 rounded-full transition-colors duration-200 ease-in-out cursor-pointer size-10 flex items-center justify-center"
+            viewTransition
           >
             <Icon name="NavArrowLeft" color="black" size={20} />
-          </button>
+          </Link>
         )}
         <nav className="flex gap-0">
           <Link

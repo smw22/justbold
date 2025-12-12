@@ -1,0 +1,30 @@
+meta {
+  name: Delete Connection
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{domain}}/connections/:connectionId
+  body: json
+  auth: bearer
+}
+
+params:path {
+  connectionId: 
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "action": "accept" // Accent or decline
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
 import EditArray from "~/components/EditArray";
+import ImageUpload from "~/components/ImageUpload";
 import { apiFetch } from "~/lib/apiFetch";
 import ErrorMessage from "~/components/ErrorMessage";
 
@@ -90,12 +91,14 @@ export default function CreateCollaboration() {
   const [formGenres, setFormGenres] = useState<Array<{ id: string; title: string }>>([]);
   const [formSkills, setFormSkills] = useState<Array<{ id: string; title: string }>>([]);
   const [formTags, setFormTags] = useState<Array<{ id: string; title: string }>>([]);
+  const [mediaUrl, setMediaUrl] = useState("");
 
   return (
     <div className="flex flex-col gap-4">
       <Form method="post" className="flex flex-col gap-4" encType="multipart/form-data">
         <Input type="text" name="title" id="title" placeholder="Title *" required />
-        <Input type="url" name="media" id="media" placeholder="Media (Image/Video) *" accept="image/*,video/*" required />
+        <ImageUpload onUploadComplete={setMediaUrl} currentUrl={mediaUrl} />
+        <input type="hidden" name="media" value={mediaUrl} />
         <Input textarea name="content" id="content" placeholder="Write your description here..." required />
         {tags.length > 0 ? (
           <EditArray

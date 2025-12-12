@@ -100,11 +100,18 @@ export async function clientAction({ request, params }: { request: Request; para
 }
 
 export default function Profile() {
+  const { userId } = useOutletContext<{ userId: string }>();
+
   // Access the profile from the loader
   const { profile, user_posts, reviews, questions } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [tab, setTab] = useState(searchParams.get("show") === "posts" ? 1 : 0);
+
+  const currentUserId = profile.data.id;
+
+  const [currentUser, setCurrentUser] = useState(userId);
+  const isCurrentUserProfile = currentUserId === currentUser;
 
   const handleTabChange = (newTab: number) => {
     setTab(newTab);
@@ -115,23 +122,27 @@ export default function Profile() {
     }
   };
 
+  console.log(profile);
+
   return (
     <div className="outer-wrapper">
-      <Suspense fallback={<div className="flex flex-col gap-4 outer-wrapper">Profile Header</div>}>
-        <Await resolve={profile} errorElement={<div>Profile Error</div>}>
-          {(profile) => (
-            <ProfileHeader
-              name={profile.data.name}
-              bio={profile.data.bio}
-              // connection_count={profile.data.connections.length}
-              post_count={user_posts.total_posts}
-              image={profile.data.profile_image}
-              theme={profile.data.theme}
-              currentUsersProfile={false}
-            />
-          )}
-        </Await>
-      </Suspense>
+      <div className="px-4">
+        <Suspense fallback={<div className="flex flex-col gap-4 outer-wrapper">Profile Header</div>}>
+          <Await resolve={profile} errorElement={<div>Profile Error</div>}>
+            {(profile) => (
+              <ProfileHeader
+                name={profile.data.name}
+                bio={profile.data.bio}
+                // connection_count={profile.data.connections.length}
+                post_count={user_posts.total_posts}
+                image={profile.data.profile_image}
+                theme={profile.data.theme}
+                currentUsersProfile={false}
+              />
+            )}
+          </Await>
+        </Suspense>
+      </div>
       {/* // Tabs component, "About" and "Posts" - the current tab is held as a number in a state. */}
       <Tabs tabs={["About", "Posts"]} currentTab={tab} setTab={handleTabChange} />
       {/* // if tab is 0 we show about - otherwise we show posts. */}

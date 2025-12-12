@@ -1,0 +1,26 @@
+meta {
+  name: Create Connection
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{domain}}/connections
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "targetUserId": "UUID"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

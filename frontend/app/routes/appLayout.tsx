@@ -52,7 +52,7 @@ export default function AppLayout() {
     <>
       <Header />
       <main className="pb-28">
-        <Outlet />
+        <Outlet context={{ userId }} />
       </main>
       <Footer userId={userId} />
     </>

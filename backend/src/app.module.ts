@@ -39,6 +39,7 @@ import { SkillsModule } from "./skills/skills.module";
 import { Skill } from "./skills/entities/skill.entity";
 import { ConnectionsModule } from "./connections/connections.module";
 import { Connection } from "./connections/entities/connection.entity";
+import { UploadthingModule } from "./uploadthing/uploadthing.module";
 
 @Module({
   imports: [
@@ -90,6 +91,7 @@ import { Connection } from "./connections/entities/connection.entity";
     AuthModule,
     SkillsModule,
     ConnectionsModule,
+    UploadthingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
