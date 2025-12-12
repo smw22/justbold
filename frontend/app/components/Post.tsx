@@ -95,7 +95,7 @@ export default function Post({ post, clickable = true }: { post: PostType; click
               icon="ShareIos"
               variant="context-menu"
               fullWidth={true}
-              onClick={() => alert("Indsæt funktionalitet")}
+              onClick={() => navigator.share({ title: post.title, text: post.content, url: `./posts/${post.id}` })}
             />
             <div className="bg-white h-px mx-2"></div>
             <Button
@@ -143,7 +143,7 @@ export default function Post({ post, clickable = true }: { post: PostType; click
         </div>
         <div className="flex items-center gap-1">
           {clickable ? (
-            <Link to={`/posts/${post.id}`}>
+            <Link to={`/posts/${post.id}`} viewTransition>
               <button className="cursor-pointer hover:bg-gray-100 w-8 h-8 flex justify-center items-center rounded-full transition-colors duration-200 ease-in-out">
                 <Icon name="MultiBubble" size={24} className="text-neutral-grey" />
               </button>
@@ -157,7 +157,7 @@ export default function Post({ post, clickable = true }: { post: PostType; click
         </div>
         <button
           className="cursor-pointer hover:bg-gray-100 w-8 h-8 flex justify-center items-center rounded-full transition-colors duration-200 ease-in-out"
-          onClick={() => alert("Tilføj funktionalitet")}
+          onClick={() => navigator.share({ title: post.title, text: post.content, url: `./posts/${post.id}` })}
         >
           <Icon name="ArrowEmailForward" size={24} className="text-neutral-grey" />
         </button>
