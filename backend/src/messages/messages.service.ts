@@ -5,6 +5,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Message } from "./entities/message.entity";
 import { Thread } from "../threads/entities/thread.entity";
+import { User } from "../users/entities/user.entity";
 
 @Injectable()
 export class MessagesService {
@@ -12,11 +13,41 @@ export class MessagesService {
     @InjectRepository(Message)
     private readonly messagesRepository: Repository<Message>,
     @InjectRepository(Thread)
-    private readonly threadsRepository: Repository<Thread>
+    private readonly threadsRepository: Repository<Thread>,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>
   ) {}
 
-  create(createMessageDto: CreateMessageDto) {
-    return "This action adds a new message";
+  async create(createMessageDto: CreateMessageDto, userId: string, threadId: string): Promise<Message> {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+
+    const thread = await this.threadsRepository.findOne({
+      where: { id: threadId },
+      relations: ["users"],
+    });
+
+    if (!thread) {
+      throw new NotFoundException("Thread not found");
+    }
+
+    const isParticipant = thread.users.some((user) => user.id === userId);
+    if (!isParticipant) {
+      throw new ForbiddenException("You do not have access to this thread");
+    }
+
+    const message = this.messagesRepository.create({
+      content: createMessageDto.content,
+      user,
+      thread,
+    });
+
+    return this.messagesRepository.save(message);
   }
 
   async findAll(threadId: string, userId: string): Promise<Message[]> {
