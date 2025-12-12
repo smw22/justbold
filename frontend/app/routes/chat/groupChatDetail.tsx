@@ -3,6 +3,7 @@ import { apiFetch } from "~/lib/apiFetch";
 import type { Message } from "~/types/messages";
 import MessagesHeader from "./components/MessagesHeader";
 import type { MetaFunction } from "react-router";
+import ChatFooter from "./components/ChatFooter";
 
 export const meta: MetaFunction = () => {
   return [
@@ -42,6 +43,28 @@ export async function clientLoader({ params }: { params: { threadId: string } })
   return { messages: result.data, threadId, isGroup: true, userId };
 }
 
+export async function clientAction({ params, request }: { params: { threadId: string }; request: Request }) {
+  const threadId = params.threadId;
+  const formData = await request.formData();
+  const message = formData.get("message");
+
+  const messageResponse = await apiFetch(`/messages?threadId=${threadId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ content: message }),
+  });
+
+  if (!messageResponse.ok) {
+    const error = await messageResponse.json();
+    return { success: false, message: error.message || "Failed to send message" };
+  }
+
+  const messageData = await messageResponse.json();
+  return { success: true, message: messageData.data };
+}
+
 export default function GroupChatDetail() {
   const { messages, threadId, isGroup } = useLoaderData<typeof clientLoader>();
   const firstMessage = messages[0];
@@ -62,6 +85,7 @@ export default function GroupChatDetail() {
           ))}
         </div>
       </main>
+      <ChatFooter />
     </>
   );
 }
