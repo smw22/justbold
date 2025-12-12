@@ -95,7 +95,7 @@ export default function Services() {
 
   if (!services) {
     return (
-      <div className="flex flex-col gap-4 outer-wrapper">
+      <div className="flex flex-col gap-4 outer-wrapper px-4">
         <ErrorMessage error={servicesError} />
         <ServicesCardRedacted />
         <ServicesCardRedacted />
@@ -105,9 +105,9 @@ export default function Services() {
   }
 
   return (
-    <div className="flex flex-col gap-4 outer-wrapper">
+    <div className="flex flex-col gap-4 outer-wrapper px-4">
       {/* Search Input */}
-      <div className="sticky top-0 bg-light-grey z-10 pb-4 px-4 pt-4 mx-4">
+      <div className="sticky top-0 bg-light-grey z-10 pb-4 pt-4">
         <Input
           variant="onboarding"
           placeholder="Search services by title..."
@@ -127,26 +127,25 @@ export default function Services() {
 
       <ErrorMessage error={servicesError} />
       {/* Services List */}
-      <div className="px-4">
-        {services?.length > 0 ? (
-          <div className="flex flex-col gap-8">
-            {services.map((service: Service) => (
-              <ServicesCard key={service.id} servicesData={service} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8">
-            {searchQuery ? (
-              <div className="flex flex-col gap-4 items-center">
-                <p className="text-neutral-grey">No services found for "{searchQuery}"</p>
-                <Button variant="secondary" text="Clear search" onClick={() => setSearchQuery("")} />
-              </div>
-            ) : (
-              <p className="text-neutral-grey">No services available</p>
-            )}
-          </div>
-        )}
-      </div>
+
+      {services?.length > 0 ? (
+        <div className="flex flex-col gap-8">
+          {services.map((service: Service) => (
+            <ServicesCard key={service.id} servicesData={service} />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-8">
+          {searchQuery ? (
+            <div className="flex flex-col gap-4 items-center">
+              <p className="text-neutral-grey">No services found for "{searchQuery}"</p>
+              <Button variant="secondary" text="Clear search" onClick={() => setSearchQuery("")} />
+            </div>
+          ) : (
+            <p className="text-neutral-grey">No services available</p>
+          )}
+        </div>
+      )}
 
       {/* Pagination - only show if there are results */}
       {services?.length > 0 && totalPages > 1 && (

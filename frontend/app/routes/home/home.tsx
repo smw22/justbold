@@ -109,7 +109,7 @@ export default function Home() {
                   onSwiper={(swiper) => console.log(swiper)}
                 >
                   {collaborations.data.map((collab: Collaboration) => (
-                    <SwiperSlide key={collab.id}>
+                    <SwiperSlide key={collab.id} className="h-auto!">
                       <CollaborationsSliderCard collab={collab} />
                     </SwiperSlide>
                   ))}
