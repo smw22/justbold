@@ -46,20 +46,70 @@ export default function AddPeople() {
   }, []);
 
   const [query, setQuery] = useState("");
+  const [selectedConnections, setSelectedConnections] = useState<Connection[]>([]);
 
   const filteredConnections = query.trim()
     ? connections.filter((connection) => {
         const connectedUser = connection.requester.id === user.id ? connection.addressee : connection.requester;
-        return connectedUser.name.toLowerCase().includes(query.toLowerCase());
+        const isAlreadySelected = selectedConnections.some((selected) => selected.id === connection.id);
+        return connectedUser.name.toLowerCase().includes(query.toLowerCase()) && !isAlreadySelected;
       })
-    : connections;
+    : connections.filter((connection) => !selectedConnections.some((selected) => selected.id === connection.id));
+
+  const handleAddConnection = (connection: Connection) => {
+    setSelectedConnections((prev) => [...prev, connection]);
+  };
+
+  const handleRemoveConnection = (connectionId: string) => {
+    setSelectedConnections((prev) => prev.filter((conn) => conn.id !== connectionId));
+  };
 
   return (
     <div className="flex flex-col gap-3">
       <div className="flex justify-between">
-        <AvatarHeader imageUrl={user.profile_image} imageSize={40} title={user.name} color="black" />
-        <Button text="Add people" variant="primary" icon="Plus" onClick={() => setShowSearch(!showSearch)} />
+        <AvatarHeader
+          imageUrl={user.profile_image}
+          imageSize={40}
+          title={user.name}
+          color=""
+          className="text-(--darkgrey-text)"
+        />
+        {showSearch ? (
+          <button onClick={() => setShowSearch(false)} className="text-sm cursor-pointer">
+            Close
+          </button>
+        ) : (
+          <Button text="Add people" variant="primary" icon="Plus" onClick={() => setShowSearch(true)} />
+        )}
       </div>
+
+      {/* Display selected connections */}
+      {selectedConnections.length > 0 && (
+        <div className="flex flex-col gap-2">
+          {selectedConnections.map((connection) => {
+            const connectedUser = connection.requester.id === user.id ? connection.addressee : connection.requester;
+            return (
+              <div key={connection.id} className="flex justify-between">
+                <AvatarHeader
+                  imageUrl={connectedUser.profile_image}
+                  imageSize={40}
+                  title={connectedUser.name}
+                  color=""
+                  className="text-(--darkgrey-text)"
+                />
+                <Button
+                  variant="primary"
+                  text=""
+                  icon="Close"
+                  className="p-3!"
+                  onClick={() => handleRemoveConnection(connection.id)}
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {showSearch && (
         <>
           <div>
@@ -69,6 +119,7 @@ export default function AddPeople() {
               icon="Search"
               value={query}
               onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setQuery(e.target.value)}
+              onClear={() => setQuery("")}
               className="bg-transparent rounded-full! border border-neutral-200 font-normal w-full"
             />
           </div>
@@ -82,15 +133,21 @@ export default function AddPeople() {
                 const connectedUser = connection.requester.id === user.id ? connection.addressee : connection.requester;
 
                 return (
-                  <div className="flex justify-between">
+                  <div key={connection.id} className="flex justify-between">
                     <AvatarHeader
-                      key={connection.id}
                       imageUrl={connectedUser.profile_image}
                       imageSize={32}
                       title={connectedUser.name}
-                      color="black"
+                      color=""
+                      className="text-(--lightgrey-text) text-sm"
                     />
-                    <Button variant="primary" text="" icon="Plus" className="p-2!" />
+                    <Button
+                      variant="primary"
+                      text=""
+                      icon="Plus"
+                      className="p-2!"
+                      onClick={() => handleAddConnection(connection)}
+                    />
                   </div>
                 );
               })
