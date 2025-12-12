@@ -15,6 +15,7 @@ import { apiFetch } from "~/lib/apiFetch";
 import Input from "~/components/Input";
 import Button from "~/components/Button";
 import EditArray from "~/components/EditArray";
+import ErrorMessage from "~/components/ErrorMessage";
 
 export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();
@@ -74,13 +75,18 @@ export default function CreatePost() {
         <Input type="text" name="title" id="title" placeholder="Title" required />
         <Input type="url" name="media" id="media" placeholder="Media" />
         <Input textarea name="content" id="content" placeholder="Description" required />
-        <EditArray
-          array={formTags.map((tag) => tag.title)}
-          editableText={false}
-          selectOptions={tags.map((tag: { id: string; title: string }) => tag.title)}
-          placeholder="Pick tag..."
-          onChange={(selectedTitles: string[]) => setFormTags(tags.filter((tag) => selectedTitles.includes(tag.title)))}
-        />
+        {tags.length > 0 ? (
+          <EditArray
+            array={formTags.map((tag) => tag.title)}
+            editableText={false}
+            selectOptions={tags.map((tag: { id: string; title: string }) => tag.title)}
+            placeholder="Pick tag..."
+            onChange={(selectedTitles: string[]) => setFormTags(tags.filter((tag) => selectedTitles.includes(tag.title)))}
+          />
+        ) : (
+          <ErrorMessage error="No tags available" />
+        )}
+
         {formTags.map((tag) => (
           <input key={tag.id} type="hidden" name="tagIds" value={tag.id} />
         ))}

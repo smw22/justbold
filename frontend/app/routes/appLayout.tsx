@@ -1,11 +1,14 @@
-import { Await, Outlet, useLoaderData } from "react-router";
+import { Outlet, useLoaderData } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { getUser } from "~/lib/data/userData";
-import { Suspense } from "react";
 
 export async function clientLoader() {
-  const user = await getUser();
+  const token = localStorage.getItem("access_token");
+  const user = {
+    data: {
+      id: token,
+    },
+  };
 
   return {
     userId: user.data.id,

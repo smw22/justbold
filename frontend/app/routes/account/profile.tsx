@@ -9,6 +9,7 @@ import type { MetaFunction } from "react-router";
 import Button from "~/components/Button";
 import ErrorMessage from "~/components/ErrorMessage";
 import PostRedacted from "~/components/PostRedacted";
+import { getUserById, getUserPosts, getUserQuestions, getUserReviews } from "~/lib/data/userData";
 
 export const meta: MetaFunction = ({ matches }: { matches: any }) => {
   const routeData = matches.find((match: any) => match.id === "routes/account/profile")?.data as any;
@@ -23,49 +24,16 @@ export const meta: MetaFunction = ({ matches }: { matches: any }) => {
 };
 
 export async function clientLoader({ params }: { params: { profileId: string } }) {
-  const profileResponse = await apiFetch(`/user/${params.profileId}`);
-  let profileError = null;
-  let postsError = null;
-  let reviewsError = null;
-  let questionsError = null;
-
-  if (profileResponse.status === 404) {
-    profileError = profileResponse.statusText;
-    // throw new Response("Profile not found", { status: 404 });
-  }
-  const profile = await profileResponse.json();
-  const postsResponse = await apiFetch(`/user/${params.profileId}/posts`);
-  const reviewsResponse = await apiFetch(`/user/${params.profileId}/reviews`);
-  const questionsResponse = await apiFetch(`/user/${params.profileId}/questions`);
-  if (!profileResponse.ok) {
-    profileError = "Error: Couldn't get profile.";
-    // throw new Error("Unknown error.");
-  }
-  if (!reviewsResponse.ok) {
-    reviewsError = "Error: Couldn't get reviews.";
-    // throw new Error("Unknown error.");
-  }
-  if (!questionsResponse.ok) {
-    questionsError = "Error: Couldn't get questions.";
-    // throw new Error("Unknown error.");
-  }
-  if (!postsResponse.ok) {
-    postsError = "Error: Couldn't get posts.";
-  }
-
-  const user_posts = await postsResponse?.json();
-  const reviews = await reviewsResponse?.json();
-  const questions = await questionsResponse?.json();
+  const user = await getUserById(params.profileId);
+  const userPosts = await getUserPosts(params.profileId);
+  const userReviews = await getUserReviews(params.profileId);
+  const userQuestions = await getUserQuestions(params.profileId);
 
   return {
-    profile,
-    user_posts,
-    reviews,
-    questions,
-    profileError,
-    postsError,
-    reviewsError,
-    questionsError,
+    profile: user,
+    user_posts: userPosts,
+    reviews: userReviews,
+    questions: userQuestions,
   };
 }
 
@@ -111,7 +79,7 @@ export async function clientAction({ request, params }: { request: Request; para
 
 export default function Profile() {
   // Access the profile from the loader
-  const { profile, user_posts, reviews, questions, profileError, postsError, reviewsError, questionsError } = useLoaderData();
+  const { profile, user_posts, reviews, questions } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [tab, setTab] = useState(searchParams.get("show") === "posts" ? 1 : 0);
