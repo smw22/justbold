@@ -4,16 +4,55 @@ import { UpdateThreadDto } from "./dto/update-thread.dto";
 import { Thread } from "./entities/thread.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Message } from "../messages/entities/message.entity";
+import { User } from "../users/entities/user.entity";
 
 @Injectable()
 export class ThreadsService {
   constructor(
     @InjectRepository(Thread)
-    private readonly threadsRepository: Repository<Thread>
+    private readonly threadsRepository: Repository<Thread>,
+    @InjectRepository(Message)
+    private readonly messagesRepository: Repository<Message>,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>
   ) {}
 
-  create(createThreadDto: CreateThreadDto) {
-    return "This action adds a new thread";
+  async create(createThreadDto: CreateThreadDto, currentUserId: string): Promise<Thread> {
+    // Get current user
+    const currentUser = await this.usersRepository.findOne({
+      where: { id: currentUserId },
+    });
+    if (!currentUser) {
+      throw new Error("Current user not found");
+    }
+
+    // Get the other user
+    const otherUser = await this.usersRepository.findOne({
+      where: { id: createThreadDto.userId },
+    });
+    if (!otherUser) {
+      throw new Error("Other user not found");
+    }
+
+    // Create thread with both users
+    const thread = this.threadsRepository.create({
+      users: [currentUser, otherUser],
+    });
+
+    const savedThread = await this.threadsRepository.save(thread);
+
+    // Create the initial message
+    const message = this.messagesRepository.create({
+      content: createThreadDto.content,
+      user: currentUser,
+      thread: savedThread,
+    });
+
+    await this.messagesRepository.save(message);
+
+    // Return the full thread
+    return savedThread;
   }
 
   // Fetch threads for a specific user (logged in user), and include only the latest message per thread
@@ -79,8 +118,12 @@ export class ThreadsService {
     }));
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} thread`;
+  async findOne(threadId: string) {
+    const thread = await this.threadsRepository.findOne({
+      where: { id: threadId },
+      relations: ["users", "messages", "messages.user"],
+    });
+    return thread;
   }
 
   update(id: number, updateThreadDto: UpdateThreadDto) {
