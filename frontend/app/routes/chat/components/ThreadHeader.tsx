@@ -16,9 +16,6 @@ export default function ThreadHeader() {
             <li>
               <Icon name="Search" color="white" size={24} />
             </li>
-            <li>
-              <Icon name="EditPencil" color="white" size={24} />
-            </li>
           </ul>
         </div>
         <ChatTabs />
