@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import Icon from "~/components/icon";
 import AvatarHeader from "~/components/AvatarHeader";
 import Button from "~/components/Button";
@@ -44,7 +44,9 @@ export default function MessagesHeader({ otherUser, threadId, isGroup }: Message
         <button onClick={handleBackClick} aria-label="Go back">
           <Icon name="NavArrowLeft" color="white" size={20} />
         </button>
-        <AvatarHeader imageUrl={imageUrl} imageSize={60} title={title} color="white" className="font-semibold gap-6" />
+        <Link to={`/profile/${otherUser?.id}`}>
+          <AvatarHeader imageUrl={imageUrl} imageSize={60} title={title} color="white" className="font-semibold gap-6" />
+        </Link>
         <ul className="flex gap-4">
           <li className="relative">
             <button onClick={() => setShowContextMenu(!showContextMenu)} aria-label="Open context menu">
