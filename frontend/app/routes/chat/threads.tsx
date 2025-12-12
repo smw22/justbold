@@ -12,10 +12,6 @@ export const meta: MetaFunction = () => {
       property: "og:title",
       content: "Threads List | LineUp",
     },
-    // {
-    //   name: "description",
-    //   content: "This app is the best",
-    // },
   ];
 };
 

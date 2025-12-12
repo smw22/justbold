@@ -8,7 +8,7 @@ export class Thread {
   id: string;
 
   // The users participating in the thread
-  @ManyToMany(() => User, { eager: true, cascade: true })
+  @ManyToMany(() => User, { eager: true })
   @JoinTable({ name: "thread_users" })
   users: User[];
 

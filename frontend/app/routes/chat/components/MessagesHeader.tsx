@@ -44,9 +44,13 @@ export default function MessagesHeader({ otherUser, threadId, isGroup }: Message
         <button onClick={handleBackClick} aria-label="Go back">
           <Icon name="NavArrowLeft" color="white" size={20} />
         </button>
-        <Link to={`/profile/${otherUser?.id}`}>
+        {otherUser ? (
+          <Link to={`/profile/${otherUser.id}`}>
+            <AvatarHeader imageUrl={imageUrl} imageSize={60} title={title} color="white" className="font-semibold gap-6" />
+          </Link>
+        ) : (
           <AvatarHeader imageUrl={imageUrl} imageSize={60} title={title} color="white" className="font-semibold gap-6" />
-        </Link>
+        )}
         <ul className="flex gap-4">
           <li className="relative">
             <button onClick={() => setShowContextMenu(!showContextMenu)} aria-label="Open context menu">
