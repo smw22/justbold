@@ -1,13 +1,19 @@
 import StoriesSlider from "./StoriesSlider";
-import { useLoaderData, useRouteError, Await } from "react-router";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { useLoaderData, useRouteError, Await, Link } from "react-router";
 import { Suspense } from "react";
-import CollaborationsSlider from "./CollaborationsSlider";
 import PostsFeed from "./PostsFeed";
 import type { MetaFunction } from "react-router";
 import ErrorMessage from "~/components/ErrorMessage";
+import Button from "~/components/Button";
+import type { Collaboration } from "~/types/collaborations";
 
 import { getAllCollaborations } from "~/lib/data/collaborationData";
 import { getAllPosts } from "~/lib/data/postsData";
+import CollaborationsSliderCard from "./components/CollaborationsSliderCard";
+import CollaborationsSliderCardRedacted from "./components/CollaborationsSliderCardRedacted";
+import PostRedacted from "~/components/PostRedacted";
 
 export const meta: MetaFunction = () => {
   return [
@@ -69,12 +75,65 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-4">
       <StoriesSlider stories={stories} />
-      <Suspense fallback={<div className="h-32">Loading collaborations...</div>}>
-        <Await resolve={collaborations} errorElement={<ErrorMessage error="Failed to load collaborations." />}>
-          {(collaborations) => <CollaborationsSlider collaborations={collaborations} error="" />}
-        </Await>
-      </Suspense>
-      <Suspense fallback={<div className="h-32">Loading posts...</div>}>
+      <div className="bg-light-grey py-6 overflow-hidden">
+        <div className="outer-wrapper">
+          <h2 className="px-4 font-semibold text-lg mb-4">Collaborations requests</h2>
+          <Suspense
+            fallback={
+              <Swiper
+                className="pl-4! overflow-visible!"
+                spaceBetween={12}
+                slidesPerView={1.25}
+                onSlideChange={() => console.log("slide change")}
+                onSwiper={(swiper) => console.log(swiper)}
+              >
+                <SwiperSlide>
+                  <CollaborationsSliderCardRedacted />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <CollaborationsSliderCardRedacted />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <CollaborationsSliderCardRedacted />
+                </SwiperSlide>
+              </Swiper>
+            }
+          >
+            <Await resolve={collaborations} errorElement={<ErrorMessage error="Failed to load collaborations." />}>
+              {(collaborations) => (
+                <Swiper
+                  className="pl-4! overflow-visible!"
+                  spaceBetween={12}
+                  slidesPerView={1.25}
+                  onSlideChange={() => console.log("slide change")}
+                  onSwiper={(swiper) => console.log(swiper)}
+                >
+                  {collaborations.data.map((collab: Collaboration) => (
+                    <SwiperSlide key={collab.id}>
+                      <CollaborationsSliderCard collab={collab} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              )}
+            </Await>
+          </Suspense>
+
+          <div className="px-4 mt-4 flex itenms-center">
+            <Link to="/collaborations" className="">
+              <Button variant="primary" text="See all collaborations" />
+            </Link>
+          </div>
+        </div>
+      </div>
+      <Suspense
+        fallback={
+          <div className="flex flex-col gap-4 outer-wrapper">
+            <PostRedacted />
+            <PostRedacted />
+            <PostRedacted />
+          </div>
+        }
+      >
         <Await resolve={posts} errorElement={<ErrorMessage error="Failed to load posts." />}>
           {(posts) => <PostsFeed posts={posts.data} error="" />}
         </Await>
