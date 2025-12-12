@@ -28,7 +28,11 @@ export default function HeaderBurgerMenu() {
 
   return (
     <>
-      <button onClick={toggleMenu} aria-label="Toggle menu" className="cursor-pointer">
+      <button
+        onClick={toggleMenu}
+        aria-label="Toggle menu"
+        className="hover:bg-gray-200 p-2 rounded-full transition-colors duration-200 ease-in-out cursor-pointer size-10 flex items-center justify-center"
+      >
         <Icon name="Menu" color="black" size={20} />
       </button>
 
