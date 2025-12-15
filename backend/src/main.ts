@@ -20,11 +20,6 @@ async function bootstrap() {
     })
   );
 
-  // Reduce logging in production
-  if (process.env.NODE_ENV === "production") {
-    app.useLogger(["error", "warn"]);
-  }
-
   await app.listen(process.env.PORT ?? 3000);
 }
-void bootstrap();
+bootstrap();
