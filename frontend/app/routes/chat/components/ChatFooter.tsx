@@ -1,11 +1,21 @@
-import { useState } from "react";
-import { Form } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import { Form, useNavigation } from "react-router";
 import Button from "~/components/Button";
 import ContextMenu from "~/components/ContextMenu";
 import Icon from "~/components/icon";
 
 export default function ChatFooter() {
   const [showContextMenu, setShowContextMenu] = useState(false);
+  const navigation = useNavigation();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const isSubmitting = navigation.state === "submitting";
+
+  useEffect(() => {
+    if (navigation.state === "idle" && formRef.current) {
+      formRef.current.reset();
+    }
+  }, [navigation.state]);
 
   // TODO: trigger data revalidation on message send (to show the new messages in the chat) - also needed on chatDetail and groupChatDetail
 
@@ -54,15 +64,17 @@ export default function ChatFooter() {
           </ContextMenu>
         </div>
 
-        <Form method="post" className="flex gap-3 flex-1">
+        <Form method="post" className="flex gap-3 flex-1" ref={formRef}>
           <input
             type="text"
             name="message"
             placeholder="Aa"
+            disabled={isSubmitting}
             className="bg-light-grey p-3 rounded-xl border border-neutral-grey flex-1 px-4"
           />
           <button
             type="submit"
+            disabled={isSubmitting}
             className="relative text-black flex items-center justify-center w-12 h-12 cursor-pointer transition-colors duration-200 ease-in-out shrink-0 after:content-[''] after:absolute after:inset-0 after:bg-primary-yellow after:rounded-full after:-z-10 hover:after:bg-primary-yellow-hover focus:after:bg-primary-yellow-pressed"
           >
             <Icon name="SendDiagonal" size={20} />
