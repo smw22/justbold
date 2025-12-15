@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import Icon from "~/components/icon";
 import { apiFetch } from "~/lib/apiFetch";
 import fromNowDate from "~/lib/fromNowDate";
@@ -51,7 +52,7 @@ export default function Services({ query }: ServicesProps) {
             {results.services.map((service: any) => (
               <div key={service.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
                 <div className="flex items-center gap-1.5 w-full justify-between">
-                  <div className="flex items-center gap-1.5">
+                  <Link to={`/profile/${service.user.id}`} className="flex items-center gap-1.5">
                     <img
                       src={service.user.profile_image}
                       alt={service.user.name}
@@ -63,7 +64,7 @@ export default function Services({ query }: ServicesProps) {
                         <span key={looking_for}> #{looking_for}</span>
                       ))}
                     </p>
-                  </div>
+                  </Link>
                   <Icon name="HomeSale" size={24} className="min-h-6 min-w-6" />
                 </div>
                 <div className="h-px bg-black/15 mx-9 my-2"></div>

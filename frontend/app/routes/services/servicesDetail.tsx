@@ -54,7 +54,9 @@ export default function ServicesDetail() {
   return (
     <div className=" p-4 outer-wrapper">
       <div className="flex items-center justify-between mb-4">
-        <AvatarHeader imageUrl={service.user.profile_image} imageSize={40} title={service.user.name} color="black" />
+        <Link to={`/profile/${service.user.id}`}>
+          <AvatarHeader imageUrl={service.user.profile_image} imageSize={40} title={service.user.name} color="black" />
+        </Link>
 
         <span className="text-lightgrey">#{service.category}</span>
         <div>

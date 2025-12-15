@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import fromNowDate from "~/lib/fromNowDate";
 
@@ -51,7 +52,7 @@ export default function Collaborations({ query }: CollaborationsProps) {
           <div className="flex flex-col gap-3">
             {results.collaborations.map((collab: any) => (
               <div key={collab.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
-                <div className="flex items-center gap-1.5">
+                <Link to={`/profile/${collab.user.id}`} className="flex items-center gap-1.5">
                   <img src={collab.user.profile_image} alt={collab.user.name} className="h-5 w-5 object-cover rounded-full" />
                   <p className="text-xs text-(--lightgrey-text)">
                     <span className="text-neutral-grey">{collab.user.name}</span> looking for
@@ -59,7 +60,7 @@ export default function Collaborations({ query }: CollaborationsProps) {
                       <span key={looking_for}> #{looking_for}</span>
                     ))}
                   </p>
-                </div>
+                </Link>
                 <div className="h-px bg-black/15 mx-9 my-2"></div>
                 <h4>{collab.title}</h4>
                 <img src={collab.media} alt={collab.title} className="rounded-3xl h-[222px] w-[333px] object-cover" />
