@@ -12,6 +12,11 @@ type Collaboration = {
     name: string;
     profile_image: string;
   };
+  users?: Array<{
+    id: string;
+    name: string;
+    profile_image: string;
+  }>;
   title: string;
   content: string;
   tags: string[];
@@ -32,15 +37,50 @@ function CollabCard({ children }: React.PropsWithChildren<{}>) {
   );
 }
 
-function CollabCardHeader({ userName, userImage, role }: { userName: string; userImage: string; role: string }) {
+function CollabCardHeader({
+  users,
+  role,
+}: {
+  users: Array<{ id: string; name: string; profile_image: string }>;
+  role: string;
+}) {
+  const formatNames = (names: string[]) => {
+    const firstNames = names.map((name) => name.split(" ")[0]);
+    if (firstNames.length === 0) return "";
+    if (firstNames.length === 1) return firstNames[0];
+    if (firstNames.length === 2) return `${firstNames[0]} and ${firstNames[1]}`;
+    return `${firstNames.slice(0, -1).join(", ")} and ${firstNames[firstNames.length - 1]}`;
+  };
+
+  const allNames = users.map((u) => u.name);
+
   return (
-    <div className="flex items-center gap-1 border-b border-gray-200 pb-4 ">
-      <div className="flex items-center gap-1">
-        <img className="size-10 rounded-full" src={userImage} alt={userName} />
-        <span className="">{userName.split(" ")[0]}</span>
+    <div className="flex items-center gap-1 border-b border-gray-200 pb-4">
+      <div className={`flex ${users.length > 1 ? "-space-x-2" : ""}`}>
+        {users.slice(0, 4).map((user, i) => (
+          <img
+            key={user.id}
+            src={user.profile_image}
+            alt={user.name}
+            className="relative size-10 object-cover rounded-full ring-2 ring-white"
+            style={{ zIndex: 100 - i }}
+          />
+        ))}
+        {users.length > 4 && (
+          <div
+            className="relative size-10 rounded-full bg-neutral-200 text-xs flex items-center justify-center ring-2 ring-white"
+            style={{ zIndex: 96 }}
+          >
+            +{users.length - 4}
+          </div>
+        )}
       </div>
-      <span className="text-gray-400">looking for a</span>
-      <span className="text-gray-400 lowercase">#{role}</span>
+      <div className="flex gap-1">
+        <span>{formatNames(allNames)}</span>
+        <span className="text-gray-400">
+          looking for a <span className="lowercase">#{role}</span>
+        </span>
+      </div>
     </div>
   );
 }
@@ -98,16 +138,21 @@ function CollabCardActions({ collabId, userId }: { collabId: string; userId: str
 export default function CollaborationsFeed({ collaborations }: CollaborationsSliderProps) {
   return (
     <div className="flex flex-col gap-6">
-      {collaborations?.data?.map((collab: Collaboration) => (
-        <CollabCard key={collab.id}>
-          <CollabCardHeader userName={collab.user.name} userImage={collab.user.profile_image} role={collab.role} />
-          <CollabCardTitle title={collab.title} />
-          <CollabCardMeta location={collab.location} created={collab.created} tags={collab.tags} />
-          <CollabCardImage media={collab.media} alt={collab.title} />
-          <CollabCardContent content={collab.content} />
-          <CollabCardActions collabId={collab.id} userId={collab.user.id} />
-        </CollabCard>
-      ))}
+      {collaborations?.data?.map((collab: Collaboration) => {
+        const extraUsers = (collab.users ?? []).filter((u: any) => u.id !== collab.user.id);
+        const allUsers = [collab.user, ...extraUsers];
+
+        return (
+          <CollabCard key={collab.id}>
+            <CollabCardHeader users={allUsers} role={collab.role} />
+            <CollabCardTitle title={collab.title} />
+            <CollabCardMeta location={collab.location} created={collab.created} tags={collab.tags} />
+            <CollabCardImage media={collab.media} alt={collab.title} />
+            <CollabCardContent content={collab.content} />
+            <CollabCardActions collabId={collab.id} userId={collab.user.id} />
+          </CollabCard>
+        );
+      })}
     </div>
   );
 }

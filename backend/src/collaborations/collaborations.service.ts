@@ -34,9 +34,7 @@ export class CollaborationsService {
     const skills = createCollaborationDto.skillIds
       ? await this.skillsRepository.findByIds(createCollaborationDto.skillIds)
       : [];
-    const users = createCollaborationDto.userIds
-      ? await this.usersRepository.findByIds(createCollaborationDto.userIds)
-      : [];
+    const users = createCollaborationDto.userIds ? await this.usersRepository.findByIds(createCollaborationDto.userIds) : [];
 
     const collabData = this.collaborationRepository.create({
       ...createCollaborationDto,
@@ -69,6 +67,9 @@ export class CollaborationsService {
 
     // Add user data
     query.leftJoinAndSelect("collaboration.user", "user");
+
+    // Add users (members) data
+    query.leftJoinAndSelect("collaboration.users", "collaborationUsers");
 
     // Add tags join
     query.leftJoinAndSelect("collaboration.tags", "tag");
