@@ -1,6 +1,7 @@
 import { Injectable, HttpException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import * as bcrypt from "bcrypt";
 
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -27,8 +28,47 @@ export class UsersService {
     private readonly likesRepository: Repository<Like>
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return "This action adds a new user";
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    // Check if user with this email already exists
+    const existingUser = await this.usersRepository.findOne({
+      where: { email: createUserDto.email },
+    });
+
+    if (existingUser) {
+      throw new HttpException("User with this email already exists", 409);
+    }
+
+    // Hash the password
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    const hashedPassword = (await bcrypt.hash(createUserDto.password, 10)) as string;
+
+    // Create new user with default values for optional fields
+    const newUser = this.usersRepository.create({
+      name: createUserDto.name,
+      email: createUserDto.email,
+      password: hashedPassword,
+      phone: createUserDto.phone || "",
+      year_of_birth: createUserDto.year_of_birth || 0,
+      location: createUserDto.location || "",
+      subscription: createUserDto.subscription || "free",
+      user_type: createUserDto.user_type,
+      // Set default values for fields not in the form
+      bio: "Jeg mangler at skrive min bio.",
+      about: "Her skriver jeg noget om mig selv.",
+      theme: "header-bg-1",
+      videos: [],
+      looking_for: [],
+      genres: [],
+      profile_image: "https://i.pravatar.cc/150?img=1", // Default avatar
+    });
+
+    // Save and return the new user
+    const savedUser = await this.usersRepository.save(newUser);
+
+    // Remove password from response
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPassword } = savedUser;
+    return userWithoutPassword as User;
   }
 
   async findOne(id: string): Promise<User> {

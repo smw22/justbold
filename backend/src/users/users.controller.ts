@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Req, NotFoundException } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Req, NotFoundException, HttpException } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { ConnectionsService } from "../connections/connections.service";
+import { Public } from "src/auth/public.decorator";
 
 @Controller("user")
 export class UsersController {
@@ -11,9 +12,30 @@ export class UsersController {
     private readonly connectionsService: ConnectionsService
   ) {}
 
+  @Public()
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    try {
+      const data = await this.usersService.create(createUserDto);
+      return {
+        success: true,
+        data,
+        message: "User created successfully",
+      };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      let statusCode = 500;
+
+      if (error instanceof HttpException) {
+        statusCode = error.getStatus();
+      }
+
+      return {
+        success: false,
+        message,
+        statusCode,
+      };
+    }
   }
   @Get()
   async findCurrent(@Req() req: Request & { user: { id: string } }) {

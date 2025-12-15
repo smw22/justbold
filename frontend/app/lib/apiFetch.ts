@@ -10,6 +10,10 @@ export async function apiFetch(path: string, options: ApiFetchOptions = {}): Pro
 
   const token = localStorage.getItem("access_token");
 
+  if (!token) {
+    throw redirect(`/onboarding`);
+  }
+
   const headers: Record<string, string> = {
     ...(options.headers || {}),
   };
@@ -29,23 +33,16 @@ export async function apiFetch(path: string, options: ApiFetchOptions = {}): Pro
     }
 
     if (!response.ok) {
-      // If user has a token, don't redirect - let the calling code handle the error
-      if (token) {
-        return response;
-      }
-      throw redirect(`/onboarding`);
+      // Let the calling code handle the error
+      return response;
     }
 
     return response;
   } catch (error) {
     // Handle network errors (server offline, connection issues, etc.)
     if (error instanceof TypeError && error.message === "Failed to fetch") {
-      // If user has a token, don't redirect - let the calling code handle the error
-      if (token) {
-        // Return a mock response that indicates the error
-        throw error;
-      }
-      throw redirect(`/onboarding`);
+      // Re-throw network errors to let calling code handle them
+      throw error;
     }
     // Re-throw other errors (like redirects)
     throw error;
