@@ -1,6 +1,5 @@
 import { Outlet, useLocation, useLoaderData } from "react-router";
 import Footer from "~/components/Footer";
-import ChatFooter from "./components/ChatFooter";
 import Threadheader from "./components/ThreadHeader";
 import { apiFetch } from "~/lib/apiFetch";
 
@@ -26,7 +25,7 @@ export default function ChatLayout() {
     <>
       {isThreadPage ? <Threadheader /> : null}
       <Outlet />
-      {isThreadPage ? <Footer userId={userId} /> : <ChatFooter />}
+      {isThreadPage ? <Footer userId={userId} /> : null}
     </>
   );
 }
