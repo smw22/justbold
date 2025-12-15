@@ -133,8 +133,6 @@ export default function Profile() {
     }
   };
 
-  console.log(profile);
-
   return (
     <div className="outer-wrapper">
       <div className="px-4">
@@ -148,7 +146,7 @@ export default function Profile() {
                 post_count={user_posts.total_posts}
                 image={profile.data.profile_image}
                 theme={profile.data.theme}
-                currentUsersProfile={false}
+                currentUsersProfile={profile.data.id === userId}
               />
             )}
           </Await>
