@@ -1,26 +1,22 @@
 import { Link } from "react-router";
-import { useState } from "react";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
+import type { FormData } from "../steps";
 
 interface Step1Props {
+  formData: FormData;
+  updateFormData: (updates: Partial<FormData>) => void;
   onNext: () => void;
   onSkip: () => void;
   onLogin: () => void;
 }
 
-export default function Step1({ onNext, onSkip, onLogin }: Step1Props) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
+export default function Step1({ formData, updateFormData, onNext, onSkip, onLogin }: Step1Props) {
+  const handleContinue = () => {
+    if (formData.password !== formData.confirmPassword) {
       alert("Passwords don't match!");
       return;
     }
-    // Pass data
     onNext();
   };
 
@@ -31,43 +27,46 @@ export default function Step1({ onNext, onSkip, onLogin }: Step1Props) {
         <p>By continuing you agree to LineUp!</p>
         <p>Terms of use and Privacy Policy</p>
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
+      <div className="flex flex-col gap-3.5">
         <Input
           variant="onboarding"
           placeholder="Enter your email"
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={formData.email}
+          onChange={(e) => updateFormData({ email: e.target.value })}
           name="email"
+          required
         />
         <Input
           variant="onboarding"
           placeholder="Enter your password"
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={formData.password}
+          onChange={(e) => updateFormData({ password: e.target.value })}
           name="password"
+          required
         />
         <Input
           variant="onboarding"
           placeholder="Repeat your password"
           type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          value={formData.confirmPassword}
+          onChange={(e) => updateFormData({ confirmPassword: e.target.value })}
           name="confirmPassword"
+          required
         />
-        <Button text="Continue" variant="primary" onClick={onNext} className="mt-1.5 w-fit self-center" />
-      </form>
+        <Button text="Continue" variant="primary" type="button" onClick={handleContinue} className="mt-1.5 w-fit self-center" />
+      </div>
       <p>or</p>
-      <Button text="Sign up with Google" variant="secondary" className="font-bold" />
-      <Button text="Sign up with AppleID" variant="secondary" className="font-bold" />
+      <Button text="Sign up with Google" variant="secondary" type="button" className="font-bold" />
+      <Button text="Sign up with AppleID" variant="secondary" type="button" className="font-bold" />
       <div>
         <span>Already have an account? </span>
         <Link to={"/login"} onClick={onLogin} className="cursor-pointer text-[#007AFF]">
           Log In
         </Link>
       </div>
-      <button onClick={onSkip} className="cursor-pointer underline">
+      <button type="button" onClick={onSkip} className="cursor-pointer underline">
         Skip for now
       </button>
     </div>
