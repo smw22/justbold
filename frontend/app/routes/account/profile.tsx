@@ -71,7 +71,6 @@ export async function clientLoader({ params }: { params: { profileId: string } }
 }
 
 export async function clientAction({ request, params }: { request: Request; params: { profileId: string } }) {
-  const apiUrl = import.meta.env.VITE_API_URL;
   // Extract form data
   const formData = await request.formData();
   const question = formData.get("question")?.toString();
@@ -158,7 +157,13 @@ export default function Profile() {
       <Tabs tabs={["About", "Posts"]} currentTab={tab} setTab={handleTabChange} />
       {/* // if tab is 0 we show about - otherwise we show posts. */}
       {tab === 0 ? (
-        <About profile={profile.data} reviews={reviews.data} questions={questions.data} avg_user_rating={reviews.avg_rating} />
+        <About
+          profile={profile.data}
+          reviews={reviews.data}
+          questions={questions.data}
+          avg_user_rating={reviews.avg_rating}
+          isCurrentUserProfile={isCurrentUserProfile}
+        />
       ) : (
         <Posts posts={user_posts.data} />
       )}

@@ -20,11 +20,13 @@ export default function About({
   reviews,
   avg_user_rating,
   questions,
+  isCurrentUserProfile,
 }: {
   profile: ProfileType;
   reviews: ReviewType[];
   avg_user_rating: number;
   questions: QuestionType[];
+  isCurrentUserProfile: boolean;
 }) {
   const [showArtistsILike, setShowArtistsILike] = useState(false);
   const [showPastCollabs, setShowPastCollabs] = useState(false);
@@ -237,37 +239,39 @@ export default function About({
           )}
         </div>
       </section>
-      <section>
-        <h5 className="font-normal text-lg">Ask me a question</h5>
-        <Form method="post" action="">
-          <div className={`flex items-center border-${profile.theme} border rounded-full mx-2 my-4`}>
-            <input
-              name="question"
-              className="outline-none px-5 py-5 w-full"
-              placeholder="Type your question here..."
-              disabled={isSubmitting}
-            />
-            <button
-              type="submit"
-              className={`cursor-pointer hover:opacity-40 bg-${profile.theme} text-white min-w-12 w-12 h-12 m-2 flex items-center justify-center rounded-full transition-opacity duration-200 ease-in-out`}
-              disabled={isSubmitting}
-            >
-              <Icon name="SendDiagonal" size={24} />
-            </button>
-          </div>
-        </Form>
-        {/* Show success or error message */}
-        {actionData?.error && (
-          <div className="flex flex-row items-center justify-center bg-gray-100 border border-gray-200 rounded-2xl p-2 mx-2">
-            <p className="text-red-500 text-sm mx-4">{actionData.error}</p>
-          </div>
-        )}
-        {actionData?.success && (
-          <div className="flex flex-row items-center justify-center bg-gray-100 border border-gray-200 rounded-2xl p-2 mx-2">
-            <p className="text-green-500 text-sm mx-4">Question submitted successfully!</p>
-          </div>
-        )}
-      </section>
+      {!isCurrentUserProfile && (
+        <section>
+          <h5 className="font-normal text-lg">Ask me a question</h5>
+          <Form method="post" action="">
+            <div className={`flex items-center border-${profile.theme} border rounded-full mx-2 my-4`}>
+              <input
+                name="question"
+                className="outline-none px-5 py-5 w-full"
+                placeholder="Type your question here..."
+                disabled={isSubmitting}
+              />
+              <button
+                type="submit"
+                className={`cursor-pointer hover:opacity-40 bg-${profile.theme} text-white min-w-12 w-12 h-12 m-2 flex items-center justify-center rounded-full transition-opacity duration-200 ease-in-out`}
+                disabled={isSubmitting}
+              >
+                <Icon name="SendDiagonal" size={24} />
+              </button>
+            </div>
+          </Form>
+          {/* Show success or error message */}
+          {actionData?.error && (
+            <div className="flex flex-row items-center justify-center bg-gray-100 border border-gray-200 rounded-2xl p-2 mx-2">
+              <p className="text-red-500 text-sm mx-4">{actionData.error}</p>
+            </div>
+          )}
+          {actionData?.success && (
+            <div className="flex flex-row items-center justify-center bg-gray-100 border border-gray-200 rounded-2xl p-2 mx-2">
+              <p className="text-green-500 text-sm mx-4">Question submitted successfully!</p>
+            </div>
+          )}
+        </section>
+      )}
     </article>
   );
 }
