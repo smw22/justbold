@@ -90,7 +90,9 @@ export default function Tags({ query }: TagsProps) {
                     <img src={post.media} alt={post.media} className="rounded-3xl h-[222px] w-[333px] object-cover" />
                     <p className="text-md text-(--lightgrey-text)">{post.content}</p>
                     <div className="flex justify-between text-xs">
-                      <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
+                      <Link to={`/posts/${post.id}`} className="font-bold text-neutral-grey cursor-pointer">
+                        Read more
+                      </Link>
                       <div className="text-(--lightgrey-text)">
                         <p>{fromNowDate({ date: post.created })}</p>
                       </div>
@@ -119,7 +121,9 @@ export default function Tags({ query }: TagsProps) {
                     <img src={collab.media} alt={collab.title} className="rounded-3xl h-[222px] w-[333px] object-cover" />
                     <p className="text-md text-(--lightgrey-text)">{collab.content}</p>
                     <div className="flex justify-between text-xs">
-                      <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
+                      <Link to={`/collaborations/${collab.id}`} className="font-bold text-neutral-grey cursor-pointer">
+                        Read more
+                      </Link>
                       <div className="text-(--lightgrey-text)">
                         <p>
                           {collab.location} - {fromNowDate({ date: collab.created })}

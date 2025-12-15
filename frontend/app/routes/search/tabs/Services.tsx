@@ -71,7 +71,9 @@ export default function Services({ query }: ServicesProps) {
                 <h4>{service.title}</h4>
                 <p className="text-md text-(--lightgrey-text)">{service.content}</p>
                 <div className="flex justify-between text-xs">
-                  <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
+                  <Link to={`/services/${service.id}`} className="font-bold text-neutral-grey cursor-pointer">
+                    Read more
+                  </Link>
                   <div className="text-(--lightgrey-text)">
                     <p>
                       {service.location} - {fromNowDate({ date: service.created })}
