@@ -109,12 +109,13 @@ export default function Services() {
       {/* Search Input */}
       <div className="sticky top-0 bg-light-grey z-10 pb-4 pt-4">
         <Input
-          variant="onboarding"
+          variant="search"
+          icon="Search"
           placeholder="Search services by title..."
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full text-start"
+          className="w-full"
         />
         {searchQuery && (
           <p className="text-xs text-neutral-grey mt-2">

@@ -54,7 +54,7 @@ const Input = React.forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProp
         return (
           <div className="relative w-full">
             <input
-              ref={ref}
+              ref={ref as React.Ref<HTMLInputElement>}
               className={`relative bg-black/5 p-2.5 pl-9 rounded-lg focus:outline-1 text-sm font-medium ${className}`}
               placeholder={rest.placeholder}
               {...rest}
