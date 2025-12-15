@@ -86,7 +86,11 @@ https://github.com/orgs/eaaa-dob-wu-e25a/projects/14
   - Backend: Ikke endnu
 - Et eksempel på et af jeres GitHub issues, der illustrerer analyse og planlægning af en feature eller user story
 - Et eksempel på et af jeres pull requests, der viser konstruktiv feedback og forbedringer på en feature
-- Et diagram over jeres databasestruktur (ER-diagram eller lignende) (samt en kort beskrivelse af jeres datamodellering og relevante overvejelser (og eventuelle fortrydelser)?)
+
+# Database ⚠️
+Et diagram over jeres databasestruktur (ER-diagram eller lignende) (samt en kort beskrivelse af jeres datamodellering og relevante overvejelser (og eventuelle fortrydelser)?)
+<img width="1303" height="926" alt="Screenshot 2025-12-15 at 13 44 58" src="https://github.com/user-attachments/assets/38af03d0-69aa-4c5a-b5ec-b49a5318105c" />
+
 
 # Login-informationer 🔐 ⚠️
 
