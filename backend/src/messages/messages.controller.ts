@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, BadRequestException } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, BadRequestException, Req } from "@nestjs/common";
 import { MessagesService } from "./messages.service";
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { UpdateMessageDto } from "./dto/update-message.dto";
@@ -8,8 +8,29 @@ export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
   @Post()
-  create(@Body() createMessageDto: CreateMessageDto) {
-    return this.messagesService.create(createMessageDto);
+  async create(
+    @Body() createMessageDto: CreateMessageDto,
+    @Req() req: Request & { user: { id: string } },
+    @Query("threadId") threadId: string
+  ) {
+    if (!threadId) {
+      throw new BadRequestException("threadId query param is required");
+    }
+
+    try {
+      const userId = req.user.id;
+      const data = await this.messagesService.create(createMessageDto, userId, threadId);
+
+      return {
+        success: true,
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 
   @Get()

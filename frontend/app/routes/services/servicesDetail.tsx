@@ -65,8 +65,10 @@ export default function ServicesDetail() {
         <h1>{service.title}</h1>
         <img src={service.media} alt={service.title} className="w-full rounded-2xl" />
         <p>{service.content}</p>
-        <Link to="/chat">
-          <Button variant="primary" text="Start a chat" icon="ChatLines" fullWidth={false} />
+
+        {/* NOTE - The service id is added as a param for future reference if we add group chats or specific collaboration chats. */}
+        <Link to={`/chats/new?serviceId=${service.id}&userId=${service.user.id}`}>
+          <Button variant="primary" text="Start Chat" icon="ChatLines" fullWidth={false} />
         </Link>
         <div>
           <span className="font-bold">Location: </span>

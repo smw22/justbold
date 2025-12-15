@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import Icon from "~/components/icon";
 import AvatarHeader from "~/components/AvatarHeader";
 import Button from "~/components/Button";
@@ -18,18 +18,39 @@ interface MessagesHeaderProps {
 export default function MessagesHeader({ otherUser, threadId, isGroup }: MessagesHeaderProps) {
   const [showContextMenu, setShowContextMenu] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const imageUrl = isGroup ? `/images/group-chat-avatar.png` : otherUser?.profile_image || "/images/user-avatar.png";
 
   const title = isGroup ? `Group ${threadId?.slice(0, 8)}` : otherUser?.name || "Chat";
 
+  const handleBackClick = () => {
+    // Check if we're on /chats/:threadId (but not /chats/groups/:threadId or /chats/new)
+    const isChatDetailRoute =
+      location.pathname.match(/^\/chats\/[^/]+$/) &&
+      !location.pathname.startsWith("/chats/groups") &&
+      !location.pathname.startsWith("/chats/new");
+
+    if (isChatDetailRoute) {
+      navigate("/chats");
+    } else {
+      navigate(-1);
+    }
+  };
+
   return (
     <header className="outer-wrapper bg-header-bg-3!">
       <nav className="flex justify-between items-center px-4 py-6">
-        <button onClick={() => navigate(-1)} aria-label="Go back">
+        <button onClick={handleBackClick} aria-label="Go back">
           <Icon name="NavArrowLeft" color="white" size={20} />
         </button>
-        <AvatarHeader imageUrl={imageUrl} imageSize={60} title={title} color="white" className="font-semibold gap-6" />
+        {otherUser ? (
+          <Link to={`/profile/${otherUser.id}`}>
+            <AvatarHeader imageUrl={imageUrl} imageSize={60} title={title} color="white" className="font-semibold gap-6" />
+          </Link>
+        ) : (
+          <AvatarHeader imageUrl={imageUrl} imageSize={60} title={title} color="white" className="font-semibold gap-6" />
+        )}
         <ul className="flex gap-4">
           <li className="relative">
             <button onClick={() => setShowContextMenu(!showContextMenu)} aria-label="Open context menu">
