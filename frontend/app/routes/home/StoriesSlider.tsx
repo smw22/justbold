@@ -7,8 +7,8 @@ type StoriesSliderProps = {
 
 export default function StoriesSlider({ stories }: StoriesSliderProps) {
   return (
-    <div className="overflow-hidden">
-      <div className="outer-wrapper">
+    <div className="overflow-hidden outer-wrapper">
+      <div>
         <Swiper
           className="pl-4! overflow-visible!"
           spaceBetween={12}

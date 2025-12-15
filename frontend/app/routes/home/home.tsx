@@ -75,8 +75,8 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-4">
       <StoriesSlider stories={stories} />
-      <div className="bg-light-grey py-6 overflow-hidden">
-        <div className="outer-wrapper">
+      <div className="bg-light-grey">
+        <div className="outer-wrapper py-6 overflow-hidden">
           <h2 className="px-4 font-semibold text-lg mb-4">Collaborations requests</h2>
           <Suspense
             fallback={
