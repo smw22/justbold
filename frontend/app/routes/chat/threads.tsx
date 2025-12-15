@@ -2,10 +2,26 @@ import { useLoaderData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Thread } from "~/types/threads";
 import ThreadCard from "./components/ThreadCard";
+import type { MetaFunction } from "react-router";
 import ErrorMessage from "~/components/ErrorMessage";
 
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Threads List | LineUp" },
+    {
+      property: "og:title",
+      content: "Threads List | LineUp",
+    },
+  ];
+};
+
 export async function clientLoader() {
-  const userId = localStorage.getItem("user_id");
+  const userResponse = await apiFetch(`/user`);
+  if (!userResponse.ok) throw new Error(`Failed to load user: ${userResponse.status}`);
+  const userResult = await userResponse.json();
+
+  const userId = userResult.data.id;
+
   let threadsError = null;
 
   if (!userId) {
@@ -26,11 +42,11 @@ export async function clientLoader() {
     // throw new Error(threadResult.message || "Failed to load threads");
   }
 
-  return { threads: threadResult?.data, threadsError };
+  return { threads: threadResult.data, userId, threadsError };
 }
 
 export default function Threads() {
-  const { threads, threadsError } = useLoaderData<typeof clientLoader>();
+  const { threads, userId, threadsError } = useLoaderData<typeof clientLoader>();
 
   return (
     <main className="outer-wrapper pb-28">
@@ -41,7 +57,7 @@ export default function Threads() {
           <p className="text-center py-8 text-gray-500">It looks a little empty here...</p>
         ) : (
           threads.map((thread: Thread) => (
-            <ThreadCard key={thread.id} threadData={thread} messageData={thread.messages[0]} isGroup={false} />
+            <ThreadCard key={thread.id} threadData={thread} messageData={thread.messages[0]} isGroup={false} userId={userId} />
           ))
         )}
       </div>

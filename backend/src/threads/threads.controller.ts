@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, BadRequestException } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, BadRequestException, Req } from "@nestjs/common";
 import { ThreadsService } from "./threads.service";
 import { CreateThreadDto } from "./dto/create-thread.dto";
 import { UpdateThreadDto } from "./dto/update-thread.dto";
@@ -8,8 +8,20 @@ export class ThreadsController {
   constructor(private readonly threadsService: ThreadsService) {}
 
   @Post()
-  create(@Body() createThreadDto: CreateThreadDto) {
-    return this.threadsService.create(createThreadDto);
+  async create(@Body() createThreadDto: CreateThreadDto, @Req() req: Request & { user: { id: string } }) {
+    try {
+      const userId = req.user.id;
+      const data = await this.threadsService.create(createThreadDto, userId);
+      return {
+        success: true,
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 
   @Get()
@@ -54,9 +66,20 @@ export class ThreadsController {
     }
   }
 
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.threadsService.findOne(+id);
+  @Get(":threadId")
+  async findOne(@Param("threadId") threadId: string) {
+    try {
+      const data = await this.threadsService.findOne(threadId);
+      return {
+        success: true,
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 
   @Patch(":id")

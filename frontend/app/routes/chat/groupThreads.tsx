@@ -2,10 +2,26 @@ import { useLoaderData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Thread } from "~/types/threads";
 import ThreadCard from "./components/ThreadCard";
+import type { MetaFunction } from "react-router";
 import ErrorMessage from "~/components/ErrorMessage";
 
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Group Threads List | LineUp" },
+    {
+      property: "og:title",
+      content: "Group Threads List | LineUp",
+    },
+  ];
+};
+
 export async function clientLoader() {
-  const userId = localStorage.getItem("user_id");
+  const userResponse = await apiFetch(`/user`);
+  if (!userResponse.ok) throw new Error(`Failed to load user: ${userResponse.status}`);
+  const userResult = await userResponse.json();
+
+  const userId = userResult.data.id;
+
   let threadsError = null;
 
   if (!userId) {

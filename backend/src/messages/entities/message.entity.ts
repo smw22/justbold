@@ -8,11 +8,11 @@ export class Message {
   id: string;
 
   // the user who sent the message
-  @ManyToOne(() => User, { eager: true })
+  @ManyToOne(() => User, { eager: true, onDelete: "CASCADE", nullable: false })
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @ManyToOne(() => Thread, { eager: true })
+  @ManyToOne(() => Thread, { eager: true, onDelete: "CASCADE", nullable: false })
   @JoinColumn({ name: "thread_id" })
   thread: Thread;
 
