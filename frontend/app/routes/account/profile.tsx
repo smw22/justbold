@@ -138,17 +138,19 @@ export default function Profile() {
       <div className="px-4">
         <Suspense fallback={<div className="flex flex-col gap-4 outer-wrapper">Profile Header</div>}>
           <Await resolve={profile} errorElement={<div>Profile Error</div>}>
-            {(profile) => (
-              <ProfileHeader
-                name={profile.data.name}
-                bio={profile.data.bio}
-                // connection_count={profile.data.connections.length}
-                post_count={user_posts.total_posts}
-                image={profile.data.profile_image}
-                theme={profile.data.theme}
-                currentUsersProfile={profile.data.id === userId}
-              />
-            )}
+            {(profile) => {
+              return (
+                <ProfileHeader
+                  name={profile.data.name}
+                  bio={profile.data.bio}
+                  connection_count={profile.connections}
+                  post_count={user_posts.total_posts}
+                  image={profile.data.profile_image}
+                  theme={profile.data.theme}
+                  currentUsersProfile={profile.data.id === userId}
+                />
+              );
+            }}
           </Await>
         </Suspense>
       </div>
