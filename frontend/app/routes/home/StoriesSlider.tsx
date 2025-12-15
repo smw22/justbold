@@ -16,8 +16,6 @@ export default function StoriesSlider({ stories }: StoriesSliderProps) {
             0: { slidesPerView: 4.5 },
             640: { slidesPerView: 6.5 },
           }}
-          onSlideChange={() => console.log("slide change")}
-          onSwiper={(swiper) => console.log(swiper)}
         >
           {stories.map((story) => (
             <SwiperSlide className="" key={story.id}>
