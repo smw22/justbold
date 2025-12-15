@@ -3,20 +3,23 @@ import Logo from "~/assets/icons/artwork/Logo";
 import Button from "~/components/Button";
 import PricingOption from "~/components/PricingOption";
 import Icon from "~/components/icon";
+import type { FormData } from "../steps";
 
 interface Step5Props {
+  formData: FormData;
+  updateFormData: (updates: Partial<FormData>) => void;
   onSkip: () => void;
 }
 
-export default function Step5({ onSkip }: Step5Props) {
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+export default function Step5({ formData, updateFormData, onSkip }: Step5Props) {
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(formData.subscription || null);
 
-  const features = [
-    "Unlimited collabs",
-    "Unlimited connections",
-    "Advanced insights",
-    "See detailed reviews",
-  ];
+  const features = ["Unlimited collabs", "Unlimited connections", "Advanced insights", "See detailed reviews"];
+
+  const handlePlanSelect = (plan: string) => {
+    setSelectedPlan(plan);
+    updateFormData({ subscription: plan });
+  };
 
   return (
     <div className="m-auto flex flex-col items-center justify-center min-h-full gap-9 w-[273px] pt-14">
@@ -43,7 +46,7 @@ export default function Step5({ onSkip }: Step5Props) {
           price="58 kr."
           period="58 kr. / month"
           isSelected={selectedPlan === "monthly"}
-          onClick={() => setSelectedPlan("monthly")}
+          onClick={() => handlePlanSelect("monthly")}
         />
         <PricingOption
           title="Yearly"
@@ -52,20 +55,15 @@ export default function Step5({ onSkip }: Step5Props) {
           badge="HIT"
           savingsLabel="save 50%"
           isSelected={selectedPlan === "yearly"}
-          onClick={() => setSelectedPlan("yearly")}
+          onClick={() => handlePlanSelect("yearly")}
         />
         <div className="flex flex-col gap-4">
-          <Button
-            text="Start my free 7-day trial"
-            variant="primary"
-            onClick={onSkip}
-            className="w-fit self-center"
-          />{" "}
+          <Button text="Start my free 7-day trial" variant="primary" type="submit" className="w-fit self-center" />{" "}
           <p className="text-sm text-center">Terms of use and Privacy Policy</p>
         </div>
       </div>
 
-      <button onClick={onSkip} className="cursor-pointer underline">
+      <button type="button" onClick={onSkip} className="cursor-pointer underline">
         Skip for now
       </button>
     </div>

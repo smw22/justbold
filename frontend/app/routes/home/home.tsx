@@ -80,13 +80,7 @@ export default function Home() {
           <h2 className="px-4 font-semibold text-lg mb-4">Collaborations requests</h2>
           <Suspense
             fallback={
-              <Swiper
-                className="pl-4! overflow-visible!"
-                spaceBetween={12}
-                slidesPerView={1.25}
-                onSlideChange={() => console.log("slide change")}
-                onSwiper={(swiper) => console.log(swiper)}
-              >
+              <Swiper className="pl-4! overflow-visible!" spaceBetween={12} slidesPerView={1.25}>
                 <SwiperSlide>
                   <CollaborationsSliderCardRedacted />
                 </SwiperSlide>
@@ -101,13 +95,7 @@ export default function Home() {
           >
             <Await resolve={collaborations} errorElement={<ErrorMessage error="Failed to load collaborations." />}>
               {(collaborations) => (
-                <Swiper
-                  className="pl-4! overflow-visible!"
-                  spaceBetween={12}
-                  slidesPerView={1.25}
-                  onSlideChange={() => console.log("slide change")}
-                  onSwiper={(swiper) => console.log(swiper)}
-                >
+                <Swiper className="pl-4! overflow-visible!" spaceBetween={12} slidesPerView={1.25}>
                   {collaborations.data.map((collab: Collaboration) => (
                     <SwiperSlide key={collab.id} className="h-auto!">
                       <CollaborationsSliderCard collab={collab} />

@@ -96,7 +96,12 @@ export default function ProfileHeader({
             <Link to={"/profile/edit"} className="w-full">
               <Button variant="primary-glass" text="Edit profile" fullWidth={true} />
             </Link>
-            <Button variant="primary-glass" text="Share profile" fullWidth={true} />
+            <Button
+              variant="primary-glass"
+              text="Share profile"
+              fullWidth={true}
+              onClick={() => navigator.share({ title: name, text: `Profile for ${name}. ${bio}`, url: `./profile/` })}
+            />
           </>
         ) : (
           <>

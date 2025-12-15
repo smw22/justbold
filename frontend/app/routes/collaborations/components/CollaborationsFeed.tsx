@@ -107,7 +107,11 @@ function CollabCardMeta({ location, created, tags }: { location: string; created
 }
 
 function CollabCardImage({ media, alt }: { media: string; alt: string }) {
-  return <img className="rounded-3xl" src={media} alt={alt} />;
+  return media ? (
+    <img className="rounded-3xl aspect-post md:aspect-video w-full" src={media} alt={alt} />
+  ) : (
+    <div className="rounded-3xl bg-light-grey aspect-post md:aspect-video w-full" />
+  );
 }
 
 function CollabCardContent({ content }: { content: string }) {

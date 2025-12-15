@@ -1,6 +1,7 @@
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import AppWrapper from "./components/AppWrapper";
 import Logo from "./assets/icons/artwork/Logo";
+import type { MetaFunction } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
