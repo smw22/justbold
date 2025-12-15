@@ -141,6 +141,7 @@ export default function Profile() {
             {(profile) => {
               return (
                 <ProfileHeader
+                  userId={profile.data.id}
                   name={profile.data.name}
                   bio={profile.data.bio}
                   connection_count={profile.connections}
