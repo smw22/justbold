@@ -1,10 +1,12 @@
-import { useLoaderData } from "react-router";
-
+import { useLoaderData, Await } from "react-router";
+import { Suspense } from "react";
 import CollaborationsFeed from "./components/CollaborationsFeed";
 import CollaborationsFilter from "./components/CollaborationsFilter";
-import { apiFetch } from "~/lib/apiFetch";
+import CollaborationsCardRedacted from "./components/CollaborationsCardRedacted";
 
 import type { MetaFunction } from "react-router";
+import ErrorMessage from "~/components/ErrorMessage";
+import { getAllCollaborations } from "~/lib/data/collaborationData";
 
 export const meta: MetaFunction = () => {
   return [
@@ -20,25 +22,41 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function clientLoader(): Promise<{}> {
-  const collabResponse = await apiFetch(`/collaborations`);
+export async function clientLoader() {
+  const collaborations = getAllCollaborations();
 
-  if (!collabResponse.ok) {
-    throw new Error(`Failed to fetch collaborations: ${collabResponse.status}`);
-  }
-
-  const collaborations = await collabResponse.json();
-
-  return { collaborations };
+  return {
+    collaborations,
+  };
 }
 
 export default function Collaborations() {
   const { collaborations } = useLoaderData();
 
   return (
-    <div className="flex flex-col gap-4 px-4 outer-wrapper">
-      <CollaborationsFilter />
-      <CollaborationsFeed collaborations={collaborations} />
-    </div>
+    <Suspense
+      fallback={
+        <div className="flex flex-col gap-4 px-4 outer-wrapper">
+          <CollaborationsCardRedacted />
+          <CollaborationsCardRedacted />
+          <CollaborationsCardRedacted />
+        </div>
+      }
+    >
+      <Await
+        resolve={collaborations}
+        errorElement={
+          <div className="flex flex-col gap-4 px-4 outer-wrapper">
+            <ErrorMessage error="Failed to load collaborations." />
+          </div>
+        }
+        children={(collaborations: any) => (
+          <div className="flex flex-col gap-4 px-4 outer-wrapper">
+            <CollaborationsFilter />
+            <CollaborationsFeed collaborations={collaborations} />
+          </div>
+        )}
+      />
+    </Suspense>
   );
 }

@@ -14,6 +14,7 @@ import Icon from "~/components/icon";
 import type { ProfileType } from "~/types/profile";
 import type { ReviewType } from "~/types/review";
 import type { QuestionType } from "~/types/question";
+import ErrorMessage from "~/components/ErrorMessage";
 export default function About({
   profile,
   reviews,
@@ -32,15 +33,6 @@ export default function About({
   const actionData = useActionData();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-
-    let formData = new FormData(e.target);
-    if (!formData.get("question")) {
-      return;
-    }
-  };
 
   return (
     <article className="bg-white p-4 flex flex-col gap-4 rounded-bl-3xl rounded-br-3xl">
@@ -101,7 +93,7 @@ export default function About({
           </div>
         ) : (
           <div className="m-4">
-            <p>No reviews yet.</p>
+            <p>It looks a little empty here...</p>
           </div>
         )}
       </section>
@@ -241,7 +233,7 @@ export default function About({
                 </div>
               ))
           ) : (
-            <p>No questions yet.</p>
+            <p>It looks a little empty here...</p>
           )}
         </div>
       </section>
