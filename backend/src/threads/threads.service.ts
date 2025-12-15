@@ -35,6 +35,9 @@ export class ThreadsService {
       throw new NotFoundException("Other user not found");
     }
 
+    // TOD: Here can be additional logic to check if a thread between these two users already exists
+    // At the moment, two users can have multiple threads between them
+
     // Create thread with both users
     const thread = this.threadsRepository.create({
       users: [currentUser, otherUser],

@@ -69,6 +69,10 @@ export async function clientAction({ params, request }: { params: { threadId: st
   const formData = await request.formData();
   const message = formData.get("message");
 
+  if (!message || typeof message !== "string" || message.trim() === "") {
+    return { success: false, message: "Message cannot be empty" };
+  }
+
   const messageResponse = await apiFetch(`/messages?threadId=${threadId}`, {
     method: "POST",
     headers: {

@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router";
+import { useActionData, useLoaderData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Message } from "~/types/messages";
 import MessagesHeader from "./components/MessagesHeader";
@@ -50,6 +50,10 @@ export async function clientAction({ params, request }: { params: { threadId: st
   const formData = await request.formData();
   const message = formData.get("message");
 
+  if (!message || typeof message !== "string" || message.trim() === "") {
+    return { success: false, message: "Message cannot be empty" };
+  }
+
   const messageResponse = await apiFetch(`/messages?threadId=${threadId}`, {
     method: "POST",
     headers: {
@@ -69,6 +73,8 @@ export async function clientAction({ params, request }: { params: { threadId: st
 
 export default function GroupChatDetail() {
   const { messages, threadId, isGroup, messagesError } = useLoaderData<typeof clientLoader>();
+  const actionData = useActionData<typeof clientAction>();
+
   const firstMessage = messages ? messages[0] : null;
   const dateStr = firstMessage
     ? new Date(firstMessage.created).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })
@@ -83,6 +89,11 @@ export default function GroupChatDetail() {
         </div>
         <div className="flex flex-col space-y-3">
           <ErrorMessage error={messagesError} />
+          {actionData?.success === false && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
+              <strong>Error:</strong> {actionData.message || "Failed to send message"}
+            </div>
+          )}
           {messages?.map((message: Message) => (
             <GroupBubble key={message.id} message={message} />
           ))}

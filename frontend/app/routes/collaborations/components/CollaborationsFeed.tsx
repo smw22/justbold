@@ -87,6 +87,7 @@ function CollabCardActions({ collabId, userId }: { collabId: string; userId: str
         Read more
       </Link>
 
+      {/*NOTE - The collaboration id is added as a param for future reference if we add group chats or specific collaboration chats. */}
       <Link to={`/chats/new?collaborationId=${collabId}&userId=${userId}`}>
         <Button variant="primary" text="Start Chat" icon="ChatBubble" />
       </Link>

@@ -7,6 +7,8 @@ import Icon from "~/components/icon";
 export default function ChatFooter() {
   const [showContextMenu, setShowContextMenu] = useState(false);
 
+  // TODO: trigger data revalidation on message send (to show the new messages in the chat) - also needed on chatDetail and groupChatDetail
+
   return (
     <footer className="outer-wrapper fixed bg-white bottom-0 left-0 right-0 w-full flex items-center justify-center p-6">
       <div className="flex gap-3 w-full max-w-full">

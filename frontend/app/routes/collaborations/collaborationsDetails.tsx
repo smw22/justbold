@@ -84,6 +84,7 @@ function CollabContent({ content }: { content: string }) {
 function CollabChat({ collabId, userId }: { collabId: string; userId: string }) {
   return (
     <div className="mt-auto flex items-center justify-between gap-4">
+      {/* NOTE - The collaboration id is added as a param for future reference if we add group chats or specific collaboration chats. */}
       <Link to={`/chats/new?collaborationId=${collabId}&userId=${userId}`}>
         <Button text="Start Chat" variant="primary" icon="ChatBubble" />
       </Link>
