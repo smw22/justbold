@@ -267,7 +267,10 @@ export default function About({
           )}
           {actionData?.success && (
             <div className="flex flex-row items-center justify-center bg-gray-100 border border-gray-200 rounded-2xl p-2 mx-2">
-              <p className="text-green-500 text-sm mx-4">Question submitted successfully!</p>
+              <p className="text-green-500 text-sm mx-4">
+                Question submitted successfully! The question will appear when it has been answered by{" "}
+                {profile.name.split(" ")[0]}.
+              </p>
             </div>
           )}
         </section>
