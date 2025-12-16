@@ -2,7 +2,7 @@ import StoriesSlider from "./StoriesSlider";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { useLoaderData, useRouteError, Await, Link } from "react-router";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import PostsFeed from "./PostsFeed";
 import type { MetaFunction } from "react-router";
 import ErrorMessage from "~/components/ErrorMessage";
@@ -71,6 +71,8 @@ export async function clientLoader() {
 
 export default function Home() {
   const { collaborations, posts } = useLoaderData();
+  const [atStart, setAtStart] = useState(true);
+  const [atEnd, setAtEnd] = useState(false);
 
   return (
     <div className="flex flex-col gap-4">
@@ -78,33 +80,77 @@ export default function Home() {
       <div className="bg-light-grey">
         <div className="outer-wrapper py-6 overflow-hidden">
           <h2 className="px-4 font-semibold text-lg mb-4">Collaborations requests</h2>
-          <Suspense
-            fallback={
-              <Swiper className="pl-4! overflow-visible!" spaceBetween={12} slidesPerView={1.25}>
-                <SwiperSlide>
-                  <CollaborationsSliderCardRedacted />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CollaborationsSliderCardRedacted />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CollaborationsSliderCardRedacted />
-                </SwiperSlide>
-              </Swiper>
-            }
-          >
-            <Await resolve={collaborations} errorElement={<ErrorMessage error="Failed to load collaborations." />}>
-              {(collaborations) => (
-                <Swiper className="pl-4! overflow-visible!" spaceBetween={12} slidesPerView={1.25}>
-                  {collaborations.data.map((collab: Collaboration) => (
-                    <SwiperSlide key={collab.id} className="h-auto!">
-                      <CollaborationsSliderCard collab={collab} />
-                    </SwiperSlide>
-                  ))}
+          <div className="relative">
+            {!atStart && (
+              <div
+                className="absolute z-1000 left-0 top-0 bottom-0 w-3 bg-linear-to-r from-neutral-grey/10 to-transparent"
+                style={{
+                  WebkitMaskImage: "linear-gradient(to top, transparent 0%, black 20%, black 80%, transparent 100%)",
+                  maskImage: "linear-gradient(to top, transparent 0%, black 20%, black 80%, transparent 100%)",
+                }}
+              ></div>
+            )}
+            {!atEnd && (
+              <div
+                className="absolute z-1000 right-0 top-0 bottom-0 w-3 bg-linear-to-l from-neutral-grey/10 to-transparent"
+                style={{
+                  WebkitMaskImage: "linear-gradient(to top, transparent 0%, black 20%, black 80%, transparent 100%)",
+                  maskImage: "linear-gradient(to top, transparent 0%, black 20%, black 80%, transparent 100%)",
+                }}
+              ></div>
+            )}
+            <Suspense
+              fallback={
+                <Swiper
+                  className="pl-4! pr-4! overflow-visible!"
+                  spaceBetween={12}
+                  slidesPerView={1.25}
+                  onSwiper={(swiper) => {
+                    setAtStart(swiper.isBeginning);
+                    setAtEnd(swiper.isEnd);
+                  }}
+                  onSlideChange={(swiper) => {
+                    setAtStart(swiper.isBeginning);
+                    setAtEnd(swiper.isEnd);
+                  }}
+                >
+                  <SwiperSlide>
+                    <CollaborationsSliderCardRedacted />
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <CollaborationsSliderCardRedacted />
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <CollaborationsSliderCardRedacted />
+                  </SwiperSlide>
                 </Swiper>
-              )}
-            </Await>
-          </Suspense>
+              }
+            >
+              <Await resolve={collaborations} errorElement={<ErrorMessage error="Failed to load collaborations." />}>
+                {(collaborations) => (
+                  <Swiper
+                    className="pl-4! pr-4! overflow-visible!"
+                    spaceBetween={12}
+                    slidesPerView={1.25}
+                    onSwiper={(swiper) => {
+                      setAtStart(swiper.isBeginning);
+                      setAtEnd(swiper.isEnd);
+                    }}
+                    onSlideChange={(swiper) => {
+                      setAtStart(swiper.isBeginning);
+                      setAtEnd(swiper.isEnd);
+                    }}
+                  >
+                    {collaborations.data.map((collab: Collaboration) => (
+                      <SwiperSlide key={collab.id} className="h-auto!">
+                        <CollaborationsSliderCard collab={collab} />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                )}
+              </Await>
+            </Suspense>
+          </div>
 
           <div className="px-4 mt-4 flex itenms-center">
             <Link to="/collaborations" className="">
