@@ -8,6 +8,7 @@ import type { MetaFunction } from "react-router";
 import fromNowDate from "~/lib/fromNowDate";
 import { getCollaboration } from "~/lib/data/collaborationData";
 import { Suspense } from "react";
+import type { Tag } from "~/types/tag";
 
 export const meta: MetaFunction = ({ matches }) => {
   const routeData = matches.find((match: any) => match.id === "routes/collaborations/collaborationsDetails")?.loaderData as any;
@@ -56,7 +57,7 @@ function CollabHeader({
   );
 }
 
-function CollabTags({ tags }: { tags: any[] }) {
+function CollabTags({ tags }: { tags: Tag[] }) {
   return (
     <div className="flex gap-2 flex-wrap">
       {tags.map((tag) => {

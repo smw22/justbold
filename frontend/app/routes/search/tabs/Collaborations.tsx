@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import fromNowDate from "~/lib/fromNowDate";
+import type { Collaboration } from "~/types/collaborations";
 
 interface CollaborationsProps {
   query: string;
@@ -50,13 +51,13 @@ export default function Collaborations({ query }: CollaborationsProps) {
             {query ? "Collaboration requests" : "Recent collaboration requests"}
           </p>
           <div className="flex flex-col gap-3">
-            {results.collaborations.map((collab: any) => (
+            {results.collaborations.map((collab: Collaboration) => (
               <div key={collab.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
                 <Link to={`/profile/${collab.user.id}`} className="flex items-center gap-1.5">
                   <img src={collab.user.profile_image} alt={collab.user.name} className="h-5 w-5 object-cover rounded-full" />
                   <p className="text-xs text-(--lightgrey-text)">
                     <span className="text-neutral-grey">{collab.user.name}</span> looking for
-                    {collab.user.looking_for.map((looking_for: any) => (
+                    {collab.user.looking_for.map((looking_for: string) => (
                       <span key={looking_for}> #{looking_for}</span>
                     ))}
                   </p>

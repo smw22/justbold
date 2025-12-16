@@ -4,6 +4,11 @@ import Button from "~/components/Button";
 import { apiFetch } from "~/lib/apiFetch";
 import fromNowDate from "~/lib/fromNowDate";
 import { Link } from "react-router";
+import type { PostType } from "~/types/post";
+import type { Tag } from "~/types/tag";
+import type { ProfileType } from "~/types/profile";
+import type { Collaboration } from "~/types/collaborations";
+import type { Service } from "~/types/services/servicesProps";
 
 interface ForYouProps {
   query: string;
@@ -104,7 +109,7 @@ export default function ForYou({ query }: ForYouProps) {
         <section className="flex flex-col gap-3">
           <p className="font-medium text-xs text-neutral-grey">{query ? "Users" : "Recently created users"}</p>
           <div className="flex flex-col gap-3">
-            {results.people.map((person: any) => {
+            {results.people.map((person: ProfileType) => {
               const status = connections[person.id];
               const hideButton = status === "accepted";
               const isPending = status === "pending";
@@ -145,13 +150,13 @@ export default function ForYou({ query }: ForYouProps) {
             {query ? "Collaboration requests" : "Recent collaboration requests"}
           </p>
           <div className="flex flex-col gap-3">
-            {results.collaborations.map((collab: any) => (
+            {results.collaborations.map((collab: Collaboration) => (
               <div key={collab.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
                 <Link to={`/profile/${collab.user.id}`} className="flex items-center gap-1.5">
                   <img src={collab.user.profile_image} alt={collab.user.name} className="h-5 w-5 object-cover rounded-full" />
                   <p className="text-xs text-(--lightgrey-text)">
                     <span className="text-neutral-grey">{collab.user.name}</span> looking for
-                    {collab.user.looking_for.map((looking_for: any) => (
+                    {collab.user.looking_for.map((looking_for: string) => (
                       <span key={looking_for}> #{looking_for}</span>
                     ))}
                   </p>
@@ -180,7 +185,7 @@ export default function ForYou({ query }: ForYouProps) {
         <section className="flex flex-col gap-3 max-w-[331px]">
           <p className="font-medium text-xs text-neutral-grey">{query ? "Services" : "Recent services"}</p>
           <div className="flex flex-col gap-3">
-            {results.services.map((service: any) => (
+            {results.services.map((service: Service) => (
               <div key={service.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
                 <div className="flex items-center gap-1.5 w-full justify-between">
                   <Link to={`/profile/${service.user.id}`} className="flex items-center gap-1.5">
@@ -191,7 +196,7 @@ export default function ForYou({ query }: ForYouProps) {
                     />
                     <p className="text-xs text-(--lightgrey-text)">
                       <span className="text-neutral-grey">{service.user.name}</span> looking for
-                      {service.user.looking_for.map((looking_for: any) => (
+                      {service.user.looking_for.map((looking_for: string) => (
                         <span key={looking_for}> #{looking_for}</span>
                       ))}
                     </p>
@@ -221,19 +226,19 @@ export default function ForYou({ query }: ForYouProps) {
         <section className="flex flex-col gap-3 max-w-[331px]">
           <p className="font-medium text-xs text-neutral-grey">{query ? "Posts" : "Recent posts"}</p>
           <div className="flex flex-col gap-3">
-            {results.posts.map((post: any) => (
+            {results.posts.map((post: PostType) => (
               <div key={post.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
                 <Link to={`/profile/${post.user.id}`} className="flex items-center gap-1.5">
                   <img src={post.user.profile_image} alt={post.user.name} className="h-5 w-5 object-cover rounded-full" />
                   <p className="text-xs text-(--lightgrey-text)">
                     <span className="text-neutral-grey">{post.user.name}</span>
-                    {post.tags?.length > 0 && (
+                    {(post.tags as Tag[])?.length > 0 && (
                       <>
                         {" tagged "}
-                        {post.tags.map((tag: any, index: number) => (
+                        {(post.tags as Tag[]).map((tag: Tag, index: number) => (
                           <span key={tag.id}>
                             #{tag.title}
-                            {index < post.tags.length - 1 ? ", " : ""}
+                            {index < (post.tags as Tag[]).length - 1 ? ", " : ""}
                           </span>
                         ))}
                       </>
