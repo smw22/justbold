@@ -73,7 +73,7 @@ Features Eventuelle kendte issues eller manglende features (udfyld her)
 - "Past collaborations" er ikke lavet med dynamisk indhold.
 - På "edit profile"-siden er det i skrivende stund ikke muligt at ændre sit profilbillede.
 
-# Design Valg / Afvigelser ✏️ 🚨
+# Design - Valg / Afvigelser ✏️ 🚨
 
 En liste og kort beskrivelse af eventuelle ekstra features eller innovationer, I har tilføjet ud over kravene
 
