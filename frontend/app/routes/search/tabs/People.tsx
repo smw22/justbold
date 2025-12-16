@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import Button from "~/components/Button";
 import { apiFetch } from "~/lib/apiFetch";
 
@@ -108,7 +109,7 @@ export default function People({ query }: PeopleProps) {
 
               return (
                 <div key={person.id} className="flex items-center gap-1.5 w-full justify-between">
-                  <div className="flex gap-1.5">
+                  <Link to={`/profile/${person.id}`} className="flex gap-1.5">
                     <img
                       src={person.profile_image || "placeholder.jpg"}
                       alt={person.name}
@@ -118,7 +119,7 @@ export default function People({ query }: PeopleProps) {
                       <p className="text-neutral-grey font-medium text-sm">{person.name}</p>
                       <p className="text-(--lightgrey-text) text-xs">{person.location}</p>
                     </div>
-                  </div>
+                  </Link>
                   {!hideButton && (
                     <Button
                       variant="primary"
