@@ -1,14 +1,12 @@
-import Button from "~/components/Button";
-import CommentThread from "./commentThread";
 import Icon from "~/components/icon";
 import { useEffect, useRef, useState } from "react";
-import { Form, Link, useLoaderData, useFetcher, useBlocker } from "react-router";
+import { useLoaderData, useFetcher, useBlocker } from "react-router";
 import Post from "~/components/Post";
 import type { CommentType } from "~/types/comment";
 import { apiFetch } from "~/lib/apiFetch";
 import type { MetaFunction } from "react-router";
-import Comment from "./comment";
 import Input from "~/components/Input";
+import CommentThread from "./components/commentThread";
 
 export const meta: MetaFunction = ({ matches }) => {
   const routeData = matches.find((match: any) => match.id === "routes/post/postDetail")?.loaderData as any;
