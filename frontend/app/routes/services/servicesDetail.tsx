@@ -65,7 +65,9 @@ export default function ServicesDetail() {
       </div>
       <div className="flex flex-col gap-4">
         <h1>{service.title}</h1>
-        <img src={service.media} alt={service.title} className="w-full rounded-2xl" />
+        <div className="w-full h-64 bg-gray-200 rounded-3xl overflow-hidden">
+          {service.media && <img src={service.media} alt={service.title} className="w-full h-full object-cover" />}
+        </div>
         <p>{service.content}</p>
 
         {/* NOTE - The service id is added as a param for future reference if we add group chats or specific collaboration chats. */}

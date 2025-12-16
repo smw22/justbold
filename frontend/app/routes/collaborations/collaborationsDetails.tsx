@@ -99,7 +99,7 @@ function CollabTitle({ title }: { title: string }) {
 function CollabImage({ imageUrl }: { imageUrl: string }) {
   return (
     <div className="w-full h-64 bg-gray-200 rounded-3xl overflow-hidden">
-      <img src={imageUrl} alt="Collaboration" className="w-full h-full object-cover" />
+      {imageUrl && <img src={imageUrl} alt="Collaboration" className="w-full h-full object-cover" />}
     </div>
   );
 }
