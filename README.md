@@ -1,6 +1,7 @@
 # Project 🧭 🚨
 
 Semester Project - Lineup
+[DEPLOYED LØSNING HER](https://lineup-frontend.onrender.com)
 
 # Design 🎨 ⚠️
 
@@ -48,7 +49,7 @@ Features Eventuelle kendte issues eller manglende features (udfyld her)
 
 ### Filter muligheder
 
-- Filter på Services er ikke imeplementeret
+- Filter på Services er ikke implementeret
 - Filter på Collaborations er ikke implemeneteret
 
 ### Menu punkter i burger menu
@@ -63,6 +64,12 @@ Features Eventuelle kendte issues eller manglende features (udfyld her)
 ### Stories
 
 - Visning på homepage er der, men der er ikke noget backend funktionalitet.
+
+### Profil
+
+- "Artists I Like" er ikke lavet med dynamisk indhold. Det har været uklart, om der er tale om kunstnere på LineUp, eller om tanken har været at hente artister gennem f.eks. Spotify API.
+- "Past collaborations" er ikke lavet med dynamisk indhold.
+- På "edit profile"-siden er det i skrivende stund ikke muligt at ændre sit profilbillede.
 
 # Beslutninger ud over designet ✏️ 🚨
 
@@ -79,11 +86,11 @@ https://github.com/orgs/eaaa-dob-wu-e25a/projects/14
 <img width="1907" height="862" alt="kanban-justbold" src="https://github.com/user-attachments/assets/13e63d39-884a-4aa3-bb8b-16f27aa9c853" />
 
 
-# Links 🔗 🚨
+# Links 🔗 ⚠️
 
 - Til den deployede løsning (backend og frontend)
-  - Frontend: Ikke endnu
-  - Backend: Ikke endnu
+  - [Frontend](https://lineup-frontend.onrender.com)
+  - [Backend](https://sem-proj-just-bold.onrender.com)
 - Et eksempel på et af jeres GitHub issues, der illustrerer analyse og planlægning af en feature eller user story
 - Et eksempel på et af jeres pull requests, der viser konstruktiv feedback og forbedringer på en feature
 

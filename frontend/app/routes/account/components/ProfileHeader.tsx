@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import ContextMenu from "~/components/ContextMenu";
 import Button from "~/components/Button";
 import Icon from "~/components/icon";
+import { apiFetch } from "~/lib/apiFetch";
 
 export default function ProfileHeader({
   id,
@@ -13,6 +14,7 @@ export default function ProfileHeader({
   image,
   theme,
   currentUsersProfile,
+  userId,
 }: {
   id: string;
   name: string;
@@ -22,8 +24,64 @@ export default function ProfileHeader({
   image: string;
   theme: string;
   currentUsersProfile: boolean;
+  userId: string;
 }) {
   const [showContextMenu, setShowContextMenu] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<"pending" | "accepted" | null>(null);
+
+  useEffect(() => {
+    if (currentUsersProfile) return;
+
+    const fetchConnectionStatus = async () => {
+      try {
+        const res = await apiFetch("/connections");
+        if (res.ok) {
+          const data = await res.json();
+
+          // Check accepted connections
+          for (const connection of data.accepted ?? []) {
+            const otherId = connection.requester.id === data.me ? connection.addressee.id : connection.requester.id;
+            if (otherId === userId) {
+              setConnectionStatus("accepted");
+              return;
+            }
+          }
+
+          // Check pending connections
+          for (const connection of data.pending ?? []) {
+            const otherId = connection.requester.id === data.me ? connection.addressee.id : connection.requester.id;
+            if (otherId === userId) {
+              setConnectionStatus("pending");
+              return;
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch connection status:", error);
+      }
+    };
+
+    fetchConnectionStatus();
+  }, [currentUsersProfile, userId]);
+
+  const handleConnect = async () => {
+    try {
+      const res = await apiFetch("/connections", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ targetUserId: userId }),
+      });
+      if (res.ok) {
+        setConnectionStatus("pending");
+      }
+    } catch (error) {
+      console.error("Failed to send connection request:", error);
+    }
+  };
+
+  const hideConnectButton = connectionStatus === "accepted";
+  const isPending = connectionStatus === "pending";
+
   return (
     <article className={`p-5 rounded-4xl mb-12 mt-4 bg-${theme} text-white flex flex-col justify-center gap-3 items-center`}>
       <div className="w-full relative flex items-end justify-end -mb-8">
@@ -107,7 +165,16 @@ export default function ProfileHeader({
           </>
         ) : (
           <>
-            <Button variant="primary-glass" text="Connect" icon="AddCircle" fullWidth={true} />
+            {!hideConnectButton && (
+              <Button
+                variant="primary-glass"
+                text={isPending ? "Pending" : "Connect"}
+                icon="AddCircle"
+                fullWidth={true}
+                disabled={isPending}
+                onClick={handleConnect}
+              />
+            )}
             <Link to={`/chats/new?userId=${id}`} className="w-full">
               <Button variant="primary-glass" text="Message" fullWidth={true} />
             </Link>

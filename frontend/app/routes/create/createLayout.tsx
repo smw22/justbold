@@ -1,6 +1,5 @@
 import { Outlet, useLoaderData } from "react-router";
 import { NavLink } from "react-router";
-import AvatarHeader from "../../components/AvatarHeader";
 import { getUser } from "~/lib/data/userData";
 import { getTags } from "~/lib/data/tagsData";
 import { getGenres } from "~/lib/data/genresData";
@@ -47,8 +46,7 @@ export default function Create() {
         </NavLink>
       </div>
       <div className="flex flex-col gap-4">
-        <AvatarHeader imageUrl={user?.profile_image} imageSize={40} title={user?.name} color="black" />
-        <Outlet context={{ tags, genres, skills }} />
+        <Outlet context={{ tags, genres, skills, user }} />
       </div>
     </div>
   );

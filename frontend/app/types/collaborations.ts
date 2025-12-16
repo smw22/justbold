@@ -8,6 +8,11 @@ export type Collaboration = {
     profile_image: string;
     looking_for: string[];
   };
+  users?: Array<{
+    id: string;
+    name: string;
+    profile_image: string;
+  }>;
   title: string;
   content: string;
   media: string;

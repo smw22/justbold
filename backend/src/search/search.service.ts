@@ -135,6 +135,7 @@ export class SearchService {
     const collaborations = await this.collaborationsRepository
       .createQueryBuilder("collaboration")
       .leftJoinAndSelect("collaboration.user", "user")
+      .leftJoinAndSelect("collaboration.users", "users")
       .leftJoinAndSelect("collaboration.tags", "tags")
       .leftJoinAndSelect("collaboration.genres", "genres")
       .where("tags.id IN (:...tagIds)", { tagIds })
@@ -146,6 +147,7 @@ export class SearchService {
     const posts = await this.postsRepository
       .createQueryBuilder("post")
       .leftJoinAndSelect("post.user", "user")
+      .leftJoinAndSelect("post.users", "users")
       .leftJoinAndSelect("post.tags", "tags")
       .where("tags.id IN (:...tagIds)", { tagIds })
       .take(limitPerType)
@@ -162,7 +164,7 @@ export class SearchService {
   private async searchPosts(searchTerm: string, skip: number, limit: number) {
     return this.postsRepository.find({
       where: [{ title: ILike(searchTerm) }],
-      relations: ["user", "tags"],
+      relations: ["user", "tags", "users"],
       take: limit,
       skip,
     });
@@ -181,7 +183,7 @@ export class SearchService {
       this.collaborationsRepository.find({
         order: { created: "DESC" },
         take: limitPerCategory,
-        relations: ["user", "tags", "genres"],
+        relations: ["user", "tags", "genres", "users"],
       }),
       this.servicesRepository.find({
         order: { created: "DESC" },
@@ -191,7 +193,7 @@ export class SearchService {
       this.postsRepository.find({
         order: { created: "DESC" },
         take: limitPerCategory,
-        relations: ["user", "tags"],
+        relations: ["user", "tags", "users"],
       }),
     ]);
 
@@ -220,7 +222,7 @@ export class SearchService {
           collaborations: await this.collaborationsRepository.find({
             order: { created: "DESC" },
             take: limit,
-            relations: ["user", "tags", "genres"],
+            relations: ["user", "tags", "genres", "users"],
           }),
         };
 
@@ -239,11 +241,12 @@ export class SearchService {
           this.collaborationsRepository.find({
             order: { created: "DESC" },
             take: limitPerCategory,
-            relations: ["user", "tags", "genres"],
+            relations: ["user", "tags", "genres", "users"],
           }),
           this.postsRepository
             .createQueryBuilder("post")
             .leftJoinAndSelect("post.user", "user")
+            .leftJoinAndSelect("post.users", "users")
             .leftJoinAndSelect("post.tags", "tags")
             .orderBy("post.created", "DESC")
             .take(limitPerCategory)
