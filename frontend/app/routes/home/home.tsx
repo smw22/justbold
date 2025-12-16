@@ -2,7 +2,7 @@ import StoriesSlider from "./StoriesSlider";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { useLoaderData, useRouteError, Await, Link } from "react-router";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import PostsFeed from "./PostsFeed";
 import type { MetaFunction } from "react-router";
 import ErrorMessage from "~/components/ErrorMessage";
@@ -61,7 +61,7 @@ const stories = [
 
 export async function clientLoader() {
   const collaborations = getAllCollaborations();
-  const posts = getAllPosts();
+  const posts = getAllPosts(1, 10);
 
   return {
     collaborations,
