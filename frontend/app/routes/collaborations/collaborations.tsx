@@ -53,7 +53,7 @@ export default function Collaborations() {
         children={(collaborations: any) => (
           <div className="flex flex-col gap-4 px-4 outer-wrapper">
             <CollaborationsFilter />
-            <CollaborationsFeed collaborations={collaborations} />
+            <CollaborationsFeed collaborations={collaborations.data} />
           </div>
         )}
       />

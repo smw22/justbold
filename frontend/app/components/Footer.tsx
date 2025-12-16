@@ -63,7 +63,7 @@ export default function Footer({ userId }: { userId: string }) {
   return (
     <footer
       ref={footerRef}
-      className="glass-bar max-w-md bg-tab-bar bg-opacity-80 fixed bottom-5 left-1/2 -translate-x-1/2 w-[90%] p-1 text-white rounded-full backdrop-blur-lg backdrop-saturate-150"
+      className="glass-bar max-w-md bg-tab-bar bg-opacity-80 fixed z-2000 bottom-5 left-1/2 -translate-x-1/2 w-[90%] p-1 text-white rounded-full backdrop-blur-lg backdrop-saturate-150"
     >
       <div
         style={{

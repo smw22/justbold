@@ -1,7 +1,8 @@
 import { apiFetch } from "../apiFetch";
 
-export async function getAllPosts() {
-  const getPosts = await apiFetch("/posts").then(async (response) => {
+export async function getAllPosts(page = 1, limit = 10) {
+  const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+  const getPosts = await apiFetch(`/posts?${params.toString()}`).then(async (response) => {
     if (!response.ok) {
       throw new Response("Failed to fetch posts", {
         status: response.status,
