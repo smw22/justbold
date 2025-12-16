@@ -6,8 +6,9 @@ import { Collaboration } from "./entities/collaboration.entity";
 import { Genre } from "../genres/entities/genre.entity";
 import { Tag } from "../tags/entities/tag.entity";
 import { Skill } from "../skills/entities/skill.entity";
+import { User } from "src/users/entities/user.entity";
 @Module({
-  imports: [TypeOrmModule.forFeature([Collaboration, Genre, Tag, Skill])],
+  imports: [TypeOrmModule.forFeature([Collaboration, Genre, Tag, Skill, User])],
   controllers: [CollaborationsController],
   providers: [CollaborationsService],
 })

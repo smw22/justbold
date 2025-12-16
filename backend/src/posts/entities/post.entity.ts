@@ -33,4 +33,8 @@ export class Post {
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   created: Date;
+
+  @ManyToMany(() => User, { eager: true })
+  @JoinTable({ name: "post_users" })
+  users: User[];
 }

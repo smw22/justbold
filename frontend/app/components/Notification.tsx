@@ -5,7 +5,15 @@ import fromNowDate from "~/lib/fromNowDate";
 
 type NotificationVariant = "connection" | "collaboration" | "post_like" | "post_repost" | "post_comment";
 
-export default function Notification({ notification }: { notification: NotificationType }) {
+export default function Notification({
+  notification,
+  onAccept,
+  isAccepted,
+}: {
+  notification: NotificationType;
+  onAccept?: () => void;
+  isAccepted?: boolean;
+}) {
   const mockImg = "https://loremflickr.com/640/480?lock=8937661869850624";
 
   switch (notification.object_type) {
@@ -21,7 +29,14 @@ export default function Notification({ notification }: { notification: Notificat
 
             <p className="text-xs text-gray-500">{fromNowDate({ date: notification.created })}</p>
           </div>
-          <Button text="Accept" variant="secondary-glass" onClick={() => alert("Acceptér connection.")} />
+          {onAccept && (
+            <Button
+              text={isAccepted ? "Connected" : "Accept"}
+              variant="secondary-glass"
+              disabled={isAccepted}
+              onClick={onAccept}
+            />
+          )}
         </div>
       );
     case "collaboration":

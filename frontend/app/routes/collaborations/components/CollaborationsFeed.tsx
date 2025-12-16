@@ -15,6 +15,11 @@ type Collaboration = {
     name: string;
     profile_image: string;
   };
+  users?: Array<{
+    id: string;
+    name: string;
+    profile_image: string;
+  }>;
   title: string;
   content: string;
   tags: string[];
@@ -30,31 +35,50 @@ function CollabCard({ children }: React.PropsWithChildren<{}>) {
 }
 
 function CollabCardHeader({
-  userId,
-  userName,
-  userImage,
+  users,
   role,
 }: {
-  userId: string;
-  userName: string;
-  userImage: string;
+  users: Array<{ id: string; name: string; profile_image: string }>;
   role: string;
 }) {
-  return (
-    <div className="flex flex-col gap-2 border-b border-gray-200 pb-2">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1 flex-wrap">
-          <Link to={`/profile/${userId}`} className="flex items-center gap-2">
-            <img className="size-10 rounded-full" src={userImage} alt={userName} />
-            <span className="">{userName.split(" ")[0]}</span>
-          </Link>
-          <span className="text-gray-400">looking for a</span>
-          <span className="text-gray-400 lowercase">#{role}</span>
-        </div>
+  const formatNames = (names: string[]) => {
+    const firstNames = names.map((name) => name.split(" ")[0]);
+    if (firstNames.length === 0) return "";
+    if (firstNames.length === 1) return firstNames[0];
+    if (firstNames.length === 2) return `${firstNames[0]} and ${firstNames[1]}`;
+    return `${firstNames.slice(0, -1).join(", ")} and ${firstNames[firstNames.length - 1]}`;
+  };
 
-        <button aria-label="Bookmark service" type="button" className="bg-transparent border-none p-0 m-0 cursor-pointer">
-          <Icon name="BookmarkEmpty" size={24}></Icon>
-        </button>
+  const allNames = users.map((u) => u.name);
+
+  return (
+    <div className="flex items-center gap-2 border-b border-gray-200 pb-2 ">
+      <div className={`flex ${users.length > 1 ? "-space-x-2" : ""}`}>
+        {users.slice(0, 4).map((user, i) => (
+          <Link to={`/profile/${user.id}`}>
+            <img
+              key={user.id}
+              src={user.profile_image}
+              alt={user.name}
+              className="relative size-10 object-cover rounded-full ring-2 ring-white"
+              style={{ zIndex: 100 - i }}
+            />
+          </Link>
+        ))}
+        {users.length > 4 && (
+          <div
+            className="relative size-10 rounded-full bg-neutral-200 text-xs flex items-center justify-center ring-2 ring-white"
+            style={{ zIndex: 96 }}
+          >
+            +{users.length - 4}
+          </div>
+        )}
+      </div>
+      <div className="flex gap-1">
+        <span>{formatNames(allNames)}</span>
+        <span className="text-gray-400">
+          looking for a <span className="lowercase">#{role}</span>
+        </span>
       </div>
     </div>
   );
@@ -115,14 +139,11 @@ function CollabCardActions({ collabId, userId }: { collabId: string; userId: str
 }
 
 function CollaborationsCard({ collab }: { collab: Collaboration }) {
+  const extraUsers = (collab.users ?? []).filter((u: any) => u.id !== collab.user.id);
+  const allUsers = [collab.user, ...extraUsers];
   return (
-    <CollabCard>
-      <CollabCardHeader
-        userId={collab.user.id}
-        userName={collab.user.name}
-        userImage={collab.user.profile_image}
-        role={collab.role}
-      />
+    <CollabCard key={collab.id}>
+      <CollabCardHeader users={allUsers} role={collab.role} />
       <CollabCardTitle title={collab.title} />
       <CollabCardMeta location={collab.location} created={collab.created} tags={collab.tags} />
       <CollabCardImage media={collab.media} alt={collab.title} />

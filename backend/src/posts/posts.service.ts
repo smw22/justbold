@@ -8,6 +8,7 @@ import { Post } from "./entities/post.entity";
 import { Tag } from "../tags/entities/tag.entity";
 import { Like } from "../likes/entities/like.entity";
 import { Comment } from "../comments/entities/comment.entity";
+import { User } from "src/users/entities/user.entity";
 
 @Injectable()
 export class PostsService {
@@ -19,16 +20,20 @@ export class PostsService {
     @InjectRepository(Like)
     private readonly likesRepository: Repository<Like>,
     @InjectRepository(Comment)
-    private readonly commentsRepository: Repository<Comment>
+    private readonly commentsRepository: Repository<Comment>,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>
   ) {}
 
   async create(CreatePostDto: CreatePostDto, userId: string) {
     const tags = CreatePostDto.tagIds ? await this.tagsRepository.findByIds(CreatePostDto.tagIds) : [];
+    const users = CreatePostDto.userIds ? await this.usersRepository.findByIds(CreatePostDto.userIds) : [];
 
     const postData = this.postsRepository.create({
       ...CreatePostDto,
       user: { id: userId },
       tags,
+      users,
     });
 
     return this.postsRepository.save(postData);
@@ -118,7 +123,7 @@ export class PostsService {
   async findOne(id: string, userId?: string): Promise<any> {
     const postData = await this.postsRepository.findOne({
       where: { id },
-      relations: ["tags", "user", "comments", "comments.user", "comments.parent"],
+      relations: ["tags", "user", "comments", "comments.user", "comments.parent", "users"],
     });
     if (!postData) {
       throw new HttpException("Post not found", 404);

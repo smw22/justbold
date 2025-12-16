@@ -29,25 +29,49 @@ export async function clientLoader({ params }: { params: { collaborationId: stri
 }
 
 function CollabHeader({
-  userId,
-  userName,
-  userImage,
+  users,
   role,
   created,
 }: {
-  userId: string;
-  userName: string;
-  userImage: string;
+  users: Array<{ id: string; name: string; profile_image: string }>;
   role: string;
   created: Date;
 }) {
+  const formatNames = (names: string[]) => {
+    const firstNames = names.map((n) => n.split(" ")[0]);
+    if (firstNames.length === 0) return "";
+    if (firstNames.length === 1) return firstNames[0];
+    if (firstNames.length === 2) return `${firstNames[0]} and ${firstNames[1]}`;
+    return `${firstNames.slice(0, -1).join(", ")} and ${firstNames[firstNames.length - 1]}`;
+  };
+
+  const allNames = users.map((u) => u.name);
+
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-1 flex-wrap">
-        <Link to={`/profile/${userId}`} className="flex items-center gap-2">
-          <img className="size-10 rounded-full" src={userImage} alt={userName} />
-          <span className="">{userName.split(" ")[0]}</span>
-        </Link>
+      <div className="flex items-center gap-2 flex-wrap">
+        <div className={`flex ${users.length > 1 ? "-space-x-2" : ""}`}>
+          {users.slice(0, 4).map((user, i) => (
+            <Link key={user.id} to={`/profile/${user.id}`}>
+              <img
+                key={user.id}
+                src={user.profile_image}
+                alt={user.name}
+                className="relative size-10 object-cover rounded-full ring-2 ring-white"
+                style={{ zIndex: 100 - i }}
+              />
+            </Link>
+          ))}
+          {users.length > 4 && (
+            <div
+              className="relative size-10 rounded-full bg-neutral-200 text-xs flex items-center justify-center ring-2 ring-white"
+              style={{ zIndex: 96 }}
+            >
+              +{users.length - 4}
+            </div>
+          )}
+        </div>
+        <span>{formatNames(allNames)}</span>
         <span className="text-gray-400">looking for a</span>
         <span className="text-gray-400">#{role}</span>
       </div>
@@ -121,19 +145,15 @@ function CollabSkills({ skills }: { skills: { title: string }[] }) {
 }
 
 export default function CollaborationDetails() {
-  const { collaboration } = useLoaderData();
-
+  const { collaboration } = useLoaderData() as any;
   const collab = collaboration.data;
+
+  const extraUsers = (collab.users ?? []).filter((u: any) => u.id !== collab.user.id);
+  const allUsers = [collab.user, ...extraUsers];
 
   return (
     <div className="px-4 flex flex-col gap-4 outer-wrapper">
-      <CollabHeader
-        userId={collab.user.id}
-        userName={collab.user.name}
-        userImage={collab.user.profile_image}
-        role={collab.role}
-        created={collab.created}
-      />
+      <CollabHeader users={allUsers} role={collab.role} created={collab.created} />
       <CollabTags tags={collab.tags} />
       <CollabTitle title={collab.title} />
       <CollabImage imageUrl={collab.media} />

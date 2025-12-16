@@ -54,4 +54,8 @@ export class Collaboration {
   @ManyToMany(() => Skill, { eager: true })
   @JoinTable({ name: "collaboration_skills" })
   skills: Skill[];
+
+  @ManyToMany(() => User, { eager: true })
+  @JoinTable({ name: "collaboration_users" })
+  users: User[];
 }

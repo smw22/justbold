@@ -6,6 +6,7 @@ import Button from "~/components/Button";
 import EditArray from "~/components/EditArray";
 import ErrorMessage from "~/components/ErrorMessage";
 import ImageUpload from "~/components/ImageUpload";
+import AddPeople from "~/components/AddPeople";
 
 import { useState } from "react";
 export const meta: MetaFunction = () => {
@@ -24,6 +25,7 @@ export async function clientAction({ request }: { request: Request }) {
   const content = formData.get("content") as string;
   const media = formData.get("media") as string | null;
   const tagIds = formData.getAll("tagIds").filter(Boolean) as string[];
+  const userIds = formData.getAll("userIds").filter(Boolean) as string[];
 
   if (!title || !content || !tagIds.length) {
     return { error: "Please fill in all required fields." };
@@ -34,6 +36,7 @@ export async function clientAction({ request }: { request: Request }) {
     content,
     media: media || undefined,
     tagIds,
+    userIds,
   };
 
   try {
@@ -74,6 +77,7 @@ export default function CreatePost() {
   return (
     <div className="flex flex-col gap-4">
       <Form method="post" className="flex flex-col gap-4">
+        <AddPeople />
         <Input type="text" name="title" id="title" placeholder="Title" required />
         <ImageUpload
           onUploadComplete={(url: string) => {

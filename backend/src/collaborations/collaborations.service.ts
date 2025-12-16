@@ -9,6 +9,7 @@ import { Collaboration } from "./entities/collaboration.entity";
 import { Genre } from "../genres/entities/genre.entity";
 import { Tag } from "../tags/entities/tag.entity";
 import { Skill } from "../skills/entities/skill.entity";
+import { User } from "../users/entities/user.entity";
 
 @Injectable()
 export class CollaborationsService {
@@ -20,7 +21,9 @@ export class CollaborationsService {
     @InjectRepository(Tag)
     private readonly tagsRepository: Repository<Tag>,
     @InjectRepository(Skill)
-    private readonly skillsRepository: Repository<Skill>
+    private readonly skillsRepository: Repository<Skill>,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>
   ) {}
 
   async create(createCollaborationDto: CreateCollaborationDto, userId: string): Promise<Collaboration> {
@@ -31,12 +34,15 @@ export class CollaborationsService {
     const skills = createCollaborationDto.skillIds
       ? await this.skillsRepository.findByIds(createCollaborationDto.skillIds)
       : [];
+    const users = createCollaborationDto.userIds ? await this.usersRepository.findByIds(createCollaborationDto.userIds) : [];
+
     const collabData = this.collaborationRepository.create({
       ...createCollaborationDto,
       user: { id: userId },
       genres,
       tags,
       skills,
+      users,
     });
     return await this.collaborationRepository.save(collabData);
   }
@@ -62,6 +68,9 @@ export class CollaborationsService {
     // Add user data
     query.leftJoinAndSelect("collaboration.user", "user");
 
+    // Add users (members) data
+    query.leftJoinAndSelect("collaboration.users", "collaborationUsers");
+
     // Add tags join
     query.leftJoinAndSelect("collaboration.tags", "tag");
 
@@ -86,7 +95,7 @@ export class CollaborationsService {
   async findOne(id: string): Promise<Collaboration> {
     const collabData = await this.collaborationRepository.findOne({
       where: { id },
-      relations: ["user"],
+      relations: ["user", "users"],
     });
     if (!collabData) {
       throw new HttpException("Collaboration not found", 404);

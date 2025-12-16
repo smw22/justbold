@@ -6,6 +6,7 @@ import Input from "~/components/Input";
 import EditArray from "~/components/EditArray";
 import ImageUpload from "~/components/ImageUpload";
 import { apiFetch } from "~/lib/apiFetch";
+import AddPeople from "~/components/AddPeople";
 import ErrorMessage from "~/components/ErrorMessage";
 
 export const meta: MetaFunction = () => {
@@ -29,6 +30,7 @@ export async function clientAction({ request }: { request: Request }) {
   const content = formData.get("content") as string;
   const tagIds = formData.getAll("tagIds").filter(Boolean) as string[];
   const genreIds = formData.getAll("genreIds").filter(Boolean) as string[];
+  const userIds = formData.getAll("userIds").filter(Boolean) as string[];
   const paid = formData.get("paid") === "on" ? true : undefined;
   const location = formData.get("location") as string;
   const skillIds = formData.getAll("skillIds").filter(Boolean) as string[];
@@ -44,6 +46,7 @@ export async function clientAction({ request }: { request: Request }) {
     genreIds,
     tagIds,
     skillIds,
+    userIds,
   };
 
   console.log(CollabData);
@@ -96,6 +99,7 @@ export default function CreateCollaboration() {
   return (
     <div className="flex flex-col gap-4">
       <Form method="post" className="flex flex-col gap-4" encType="multipart/form-data">
+        <AddPeople />
         <Input type="text" name="title" id="title" placeholder="Title *" required />
         <ImageUpload onUploadComplete={setMediaUrl} currentUrl={mediaUrl} />
         <input type="hidden" name="media" value={mediaUrl} />

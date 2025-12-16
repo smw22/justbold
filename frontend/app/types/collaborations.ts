@@ -5,6 +5,11 @@ export type Collaboration = {
     name: string;
     profile_image: string;
   };
+  users?: Array<{
+    id: string;
+    name: string;
+    profile_image: string;
+  }>;
   title: string;
   content: string;
   tags: [
