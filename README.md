@@ -20,7 +20,7 @@ Den primære årsag til at vi har valgt en MySQL database i stedet for Supabase 
 - Database: MySQL (Hosted på Simply)
 - Deployment: Render, frontend som static site og backend som node server
 
-# Features 💡⚠️
+# Features 💡⚠️ (Punkt 4 + 5)
 
 Vi har opdelt arbejdet i store "Milestones" fra vores projektboard, hvor hver milestone repræsenterer en sektion af appen (f.eks. profil, services, samarbejder osv.).
 Hver milestone har haft én ansvarlig udvikler, der har arbejdet på den pågældende sektion og haft ansvaret for, at den fungerer korrekt og indeholder de nødvendige funktionaliteter.
@@ -34,12 +34,6 @@ Skabelon (udfyld for hver milestone):
     - Services-preview (med anmeldelser)
     - Opret services
   - Kort beskrivelse: I denne milestone er både backend og frontend funktionalitet blevet implementeret for at vise alle services med deres detaljer og for at skabe nye services.
-  - Branches:
-    - Services-pages-step-0
-    - Services-pages-step-1
-    - Services-pages-step-2
-    - Services-pages-step-3
-  - Status/notes: _eventuelle kommentarer_
 
 ## Implementeret ✅ 🚨
 
@@ -73,7 +67,7 @@ Features Eventuelle kendte issues eller manglende features (udfyld her)
 - "Past collaborations" er ikke lavet med dynamisk indhold.
 - På "edit profile"-siden er det i skrivende stund ikke muligt at ændre sit profilbillede.
 
-# Design - Valg / Afvigelser ✏️ 🚨
+# Design - Valg / Afvigelser ✏️ 🚨 (Punkt 6 + 7)
 
 En liste og kort beskrivelse af eventuelle ekstra features eller innovationer, I har tilføjet ud over kravene
 
