@@ -175,7 +175,7 @@ export default function ProfileHeader({
                 onClick={handleConnect}
               />
             )}
-            <Link to={`/chats/new?userId=${id}`} className="w-full">
+            <Link to={`/chats/new?userId=${userId}`} className="w-full">
               <Button variant="primary-glass" text="Message" fullWidth={true} />
             </Link>
           </>
