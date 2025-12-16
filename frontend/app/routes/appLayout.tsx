@@ -1,4 +1,4 @@
-import { Outlet, useLoaderData, useRouteError, isRouteErrorResponse } from "react-router";
+import { Outlet, useLoaderData, useRouteError, isRouteErrorResponse, redirect } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { getUser } from "~/lib/data/userData";
@@ -34,6 +34,10 @@ export function ErrorBoundary() {
 
 export async function clientLoader() {
   try {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      return redirect("/onboarding");
+    }
     const user = await getUser();
     return {
       userId: user.data.id,
