@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import fromNowDate from "~/lib/fromNowDate";
 
@@ -67,7 +68,7 @@ export default function Tags({ query }: TagsProps) {
                 const post = item.data;
                 return (
                   <div key={post.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
-                    <div className="flex items-center gap-1.5">
+                    <Link to={`/profile/${post.user.id}`} className="flex items-center gap-1.5">
                       <img src={post.user.profile_image} alt={post.user.name} className="h-5 w-5 object-cover rounded-full" />
                       <p className="text-xs text-(--lightgrey-text)">
                         <span className="text-neutral-grey">{post.user.name}</span>
@@ -83,13 +84,15 @@ export default function Tags({ query }: TagsProps) {
                           </>
                         )}
                       </p>
-                    </div>
+                    </Link>
                     <div className="h-px bg-black/15 mx-9 my-2"></div>
                     <h4>{post.title}</h4>
                     <img src={post.media} alt={post.media} className="rounded-3xl h-[222px] w-[333px] object-cover" />
                     <p className="text-md text-(--lightgrey-text)">{post.content}</p>
                     <div className="flex justify-between text-xs">
-                      <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
+                      <Link to={`/posts/${post.id}`} className="font-bold text-neutral-grey cursor-pointer">
+                        Read more
+                      </Link>
                       <div className="text-(--lightgrey-text)">
                         <p>{fromNowDate({ date: post.created })}</p>
                       </div>
@@ -100,7 +103,7 @@ export default function Tags({ query }: TagsProps) {
                 const collab = item.data;
                 return (
                   <div key={collab.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
-                    <div className="flex items-center gap-1.5">
+                    <Link to={`/profile/${collab.user.id}`} className="flex items-center gap-1.5">
                       <img
                         src={collab.user.profile_image}
                         alt={collab.user.name}
@@ -112,13 +115,15 @@ export default function Tags({ query }: TagsProps) {
                           <span key={looking_for}> #{looking_for}</span>
                         ))}
                       </p>
-                    </div>
+                    </Link>
                     <div className="h-px bg-black/15 mx-9 my-2"></div>
                     <h4>{collab.title}</h4>
                     <img src={collab.media} alt={collab.title} className="rounded-3xl h-[222px] w-[333px] object-cover" />
                     <p className="text-md text-(--lightgrey-text)">{collab.content}</p>
                     <div className="flex justify-between text-xs">
-                      <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
+                      <Link to={`/collaborations/${collab.id}`} className="font-bold text-neutral-grey cursor-pointer">
+                        Read more
+                      </Link>
                       <div className="text-(--lightgrey-text)">
                         <p>
                           {collab.location} - {fromNowDate({ date: collab.created })}

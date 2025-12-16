@@ -29,11 +29,13 @@ export async function clientLoader({ params }: { params: { collaborationId: stri
 }
 
 function CollabHeader({
+  userId,
   userName,
   userImage,
   role,
   created,
 }: {
+  userId: string;
   userName: string;
   userImage: string;
   role: string;
@@ -42,10 +44,10 @@ function CollabHeader({
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-1 flex-wrap">
-        <div className="flex items-center gap-1">
+        <Link to={`/profile/${userId}`} className="flex items-center gap-2">
           <img className="size-10 rounded-full" src={userImage} alt={userName} />
           <span className="">{userName.split(" ")[0]}</span>
-        </div>
+        </Link>
         <span className="text-gray-400">looking for a</span>
         <span className="text-gray-400">#{role}</span>
       </div>
@@ -126,6 +128,7 @@ export default function CollaborationDetails() {
   return (
     <div className="px-4 flex flex-col gap-4 outer-wrapper">
       <CollabHeader
+        userId={collab.user.id}
         userName={collab.user.name}
         userImage={collab.user.profile_image}
         role={collab.role}
