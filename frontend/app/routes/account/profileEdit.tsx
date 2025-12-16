@@ -214,7 +214,7 @@ export default function ProfileEdit() {
               defaultValue={profile.data.about}
             />
           </div>
-          <div className="p-4 flex gap-4">
+          <div className="p-4 flex gap-4 flex-col sm:flex-row">
             <p className="py-2 w-20 min-w-20">What I am looking for</p>
             <EditArray
               array={userLookingFor}
@@ -224,7 +224,7 @@ export default function ProfileEdit() {
             />
             <input value={userLookingFor.toString()} name="looking_for" type="hidden" />
           </div>
-          <div className="p-4 flex gap-4">
+          <div className="p-4 flex gap-4 flex-col md:flex-row">
             <p className="py-2 w-20 min-w-20">Genres</p>
             <EditArray
               array={userGenres}
@@ -235,7 +235,7 @@ export default function ProfileEdit() {
             />
             <input value={userGenres.toString()} name="genres" type="hidden" />
           </div>
-          <div className="p-4 flex gap-4">
+          <div className="p-4 flex gap-4 flex-col md:flex-row">
             <p className="py-2 w-20 min-w-20">Theme</p>
             <div className="flex items-center gap-2">
               <div className="flex flex-col items-center justify-center gap-2">
@@ -326,7 +326,7 @@ export default function ProfileEdit() {
           </div>
         </section>
         <section className="m-4 bg-white rounded-3xl border border-gray-200 text-sm">
-          <div className="p-4 flex gap-4">
+          <div className="p-4 flex gap-4 flex-col md:flex-row">
             <p className="py-2 w-20 min-w-20">Social media</p>
             <div className="flex flex-row flex-wrap gap-4 my-3 items-center">
               <p className="text-xs text-neutral-500">Leave a field empty to hide from your profile.</p>
@@ -384,7 +384,7 @@ export default function ProfileEdit() {
           </div>
         </section>
         <section className="m-4 bg-white rounded-3xl border border-gray-200 text-sm">
-          <div className="p-4 flex gap-4">
+          <div className="p-4 flex gap-4 flex-col md:flex-row">
             <p className="py-2 w-20 min-w-20">My music</p>
             {/* <iframe
             data-testid="embed-iframe"
@@ -409,7 +409,7 @@ export default function ProfileEdit() {
           </div>
         </section>
         <section className="m-4 bg-white rounded-3xl border border-gray-200 text-sm">
-          <div className="p-4 flex gap-4">
+          <div className="p-4 flex gap-4 flex-col md:flex-row">
             <p className="py-2 w-20 min-w-20">Videos</p>
             <div className="gap-2 flex flex-col my-3 w-full">
               <p className="text-xs text-neutral-500">Add YouTube links to display videos on your profile.</p>
