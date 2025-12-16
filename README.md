@@ -65,6 +65,12 @@ Features Eventuelle kendte issues eller manglende features (udfyld her)
 
 - Visning på homepage er der, men der er ikke noget backend funktionalitet.
 
+### Profil
+
+- "Artists I Like" er ikke lavet med dynamisk indhold. Det har været uklart, om der er tale om kunstnere på LineUp, eller om tanken har været at hente artister gennem f.eks. Spotify API.
+- "Past collaborations" er ikke lavet med dynamisk indhold.
+- På "edit profile"-siden er det i skrivende stund ikke muligt at ændre sit profilbillede.
+
 # Beslutninger ud over designet ✏️ 🚨
 
 En liste og kort beskrivelse af eventuelle ekstra features eller innovationer, I har tilføjet ud over kravene
@@ -80,7 +86,7 @@ https://github.com/orgs/eaaa-dob-wu-e25a/projects/14
 <img width="1907" height="862" alt="kanban-justbold" src="https://github.com/user-attachments/assets/13e63d39-884a-4aa3-bb8b-16f27aa9c853" />
 
 
-# Links 🔗 🚨
+# Links 🔗 ⚠️
 
 - Til den deployede løsning (backend og frontend)
   - [Frontend](https://lineup-frontend.onrender.com)
