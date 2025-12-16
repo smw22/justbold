@@ -5,6 +5,7 @@ import Button from "~/components/Button";
 import Icon from "~/components/icon";
 
 export default function ProfileHeader({
+  id,
   name,
   bio,
   connection_count,
@@ -13,6 +14,7 @@ export default function ProfileHeader({
   theme,
   currentUsersProfile,
 }: {
+  id: string;
   name: string;
   bio: string;
   connection_count: number;
@@ -106,7 +108,9 @@ export default function ProfileHeader({
         ) : (
           <>
             <Button variant="primary-glass" text="Connect" icon="AddCircle" fullWidth={true} />
-            <Button variant="primary-glass" text="Message" fullWidth={true} />
+            <Link to={`/chats/new?userId=${id}`} className="w-full">
+              <Button variant="primary-glass" text="Message" fullWidth={true} />
+            </Link>
           </>
         )}
       </section>
