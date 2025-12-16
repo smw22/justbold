@@ -19,16 +19,18 @@ export default function CollaborationsSliderCard({ collab }: { collab: Collabora
   return (
     <div className="bg-white rounded-xl overflow-hidden flex flex-col gap-1 p-4 h-full">
       <div className="flex items-center gap-1 border-b border-gray-200 pb-4 mb-4">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <div className={`flex ${allUsers.length > 1 ? "-space-x-2" : ""}`}>
             {allUsers.slice(0, 3).map((user, i) => (
-              <img
-                key={user.id}
-                className="relative size-8 rounded-full ring-2 ring-white"
-                src={user.profile_image}
-                alt={user.name}
-                style={{ zIndex: 100 - i }}
-              />
+              <Link to={`/profile/${collab.user.id}`}>
+                <img
+                  key={user.id}
+                  className="relative size-8 rounded-full ring-2 ring-white"
+                  src={user.profile_image}
+                  alt={user.name}
+                  style={{ zIndex: 100 - i }}
+                />
+              </Link>
             ))}
             {allUsers.length > 3 && (
               <div

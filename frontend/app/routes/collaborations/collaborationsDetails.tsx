@@ -49,16 +49,18 @@ function CollabHeader({
 
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-1 flex-wrap">
+      <div className="flex items-center gap-2 flex-wrap">
         <div className={`flex ${users.length > 1 ? "-space-x-2" : ""}`}>
           {users.slice(0, 4).map((user, i) => (
-            <img
-              key={user.id}
-              src={user.profile_image}
-              alt={user.name}
-              className="relative size-10 object-cover rounded-full ring-2 ring-white"
-              style={{ zIndex: 100 - i }}
-            />
+            <Link key={user.id} to={`/profile/${user.id}`}>
+              <img
+                key={user.id}
+                src={user.profile_image}
+                alt={user.name}
+                className="relative size-10 object-cover rounded-full ring-2 ring-white"
+                style={{ zIndex: 100 - i }}
+              />
+            </Link>
           ))}
           {users.length > 4 && (
             <div
@@ -151,11 +153,7 @@ export default function CollaborationDetails() {
 
   return (
     <div className="px-4 flex flex-col gap-4 outer-wrapper">
-      <CollabHeader
-        users={allUsers}
-        role={collab.role}
-        created={collab.created}
-      />
+      <CollabHeader users={allUsers} role={collab.role} created={collab.created} />
       <CollabTags tags={collab.tags} />
       <CollabTitle title={collab.title} />
       <CollabImage imageUrl={collab.media} />

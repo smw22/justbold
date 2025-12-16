@@ -6,6 +6,7 @@ import Icon from "~/components/icon";
 import { apiFetch } from "~/lib/apiFetch";
 
 export default function ProfileHeader({
+  id,
   name,
   bio,
   connection_count,
@@ -15,6 +16,7 @@ export default function ProfileHeader({
   currentUsersProfile,
   userId,
 }: {
+  id: string;
   name: string;
   bio: string;
   connection_count: number;
@@ -173,7 +175,9 @@ export default function ProfileHeader({
                 onClick={handleConnect}
               />
             )}
-            <Button variant="primary-glass" text="Message" fullWidth={true} />
+            <Link to={`/chats/new?userId=${id}`} className="w-full">
+              <Button variant="primary-glass" text="Message" fullWidth={true} />
+            </Link>
           </>
         )}
       </section>

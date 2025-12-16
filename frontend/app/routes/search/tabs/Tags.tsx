@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import fromNowDate from "~/lib/fromNowDate";
 
@@ -83,13 +84,15 @@ export default function Tags({ query }: TagsProps) {
                       {/* Stacked avatars */}
                       <div className={`flex ${allDisplayUsers.length > 1 ? "-space-x-1 mr-2" : "min-w-5"}`}>
                         {allDisplayUsers.slice(0, 4).map((user: any, i: number) => (
-                          <img
-                            key={user.id}
-                            src={user.profile_image}
-                            alt={user.name}
-                            className="relative h-5 w-5 object-cover rounded-full ring-1 ring-white"
-                            style={{ zIndex: 100 - i }}
-                          />
+                          <Link to={`/profile/${post.user.id}`}>
+                            <img
+                              key={user.id}
+                              src={user.profile_image}
+                              alt={user.name}
+                              className="relative h-5 w-5 object-cover rounded-full ring-1 ring-white"
+                              style={{ zIndex: 100 - i }}
+                            />
+                          </Link>
                         ))}
                         {allDisplayUsers.length > 4 && (
                           <div
@@ -120,7 +123,9 @@ export default function Tags({ query }: TagsProps) {
                     <img src={post.media} alt={post.media} className="rounded-3xl h-[222px] w-[333px] object-cover" />
                     <p className="text-md text-(--lightgrey-text)">{post.content}</p>
                     <div className="flex justify-between text-xs">
-                      <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
+                      <Link to={`/posts/${post.id}`} className="font-bold text-neutral-grey cursor-pointer">
+                        Read more
+                      </Link>
                       <div className="text-(--lightgrey-text)">
                         <p>{fromNowDate({ date: post.created })}</p>
                       </div>
@@ -139,13 +144,15 @@ export default function Tags({ query }: TagsProps) {
                       {/* Stacked avatars */}
                       <div className={`flex ${allDisplayUsers.length > 1 ? "-space-x-1 mr-1" : "min-w-5"}`}>
                         {allDisplayUsers.slice(0, 4).map((user: any, i: number) => (
-                          <img
-                            key={user.id}
-                            src={user.profile_image}
-                            alt={user.name}
-                            className="relative h-5 w-5 object-cover rounded-full ring-1 ring-white"
-                            style={{ zIndex: 100 - i }}
-                          />
+                          <Link to={`/profile/${collab.user.id}`}>
+                            <img
+                              key={user.id}
+                              src={user.profile_image}
+                              alt={user.name}
+                              className="relative h-5 w-5 object-cover rounded-full ring-1 ring-white"
+                              style={{ zIndex: 100 - i }}
+                            />
+                          </Link>
                         ))}
                         {allDisplayUsers.length > 4 && (
                           <div
@@ -175,7 +182,9 @@ export default function Tags({ query }: TagsProps) {
                     )}
                     <p className="text-md text-(--lightgrey-text)">{collab.content}</p>
                     <div className="flex justify-between text-xs">
-                      <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
+                      <Link to={`/collaborations/${collab.id}`} className="font-bold text-neutral-grey cursor-pointer">
+                        Read more
+                      </Link>
                       <div className="text-(--lightgrey-text)">
                         <p>
                           {collab.location} - {fromNowDate({ date: collab.created })}

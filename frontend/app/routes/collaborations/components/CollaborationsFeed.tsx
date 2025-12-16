@@ -55,16 +55,18 @@ function CollabCardHeader({
   const allNames = users.map((u) => u.name);
 
   return (
-    <div className="flex items-center gap-1 border-b border-gray-200 pb-4">
+    <div className="flex items-center gap-2 border-b border-gray-200 pb-2 ">
       <div className={`flex ${users.length > 1 ? "-space-x-2" : ""}`}>
         {users.slice(0, 4).map((user, i) => (
-          <img
-            key={user.id}
-            src={user.profile_image}
-            alt={user.name}
-            className="relative size-10 object-cover rounded-full ring-2 ring-white"
-            style={{ zIndex: 100 - i }}
-          />
+          <Link to={`/profile/${user.id}`}>
+            <img
+              key={user.id}
+              src={user.profile_image}
+              alt={user.name}
+              className="relative size-10 object-cover rounded-full ring-2 ring-white"
+              style={{ zIndex: 100 - i }}
+            />
+          </Link>
         ))}
         {users.length > 4 && (
           <div

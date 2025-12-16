@@ -1,6 +1,7 @@
 # Project 🧭 🚨
 
 Semester Project - Lineup
+[DEPLOYED LØSNING HER](https://lineup-frontend.onrender.com)
 
 # Design 🎨 ⚠️
 
@@ -48,7 +49,7 @@ Features Eventuelle kendte issues eller manglende features (udfyld her)
 
 ### Filter muligheder
 
-- Filter på Services er ikke imeplementeret
+- Filter på Services er ikke implementeret
 - Filter på Collaborations er ikke implemeneteret
 
 ### Menu punkter i burger menu
@@ -82,11 +83,15 @@ https://github.com/orgs/eaaa-dob-wu-e25a/projects/14
 # Links 🔗 🚨
 
 - Til den deployede løsning (backend og frontend)
-  - Frontend: Ikke endnu
-  - Backend: Ikke endnu
+  - [Frontend](https://lineup-frontend.onrender.com)
+  - [Backend](https://sem-proj-just-bold.onrender.com)
 - Et eksempel på et af jeres GitHub issues, der illustrerer analyse og planlægning af en feature eller user story
 - Et eksempel på et af jeres pull requests, der viser konstruktiv feedback og forbedringer på en feature
-- Et diagram over jeres databasestruktur (ER-diagram eller lignende) (samt en kort beskrivelse af jeres datamodellering og relevante overvejelser (og eventuelle fortrydelser)?)
+
+# Database ⚠️
+Et diagram over jeres databasestruktur (ER-diagram eller lignende) (samt en kort beskrivelse af jeres datamodellering og relevante overvejelser (og eventuelle fortrydelser)?)
+<img width="1303" height="926" alt="Screenshot 2025-12-15 at 13 44 58" src="https://github.com/user-attachments/assets/38af03d0-69aa-4c5a-b5ec-b49a5318105c" />
+
 
 # Login-informationer 🔐 ⚠️
 

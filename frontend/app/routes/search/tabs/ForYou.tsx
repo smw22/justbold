@@ -3,6 +3,7 @@ import Icon from "~/components/icon";
 import Button from "~/components/Button";
 import { apiFetch } from "~/lib/apiFetch";
 import fromNowDate from "~/lib/fromNowDate";
+import { Link } from "react-router";
 
 interface ForYouProps {
   query: string;
@@ -118,7 +119,7 @@ export default function ForYou({ query }: ForYouProps) {
 
               return (
                 <div key={person.id} className="flex items-center gap-1.5 w-full justify-between">
-                  <div className="flex gap-1.5">
+                  <Link to={`/profile/${person.id}`} className="flex gap-1.5">
                     <img
                       src={person.profile_image || "placeholder.jpg"}
                       alt={person.name}
@@ -128,7 +129,7 @@ export default function ForYou({ query }: ForYouProps) {
                       <p className="text-neutral-grey font-medium text-sm">{person.name}</p>
                       <p className="text-(--lightgrey-text) text-xs">{person.location}</p>
                     </div>
-                  </div>
+                  </Link>
                   {!hideButton && (
                     <Button
                       variant="primary"
@@ -164,13 +165,15 @@ export default function ForYou({ query }: ForYouProps) {
                     {/* Stacked avatars */}
                     <div className={`flex ${allDisplayUsers.length > 1 ? "-space-x-1 mr-1" : "min-w-5"}`}>
                       {allDisplayUsers.slice(0, 4).map((user: any, i: number) => (
-                        <img
-                          key={user.id}
-                          src={user.profile_image}
-                          alt={user.name}
-                          className="relative h-5 w-5 object-cover rounded-full ring-1 ring-white"
-                          style={{ zIndex: 100 - i }}
-                        />
+                        <Link to={`/profile/${collab.user.id}`}>
+                          <img
+                            key={user.id}
+                            src={user.profile_image}
+                            alt={user.name}
+                            className="relative h-5 w-5 object-cover rounded-full ring-1 ring-white"
+                            style={{ zIndex: 100 - i }}
+                          />
+                        </Link>
                       ))}
                       {allDisplayUsers.length > 4 && (
                         <div
@@ -200,7 +203,9 @@ export default function ForYou({ query }: ForYouProps) {
                   )}
                   <p className="text-md text-(--lightgrey-text)">{collab.content}</p>
                   <div className="flex justify-between text-xs">
-                    <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
+                    <Link to={`/collaborations/${collab.id}`} className="font-bold text-neutral-grey cursor-pointer">
+                      Read more
+                    </Link>
                     <div className="text-(--lightgrey-text)">
                       <p>
                         {collab.location} - {fromNowDate({ date: collab.created })}
@@ -221,7 +226,7 @@ export default function ForYou({ query }: ForYouProps) {
             {results.services.map((service: any) => (
               <div key={service.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
                 <div className="flex items-center gap-1.5 w-full justify-between">
-                  <div className="flex items-center gap-1.5">
+                  <Link to={`/profile/${service.user.id}`} className="flex items-center gap-1.5">
                     <img
                       src={service.user.profile_image}
                       alt={service.user.name}
@@ -233,14 +238,16 @@ export default function ForYou({ query }: ForYouProps) {
                         <span key={looking_for}> #{looking_for}</span>
                       ))}
                     </p>
-                  </div>
+                  </Link>
                   <Icon name="HomeSale" size={24} className="min-h-6 min-w-6" />
                 </div>
                 <div className="h-px bg-black/15 mx-9 my-2"></div>
                 <h4>{service.title}</h4>
                 <p className="text-md text-(--lightgrey-text)">{service.content}</p>
                 <div className="flex justify-between text-xs">
-                  <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
+                  <Link to={`/services/${service.id}`} className="font-bold text-neutral-grey cursor-pointer">
+                    Read more
+                  </Link>
                   <div className="text-(--lightgrey-text)">
                     <p>
                       {service.location} - {fromNowDate({ date: service.created })}
@@ -269,13 +276,15 @@ export default function ForYou({ query }: ForYouProps) {
                     {/* Stacked avatars */}
                     <div className={`flex ${allDisplayUsers.length > 1 ? "-space-x-1 mr-2" : "min-w-5"}`}>
                       {allDisplayUsers.slice(0, 4).map((user: any, i: number) => (
-                        <img
-                          key={user.id}
-                          src={user.profile_image}
-                          alt={user.name}
-                          className="relative h-5 w-5 object-cover rounded-full ring-1 ring-white"
-                          style={{ zIndex: 100 - i }}
-                        />
+                        <Link to={`/profile/${post.user.id}`}>
+                          <img
+                            key={user.id}
+                            src={user.profile_image}
+                            alt={user.name}
+                            className="relative h-5 w-5 object-cover rounded-full ring-1 ring-white"
+                            style={{ zIndex: 100 - i }}
+                          />
+                        </Link>
                       ))}
                       {allDisplayUsers.length > 4 && (
                         <div
@@ -306,7 +315,9 @@ export default function ForYou({ query }: ForYouProps) {
                   <img src={post.media} alt={post.media} className="rounded-3xl h-[222px] w-[333px] object-cover" />
                   <p className="text-md text-(--lightgrey-text)">{post.content}</p>
                   <div className="flex justify-between text-xs">
-                    <button className="font-bold text-neutral-grey cursor-pointer">Read more</button>
+                    <Link to={`/posts/${post.id}`} className="font-bold text-neutral-grey cursor-pointer">
+                      Read more
+                    </Link>
                     <div className="text-(--lightgrey-text)">
                       <p>{fromNowDate({ date: post.created })}</p>
                     </div>

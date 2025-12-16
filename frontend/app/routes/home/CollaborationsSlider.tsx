@@ -10,6 +10,7 @@ import CollaborationsSliderCardRedacted from "./components/CollaborationsSliderC
 type Collaboration = {
   id: string;
   user: {
+    id: string;
     name: string;
     profile_image: string;
   };
@@ -43,10 +44,10 @@ export default function CollaborationsSlider({ collaborations }: { collaboration
         <SwiperSlide key={collab.id}>
           <div className="bg-white rounded-xl overflow-hidden flex flex-col gap-1 p-4 h-full">
             <div className="flex items-center gap-1 border-b border-gray-200 pb-4 mb-4">
-              <div className="flex items-center gap-1">
+              <Link to={`/profile/${collab.user.id}`}>
                 <img className="size-8 rounded-full" src={collab.user.profile_image} alt={collab.user.name} />
                 <span className="text-xs">{collab.user.name.split(" ")[0]}</span>
-              </div>
+              </Link>
               <span className="text-xs text-gray-400">looking for a</span>
               {collab.tags && collab.tags.length > 0 && <span className="text-xs text-gray-400">#{collab.role}</span>}
             </div>
