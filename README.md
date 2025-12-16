@@ -11,14 +11,16 @@ Link til: [Figma](https://www.figma.com/design/aX1bEPNGfhzCUKHQFK9nTf/LineUp---W
 
 # Teknologier / Dev Stack 🛠️ ⚠️
 
-Arkitektur: Monorepo med backend og frontend som separate apps. Backend kører NestJS i modulær opbygning (controllers/services/guards), eksponerer REST endpoints og bruger JWT-baseret auth. Frontend kører Vite/React med React Router til klientrouting, og henter data direkte mod API'et via fetch/HTTP-klient. Ingen deployment endnu; lokal udvikling kører separat for klient og server.
+Vi har valgt at bruge React Router i framework mode, som er valgt mest fordi vi ikke har prøvet så mange andre React frameworks dermed valgt at blive i vores comfort zone. For at prøve lidt noget nyt, uden at gå alt for langt væk fra Express, så kastede vi os ud i at bruge NestJS i backend, hvilket har hjulpet os lidt til at holde en mere fastlåst struktur fordi at Nest er forholdvist opinionated.
 
-- Backend: NestJS (TypeScript) i moduler med controllers/services/DTO'er, REST endpoints og JWT auth.
-- Frontend: React + Vite (TypeScript) med React Router til routing og datafetch mod API'et.
-- Database: MySQL kører separat instans; vi seeder testdata fra seed-scripts for lokal udvikling/test.
-- Infrastruktur/hosting: Ikke endnu (opdateres når deployment er klar).
+Den primære årsag til at vi har valgt en MySQL database i stedet for Supabase er for at undgå de gratis limitations som Supabase har.
 
-# Features 💡⚠️
+- Backend: NestJS (TypeScript)
+- Frontend: React Router (Typescript) i Framework SPA mode.
+- Database: MySQL (Hosted på Simply)
+- Deployment: Render, frontend som static site og backend som node server
+
+# Features 💡⚠️ (Punkt 4 + 5)
 
 Vi har opdelt arbejdet i store "Milestones" fra vores projektboard, hvor hver milestone repræsenterer en sektion af appen (f.eks. profil, services, samarbejder osv.).
 Hver milestone har haft én ansvarlig udvikler, der har arbejdet på den pågældende sektion og haft ansvaret for, at den fungerer korrekt og indeholder de nødvendige funktionaliteter.
@@ -32,12 +34,6 @@ Skabelon (udfyld for hver milestone):
     - Services-preview (med anmeldelser)
     - Opret services
   - Kort beskrivelse: I denne milestone er både backend og frontend funktionalitet blevet implementeret for at vise alle services med deres detaljer og for at skabe nye services.
-  - Branches:
-    - Services-pages-step-0
-    - Services-pages-step-1
-    - Services-pages-step-2
-    - Services-pages-step-3
-  - Status/notes: _eventuelle kommentarer_
 
 ## Implementeret ✅ 🚨
 
@@ -71,7 +67,7 @@ Features Eventuelle kendte issues eller manglende features (udfyld her)
 - "Past collaborations" er ikke lavet med dynamisk indhold.
 - På "edit profile"-siden er det i skrivende stund ikke muligt at ændre sit profilbillede.
 
-# Beslutninger ud over designet ✏️ 🚨
+# Design - Valg / Afvigelser ✏️ 🚨 (Punkt 6 + 7)
 
 En liste og kort beskrivelse af eventuelle ekstra features eller innovationer, I har tilføjet ud over kravene
 
@@ -85,25 +81,40 @@ Fungerende links til:
 https://github.com/orgs/eaaa-dob-wu-e25a/projects/14
 <img width="1907" height="862" alt="kanban-justbold" src="https://github.com/user-attachments/assets/13e63d39-884a-4aa3-bb8b-16f27aa9c853" />
 
-
 # Links 🔗 ⚠️
 
-- Til den deployede løsning (backend og frontend)
-  - [Frontend](https://lineup-frontend.onrender.com)
-  - [Backend](https://sem-proj-just-bold.onrender.com)
-- Et eksempel på et af jeres GitHub issues, der illustrerer analyse og planlægning af en feature eller user story
-- Et eksempel på et af jeres pull requests, der viser konstruktiv feedback og forbedringer på en feature
+- [Frontend](https://lineup-frontend.onrender.com) (https://lineup-frontend.onrender.com)
+- [Backend](https://sem-proj-just-bold.onrender.com) (https://sem-proj-just-bold.onrender.com)
+
+- [Issue](https://github.com/orgs/eaaa-dob-wu-e25a/projects/14/views/1?filterQuery=profile&pane=issue&itemId=139948823&issue=eaaa-dob-wu-e25a%7Csem-proj-just-bold%7C16) (Page: Profile)
+  - Denne issue er fint indelt i flere sub issues, for at give et umiddelbart godt overblik over de features som opgaven infholder)
+  - Det skal dog siges at vi primært har brugt issues til projektstyring, og ikke oprettet branches eller pull requests direkte fra et issue.
+
+- [Pull Request](https://github.com/eaaa-dob-wu-e25a/sem-proj-just-bold/pull/123) (Chat Page Step 1)
+  - Her er et eksempel på en af de størrer features som er blevet implementeret. Den er gennemgået i 3 steps. Først har vi sat Copilot på til at lave det første review, herefter er Copilot suggestions blevet gået igennem og rettet og til sidst har vi så gennemgået det med menneskelige øjne.
 
 # Database ⚠️
-Et diagram over jeres databasestruktur (ER-diagram eller lignende) (samt en kort beskrivelse af jeres datamodellering og relevante overvejelser (og eventuelle fortrydelser)?)
-<img width="1303" height="926" alt="Screenshot 2025-12-15 at 13 44 58" src="https://github.com/user-attachments/assets/38af03d0-69aa-4c5a-b5ec-b49a5318105c" />
 
+Vi har prøvet at ramme 3 normalform med vores databasestruktur, det har vi gjort ved at bruge jointables på data hvor som har many to many relationships.
+
+Som test data har vi lavet seeders på det meste af vores data, så vi har haft mulighed for at indsætte en masse test data og dermed haft bedre mulighed for at test større mængder af data.
+
+En udfordring vi har bakset lidt med er at vi har valgt alle sammen at være connected til vores "live" database mens vi har udviklet. Det har betydet, at når én udvikler har ændret databaseskemaet via koden, har ORM'en forventet tilsvarende ændringer hos alle. Hvis ikke alle har haft opdateret kodebase, har det ført til fejl på de individuelle branches.
+
+<img width="1303" height="926" alt="Screenshot 2025-12-15 at 13 44 58" src="https://github.com/user-attachments/assets/38af03d0-69aa-4c5a-b5ec-b49a5318105c" />
 
 # Login-informationer 🔐 ⚠️
 
 Til testbrugere (hvis relevant)
 
-- Test: test@user.com // admin
+- Awesome
+  - User: test@user.com
+  - Pass: admin
+- Avicii:
+  - User: avicii@email.com
+  - Pass: 12345678
+
+(Det er også muligt at oprette en bruger igenem [registration flow](https://lineup-frontend.onrender.com/onboarding) som man kan bruge.)
 
 # Post-mortem 📝 🚨
 
