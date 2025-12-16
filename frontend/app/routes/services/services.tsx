@@ -10,6 +10,7 @@ import { apiFetch } from "~/lib/apiFetch";
 
 import type { MetaFunction } from "react-router";
 import ErrorMessage from "~/components/ErrorMessage";
+import Icon from "~/components/icon";
 
 export const meta: MetaFunction = () => {
   return [
@@ -107,15 +108,20 @@ export default function Services() {
   return (
     <div className="flex flex-col gap-4 outer-wrapper px-4">
       {/* Search Input */}
-      <div className="sticky top-0 bg-light-grey z-10 pb-4 pt-4">
+      <div className="flex items-center gap-2 sticky top-0 bg-light-grey z-10 pb-4 pt-4">
         <Input
-          variant="onboarding"
+          variant="search"
+          icon="Search"
           placeholder="Search services by title..."
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full text-start"
+          className="w-full"
         />
+        <button className="flex items-center gap-1" onClick={() => alert("Filter functionality coming soon!")}>
+          <Icon name="Filter" size={24} />
+          <span>Filter</span>
+        </button>
         {searchQuery && (
           <p className="text-xs text-neutral-grey mt-2">
             {total > 0

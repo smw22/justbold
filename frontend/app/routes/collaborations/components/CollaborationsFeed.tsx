@@ -32,15 +32,33 @@ function CollabCard({ children }: React.PropsWithChildren<{}>) {
   );
 }
 
-function CollabCardHeader({ userName, userImage, role }: { userName: string; userImage: string; role: string }) {
+function CollabCardHeader({
+  userId,
+  userName,
+  userImage,
+  role,
+}: {
+  userId: string;
+  userName: string;
+  userImage: string;
+  role: string;
+}) {
   return (
-    <div className="flex items-center gap-1 border-b border-gray-200 pb-4 ">
-      <div className="flex items-center gap-1">
-        <img className="size-10 rounded-full" src={userImage} alt={userName} />
-        <span className="">{userName.split(" ")[0]}</span>
+    <div className="flex flex-col gap-2 border-b border-gray-200 pb-2">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1 flex-wrap">
+          <Link to={`/profile/${userId}`} className="flex items-center gap-2">
+            <img className="size-10 rounded-full" src={userImage} alt={userName} />
+            <span className="">{userName.split(" ")[0]}</span>
+          </Link>
+          <span className="text-gray-400">looking for a</span>
+          <span className="text-gray-400 lowercase">#{role}</span>
+        </div>
+
+        <button aria-label="Bookmark service" type="button" className="bg-transparent border-none p-0 m-0 cursor-pointer">
+          <Icon name="BookmarkEmpty" size={24}></Icon>
+        </button>
       </div>
-      <span className="text-gray-400">looking for a</span>
-      <span className="text-gray-400 lowercase">#{role}</span>
     </div>
   );
 }
@@ -104,7 +122,12 @@ export default function CollaborationsFeed({ collaborations }: CollaborationsSli
     <div className="flex flex-col gap-6">
       {collaborations?.data?.map((collab: Collaboration) => (
         <CollabCard key={collab.id}>
-          <CollabCardHeader userName={collab.user.name} userImage={collab.user.profile_image} role={collab.role} />
+          <CollabCardHeader
+            userId={collab.user.id}
+            userName={collab.user.name}
+            userImage={collab.user.profile_image}
+            role={collab.role}
+          />
           <CollabCardTitle title={collab.title} />
           <CollabCardMeta location={collab.location} created={collab.created} tags={collab.tags} />
           <CollabCardImage media={collab.media} alt={collab.title} />
