@@ -2,6 +2,7 @@ import { useLoaderData, useActionData } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import type { Message } from "~/types/messages";
 import MessagesHeader from "./components/MessagesHeader";
+import type { ProfileType } from "~/types/profile";
 import type { MetaFunction } from "react-router";
 import ChatFooter from "./components/ChatFooter";
 import ErrorMessage from "~/components/ErrorMessage";
@@ -53,7 +54,7 @@ export async function clientLoader({ params }: { params: { threadId: string } })
 
   // Get the other user from the first message (or any message)
   const thread = threadResult.data;
-  const otherUser = thread.users.find((user: any) => user.id !== userId);
+  const otherUser = thread.users.find((user: ProfileType) => user.id !== userId);
 
   return {
     messages: messagesResult.data,

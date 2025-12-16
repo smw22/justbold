@@ -3,30 +3,11 @@ import Badge from "~/components/Badge";
 import Icon from "~/components/icon";
 import Button from "~/components/Button";
 import fromNowDate from "~/lib/fromNowDate";
+import type { Tag } from "~/types/tag";
+import type { Collaboration } from "~/types/collaborations";
 import { InfiniteScroll } from "~/components/InfiniteScroll";
 import { getAllCollaborations } from "~/lib/data/collaborationData";
 import CollaborationsCardRedacted from "./CollaborationsCardRedacted";
-
-type Collaboration = {
-  id: string;
-  media: string;
-  user: {
-    id: string;
-    name: string;
-    profile_image: string;
-  };
-  users?: Array<{
-    id: string;
-    name: string;
-    profile_image: string;
-  }>;
-  title: string;
-  content: string;
-  tags: string[];
-  location: string;
-  created: Date;
-  role: string;
-};
 
 function CollabCard({ children }: React.PropsWithChildren<{}>) {
   return (
@@ -88,12 +69,12 @@ function CollabCardTitle({ title }: { title: string }) {
   return <h3 className="text-lg font-bold leading-tight text-gray-900">{title}</h3>;
 }
 
-function CollabCardMeta({ location, created, tags }: { location: string; created: Date; tags: string[] }) {
+function CollabCardMeta({ location, created, tags }: { location: string; created: Date; tags: Tag[] }) {
   return (
     <div className="flex items-center justify-between flex-wrap gap-2">
       <div className="flex items-center gap-2 flex-wrap">
-        {tags.map((tag: string, idx: number) => (
-          <Badge key={idx} Variant="outline" color="neutral-grey" text={typeof tag === "string" ? tag : (tag as any)?.title} />
+        {tags.map((tag: Tag, idx: number) => (
+          <Badge key={idx} Variant="outline" color="neutral-grey" text={tag.title} />
         ))}
       </div>
       <div className="text-xs text-gray-400">

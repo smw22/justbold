@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import fromNowDate from "~/lib/fromNowDate";
+import type { Collaboration } from "~/types/collaborations";
 
 interface CollaborationsProps {
   query: string;

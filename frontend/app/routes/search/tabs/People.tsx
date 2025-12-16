@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import Button from "~/components/Button";
 import { apiFetch } from "~/lib/apiFetch";
+import type { ProfileType } from "~/types/profile";
 
 interface PeopleProps {
   query: string;
@@ -102,7 +103,7 @@ export default function People({ query }: PeopleProps) {
         <section className="flex flex-col gap-3">
           <p className="font-medium text-xs text-neutral-grey">{query ? "Users" : "Recently created users"}</p>
           <div className="flex flex-col gap-3">
-            {results.people.map((person: any) => {
+            {results.people.map((person: ProfileType) => {
               const status = connections[person.id];
               const hideButton = status === "accepted";
               const isPending = status === "pending";

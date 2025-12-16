@@ -1,9 +1,9 @@
-import StoriesSlider from "./StoriesSlider";
+import StoriesSlider from "./components/StoriesSlider";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { useLoaderData, useRouteError, Await, Link } from "react-router";
-import { Suspense, useState } from "react";
-import PostsFeed from "./PostsFeed";
+import { Suspense } from "react";
+import PostsFeed from "./components/PostsFeed";
 import type { MetaFunction } from "react-router";
 import ErrorMessage from "~/components/ErrorMessage";
 import Button from "~/components/Button";

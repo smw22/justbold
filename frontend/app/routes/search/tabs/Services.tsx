@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import Icon from "~/components/icon";
 import { apiFetch } from "~/lib/apiFetch";
 import fromNowDate from "~/lib/fromNowDate";
+import type { Service } from "~/types/services/servicesProps";
 
 interface ServicesProps {
   query: string;
@@ -49,7 +50,7 @@ export default function Services({ query }: ServicesProps) {
         <section className="flex flex-col gap-3 max-w-[331px]">
           <p className="font-medium text-xs text-neutral-grey">{query ? "Services" : "Recent services"}</p>
           <div className="flex flex-col gap-3">
-            {results.services.map((service: any) => (
+            {results.services.map((service: Service) => (
               <div key={service.id} className="rounded-3xl border border-black/15 p-3.5 flex flex-col gap-2.5">
                 <div className="flex items-center gap-1.5 w-full justify-between">
                   <Link to={`/profile/${service.user.id}`} className="flex items-center gap-1.5">
@@ -60,7 +61,7 @@ export default function Services({ query }: ServicesProps) {
                     />
                     <p className="text-xs text-(--lightgrey-text)">
                       <span className="text-neutral-grey">{service.user.name}</span> looking for
-                      {service.user.looking_for.map((looking_for: any) => (
+                      {service.user.looking_for.map((looking_for: string) => (
                         <span key={looking_for}> #{looking_for}</span>
                       ))}
                     </p>

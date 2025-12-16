@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { apiFetch } from "~/lib/apiFetch";
 import fromNowDate from "~/lib/fromNowDate";
+import type { Tag } from "~/types/tag";
 
 interface TagsProps {
   query: string;
@@ -108,7 +109,7 @@ export default function Tags({ query }: TagsProps) {
                         {post.tags?.length > 0 && (
                           <>
                             {" tagged "}
-                            {post.tags.map((tag: any, index: number) => (
+                            {post.tags.map((tag: Tag, index: number) => (
                               <span key={tag.id}>
                                 #{tag.title}
                                 {index < post.tags.length - 1 ? ", " : ""}
