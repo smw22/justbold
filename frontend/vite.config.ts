@@ -19,6 +19,7 @@ export default defineConfig({
         start_url: "/",
         background_color: "#ffffff",
         theme_color: "#ffffff",
+        display: "standalone", // Or "fullscreen" for iOS
         icons: [
           {
             src: "/icon192.png",
