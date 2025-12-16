@@ -1,8 +1,11 @@
-import { Link } from "react-router";
+import { Link, useLoaderData } from "react-router";
 import Badge from "~/components/Badge";
 import Icon from "~/components/icon";
 import Button from "~/components/Button";
 import fromNowDate from "~/lib/fromNowDate";
+import { InfiniteScroll } from "~/components/InfiniteScroll";
+import { getAllCollaborations } from "~/lib/data/collaborationData";
+import CollaborationsCardRedacted from "./CollaborationsCardRedacted";
 
 type Collaboration = {
   id: string;
@@ -18,12 +21,6 @@ type Collaboration = {
   location: string;
   created: Date;
   role: string;
-};
-
-type CollaborationsSliderProps = {
-  collaborations: {
-    data: Collaboration[];
-  };
 };
 
 function CollabCard({ children }: React.PropsWithChildren<{}>) {
@@ -117,24 +114,33 @@ function CollabCardActions({ collabId, userId }: { collabId: string; userId: str
   );
 }
 
-export default function CollaborationsFeed({ collaborations }: CollaborationsSliderProps) {
+function CollaborationsCard({ collab }: { collab: Collaboration }) {
   return (
-    <div className="flex flex-col gap-6">
-      {collaborations?.data?.map((collab: Collaboration) => (
-        <CollabCard key={collab.id}>
-          <CollabCardHeader
-            userId={collab.user.id}
-            userName={collab.user.name}
-            userImage={collab.user.profile_image}
-            role={collab.role}
-          />
-          <CollabCardTitle title={collab.title} />
-          <CollabCardMeta location={collab.location} created={collab.created} tags={collab.tags} />
-          <CollabCardImage media={collab.media} alt={collab.title} />
-          <CollabCardContent content={collab.content} />
-          <CollabCardActions collabId={collab.id} userId={collab.user.id} />
-        </CollabCard>
-      ))}
-    </div>
+    <CollabCard>
+      <CollabCardHeader
+        userId={collab.user.id}
+        userName={collab.user.name}
+        userImage={collab.user.profile_image}
+        role={collab.role}
+      />
+      <CollabCardTitle title={collab.title} />
+      <CollabCardMeta location={collab.location} created={collab.created} tags={collab.tags} />
+      <CollabCardImage media={collab.media} alt={collab.title} />
+      <CollabCardContent content={collab.content} />
+      <CollabCardActions collabId={collab.id} userId={collab.user.id} />
+    </CollabCard>
+  );
+}
+
+export default function CollaborationsFeed({ collaborations }: { collaborations: Collaboration[] }) {
+  return (
+    <InfiniteScroll<Collaboration>
+      fetchPage={getAllCollaborations}
+      initialData={collaborations}
+      pageSize={10}
+      loader={<CollaborationsCardRedacted />}
+      className="flex flex-col gap-4"
+      renderItem={(collab) => <CollaborationsCard key={collab.id} collab={collab} />}
+    />
   );
 }
