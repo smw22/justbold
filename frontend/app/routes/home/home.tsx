@@ -2,7 +2,7 @@ import StoriesSlider from "./components/StoriesSlider";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { useLoaderData, useRouteError, Await, Link } from "react-router";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import PostsFeed from "./components/PostsFeed";
 import type { MetaFunction } from "react-router";
 import ErrorMessage from "~/components/ErrorMessage";
@@ -30,7 +30,7 @@ export const meta: MetaFunction = () => {
 };
 
 export function ErrorBoundary() {
-  const error = useRouteError();
+  const error = useRouteError() as { status?: number; message?: string };
 
   const isNotFound = error?.status === 404;
 
