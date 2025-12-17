@@ -147,6 +147,9 @@ Navnet i parantes er den udvikler som har harft primært ansvar for opgaven.
 - I designet var det ikke været helt streamlined ift. hvilke afstande der er brugt rundt omkring. Dette var vi streamlined, samt lavet nogle 1-2px afvigelser for at passe det ind i tailwindcss.
 - Der var nogle få steder f.eks. knapper hvor vi har taget en fælles beslutning om at padding var lige lille nok til en mobil knap, så her har vi øget padding en lille smule.
 - Når flere users er connected til en post etc. så har vi streamlined designet (tilføjet en lille hvid ring) så det matcher designet som er på profile.
+  
+**Menu**
+- Pga. af uklarheder omkring tab baren (nogle steder er venstre tab "Home", andre steder er det "Collabs") har vi valgt at flytte "Chats" op i toppen af menuen, for at gøre plads til en "Collab"-tab.
 
 **Notes → Renamed til Posts**
 
