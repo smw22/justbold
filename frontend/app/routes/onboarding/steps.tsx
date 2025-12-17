@@ -73,8 +73,6 @@ export async function clientAction({ request }: { request: Request }) {
           // Step 3: Store the access token in localStorage
           if (loginResult.access_token) {
             localStorage.setItem("access_token", loginResult.access_token);
-            localStorage.setItem("user_id", loginResult.user_id);
-            console.log("Access token stored in localStorage");
           }
 
           return redirect("../");
