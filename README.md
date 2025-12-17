@@ -1,15 +1,15 @@
-# Project 🧭 🚨
+# Project
 
 Semester Project - Lineup
 [DEPLOYED LØSNING HER](https://lineup-frontend.onrender.com)
 
-# Design 🎨 ⚠️
+# Design
 
 Design lavet af Multimediedesign studerende, venligt overlevert så vi har noget at udvikle 🎉
 
 Link til: [Figma](https://www.figma.com/design/aX1bEPNGfhzCUKHQFK9nTf/LineUp---WU-E25a-Semesterprojekt--Copy-?node-id=61-17&t=GXVjUke9gB9O5UUA-1)
 
-# Teknologier / Dev Stack 🛠️ ⚠️
+# Teknologier / Dev Stack 🛠️
 
 Vi har valgt at bruge React Router i framework mode, som er valgt mest fordi vi ikke har prøvet så mange andre React frameworks dermed valgt at blive i vores comfort zone. For at prøve lidt noget nyt, uden at gå alt for langt væk fra Express, så kastede vi os ud i at bruge NestJS i backend, hvilket har hjulpet os lidt til at holde en mere fastlåst struktur fordi at Nest er forholdvist opinionated.
 
@@ -20,11 +20,11 @@ Den primære årsag til at vi har valgt en MySQL database i stedet for Supabase 
 - Database: MySQL (Hosted på Simply)
 - Deployment: Render, frontend som static site og backend som node server
 
-# Features 💡⚠️
+# Features 💡
 
 Generelt har opgaverne været struktureret sådan at den primære udvikler har været ansvarlig for at lave både de nødvendige API endpoints samt frontend dertil.
 
-## Implementeret ✅ 🚨
+## Implementeret
 
 Navnet i parantes er den udvikler som har harft primært ansvar for opgaven.
 
@@ -90,7 +90,7 @@ Navnet i parantes er den udvikler som har harft primært ansvar for opgaven.
 - Search på Services
 - Search på Tags (Søger i collaborations og posts)
 
-## Manglende ⏳ ⚠️
+## Manglende
 
 **Stories**
 
@@ -140,7 +140,7 @@ Navnet i parantes er den udvikler som har harft primært ansvar for opgaven.
 
 - Punkter med "Coming Soon" badge, er ikke udviklet
 
-# Design - Valg / Afvigelser ✏️ 🚨
+# Design - Valg / Afvigelser
 
 **Generelt styling**
 
@@ -182,7 +182,7 @@ Navnet i parantes er den udvikler som har harft primært ansvar for opgaven.
 
 - Der var ikke lavet noget pending state på connections i designet, dette har vi lavet en implementering af.
 
-# Projektstyring 📌 ⚠️
+# Projektstyring 📌
 
 Vi har brugt Github Projects.
 
@@ -192,7 +192,7 @@ https://github.com/orgs/eaaa-dob-wu-e25a/projects/14
 Eksempel på hvordan projectbaord har set ud i processen
 <img width="1907" height="862" alt="kanban-justbold" src="https://github.com/user-attachments/assets/13e63d39-884a-4aa3-bb8b-16f27aa9c853" />
 
-# Links 🔗 ⚠️
+# Links
 
 - [Frontend](https://lineup-frontend.onrender.com) (https://lineup-frontend.onrender.com)
 - [Backend](https://sem-proj-just-bold.onrender.com) (https://sem-proj-just-bold.onrender.com) (Tager ca. 1 minut om at starte op ved første request)
@@ -204,7 +204,7 @@ Eksempel på hvordan projectbaord har set ud i processen
 - [Pull Request](https://github.com/eaaa-dob-wu-e25a/sem-proj-just-bold/pull/123) (Chat Page Step 1)
   - Her er et eksempel på en af de størrer features som er blevet implementeret. Den er gennemgået i 3 steps. Først har vi sat Copilot på til at lave det første review, herefter er Copilot suggestions blevet gået igennem og rettet og til sidst har vi så gennemgået det med menneskelige øjne.
 
-# Database ⚠️
+# Database
 
 Vi har prøvet at ramme 3 normalform med vores databasestruktur, det har vi gjort ved at bruge jointables på data hvor som har many to many relationships.
 
@@ -214,7 +214,7 @@ En udfordring vi har bakset lidt med er at vi har valgt alle sammen at være con
 
 <img width="1303" height="926" alt="Screenshot 2025-12-15 at 13 44 58" src="https://github.com/user-attachments/assets/38af03d0-69aa-4c5a-b5ec-b49a5318105c" />
 
-# Login-informationer 🔐 ⚠️
+# Login-informationer
 
 - Awesome
   - User: test@user.com
@@ -225,7 +225,7 @@ En udfordring vi har bakset lidt med er at vi har valgt alle sammen at være con
 
 (Det er også muligt at oprette en bruger igenem [registration flow](https://lineup-frontend.onrender.com/onboarding) som man kan bruge.)
 
-# Post-mortem 📝 🚨
+# Post-mortem
 
 ## Opsummering og refleksion
 
