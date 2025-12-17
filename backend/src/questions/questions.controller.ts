@@ -9,7 +9,7 @@ export class QuestionsController {
   @Post()
   async create(@Body() createQuestionDto: CreateQuestionDto, @Req() req: Request & { user: { id: string } }) {
     try {
-      const userId = req.user.id;
+      const userId = createQuestionDto.user_id;
       const data = await this.questionsService.create(createQuestionDto, userId);
       return {
         success: true,
