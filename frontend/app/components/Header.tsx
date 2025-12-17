@@ -38,6 +38,12 @@ export default function Header() {
           >
             <Icon name="BellNotification" color="black" size={20} />
           </Link>
+          <Link
+            to="/chats"
+            className="hover:bg-gray-200 p-2 rounded-full transition-colors duration-200 ease-in-out cursor-pointer size-10 flex items-center justify-center"
+          >
+            <Icon name="ChatLines" color="black" size={20} />
+          </Link>
           <HeaderBurgerMenu />
         </nav>
       </div>
