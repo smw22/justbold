@@ -32,7 +32,7 @@ export default function Footer({ userId }: { userId: string }) {
       index = 1;
     } else if (location.startsWith("/create")) {
       index = 2;
-    } else if (location.startsWith("/chat")) {
+    } else if (location.startsWith("/collaborations")) {
       index = 3;
     } else if (location === `/profile/${currentUser}` || location === `profile/${currentUser}`) {
       index = 4;
@@ -125,10 +125,10 @@ export default function Footer({ userId }: { userId: string }) {
               }}
             >
               <NavLink
-                to="/chats"
+                to="/collaborations"
                 className={({ isActive, isPending }) => (isPending ? passiveClass : isActive ? activeClass : passiveClass)}
               >
-                <Icon name="ChatLines" size={24} /> Chats
+                <Icon name="MusicDoubleNote" size={24} /> Collabs
               </NavLink>
             </div>
           </li>
