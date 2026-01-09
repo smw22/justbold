@@ -43,6 +43,12 @@ export const UserFactory = setSeederFactory(User, (faker: Faker) => {
     ],
     { min: 1, max: 3 }
   );
+  user.subscription = faker.helpers.arrayElement(["free", "premium", "pro"]);
+  user.user_type = faker.helpers.arrayElement(["musician", "producer", "band", "venue", "label"]);
+  user.genres = faker.helpers.arrayElements(
+    ["Rock", "Pop", "Jazz", "Classical", "Hip Hop", "Electronic", "Country", "Reggae", "Blues", "Metal"],
+    { min: 1, max: 3 }
+  );
   user.profile_image = faker.image.url();
   return user;
 });

@@ -15,7 +15,7 @@ export const CollaborationFactory = setSeederFactory(Collaboration, (faker: Fake
 
   collaboration.media = faker.image.url();
   collaboration.title = faker.lorem.sentence();
-  collaboration.content = faker.lorem.paragraphs({ min: 1, max: 3 });
+  collaboration.content = faker.lorem.sentence({ min: 3, max: 10 });
 
   collaboration.role = faker.helpers.arrayElement([
     "Guitar",

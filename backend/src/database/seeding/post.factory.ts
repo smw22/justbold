@@ -5,7 +5,7 @@ import { setSeederFactory } from "typeorm-extension";
 export const PostFactory = setSeederFactory(Post, (faker: Faker) => {
   const post = new Post();
   post.title = faker.lorem.sentence();
-  post.content = faker.lorem.paragraphs({ min: 1, max: 3 });
+  post.content = faker.lorem.sentence({ min: 3, max: 10 });
 
   // Tags will be set in the seeder
   //   post.tags = [faker.lorem.word(), faker.lorem.word()];
