@@ -8,7 +8,7 @@ const configService = new ConfigService();
 const AppDataSource = new DataSource({
   type: "mysql",
   host: configService.get<string>("DB_HOST"),
-  port: 3306,
+  port: configService.get<number>("DB_PORT"),
   username: configService.get<string>("DB_USER"),
   password: configService.get<string>("DB_PASSWORD"),
   database: configService.get<string>("DB_NAME"),
